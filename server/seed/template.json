@@ -1,16 +1,3762 @@
 {
-  "version": "0.1-platzhalter",
-  "name": "Platzhalter-Vorlage (wird durch Leitfaden-Vorlage 1.0 ersetzt)",
-  "phasen": [
-    { "nr": 0, "name": "Phase 0 – Bedarf und Strategie" },
-    { "nr": 1, "name": "Phase 1 – Planung" }
-  ],
-  "checkpunkte": [
-    { "phase": 0, "nr": "0.01", "text": "Bedarf dokumentieren", "gewerke": "PL", "fuehrend": "PL" }
-  ],
-  "dokumente": [
-    { "bereich": "A", "nr": "A.01", "titel": "Bedarfsanforderung", "gewerk": "PL" }
-  ],
-  "attribute": [],
-  "raumtypen": []
+ "version": "1.0",
+ "name": "Leitfaden Beschaffung und Implementierung medizinischer Großgeräte (07/2026)",
+ "notes": "Initiale Mastervorlage gemäß Anforderungsprofil GGP. Inhalte projektspezifisch anpassbar; Pflege über Vorlagenversionen.",
+ "phasen": [
+  {
+   "nr": 0,
+   "name": "Phase 0 – Bedarfsermittlung und Strategie"
+  },
+  {
+   "nr": 1,
+   "name": "Phase 1 – Wirtschaftlichkeit, Finanzierung und Förderung"
+  },
+  {
+   "nr": 2,
+   "name": "Phase 2 – Nutzungs- und Betriebskonzept"
+  },
+  {
+   "nr": 3,
+   "name": "Phase 3 – Standortprüfung und Bestandsaufnahme"
+  },
+  {
+   "nr": 4,
+   "name": "Phase 4 – Planung (Entwurfs- und Ausführungsplanung)"
+  },
+  {
+   "nr": 5,
+   "name": "Phase 5 – Genehmigungen, Anzeigen und Strahlenschutz"
+  },
+  {
+   "nr": 6,
+   "name": "Phase 6 – Ausschreibung und Vergabe"
+  },
+  {
+   "nr": 7,
+   "name": "Phase 7 – Cybersecurity und IT-Integration"
+  },
+  {
+   "nr": 8,
+   "name": "Phase 8 – Bauvorbereitung"
+  },
+  {
+   "nr": 9,
+   "name": "Phase 9 – Bauphase und Rohinstallation"
+  },
+  {
+   "nr": 10,
+   "name": "Phase 10 – Anlieferung und Montage Großgerät"
+  },
+  {
+   "nr": 11,
+   "name": "Phase 11 – Technische Inbetriebnahme und Messungen"
+  },
+  {
+   "nr": 12,
+   "name": "Phase 12 – Abnahmen, Prüfungen und Einweisungen"
+  },
+  {
+   "nr": 13,
+   "name": "Phase 13 – Go-Live und Betriebsübergabe"
+  },
+  {
+   "nr": 14,
+   "name": "Phase 14 – Projektabschluss, Dokumentation und Lessons Learned"
+  }
+ ],
+ "checkpunkte": [
+  {
+   "phase": 0,
+   "nr": "0.01",
+   "text": "Medizinischen Bedarf mit Klinik/Nutzern strukturiert erheben (Fallzahlen, Untersuchungsspektrum, Engpässe)",
+   "gewerke": "PL,MT",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 0,
+   "nr": "0.02",
+   "text": "Abgleich mit Medizinstrategie und Zielplanung des Klinikums dokumentieren",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 0,
+   "nr": "0.03",
+   "text": "Bestandsgerät bewerten: Alter, Ausfallhistorie, Wartungskosten, Ersatzteilverfügbarkeit",
+   "gewerke": "MT",
+   "fuehrend": "MT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 0,
+   "nr": "0.04",
+   "text": "Ersatz- oder Neubeschaffung abgrenzen; Optionen Upgrade/Umzug prüfen",
+   "gewerke": "PL,MT",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 0,
+   "nr": "0.05",
+   "text": "Nutzungsdauer und Auslastungsprognose über 10 Jahre erstellen",
+   "gewerke": "PL,MT",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 0,
+   "nr": "0.06",
+   "text": "Marktübersicht Gerätetypen/Hersteller erstellen (Feldstärke, Detektortechnik, Optionen)",
+   "gewerke": "MT",
+   "fuehrend": "MT",
+   "prio": "normal"
+  },
+  {
+   "phase": 0,
+   "nr": "0.07",
+   "text": "Anforderungen aus Forschung und Lehre abfragen (Universitätsklinikum)",
+   "gewerke": "PL,MT",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 0,
+   "nr": "0.08",
+   "text": "Erste Grobkostenschätzung Gerät + Bau + Nebenkosten aufstellen",
+   "gewerke": "PL,MT,AR",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 0,
+   "nr": "0.09",
+   "text": "Fördermöglichkeiten prüfen (Landesförderung, EFRE, Sonderprogramme) und Fristen notieren",
+   "gewerke": "PL,VG",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 0,
+   "nr": "0.10",
+   "text": "Projektorganisation festlegen: Rollen, Gremien, Entscheidungswege, Eskalationspfad",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 0,
+   "nr": "0.11",
+   "text": "Grober Terminrahmen mit Meilensteinen (Vergabe, Bau, Lieferung, Go-Live) abstimmen",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 0,
+   "nr": "0.12",
+   "text": "Interimskonzept bei Ersatzbeschaffung klären (Ausweichgerät, Kooperation, mobile Lösung)",
+   "gewerke": "PL,MT",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 0,
+   "nr": "0.13",
+   "text": "Stilllegungs-/Weiterverwendungskonzept Altgerät skizzieren",
+   "gewerke": "MT",
+   "fuehrend": "MT",
+   "prio": "niedrig"
+  },
+  {
+   "phase": 0,
+   "nr": "0.14",
+   "text": "Projektauftrag/Projektfreigabe durch Klinikleitung einholen und ablegen",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 1,
+   "nr": "1.01",
+   "text": "Wirtschaftlichkeitsbetrachtung erstellen (Investition, Betriebskosten, Erlöse, Amortisation)",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 1,
+   "nr": "1.02",
+   "text": "Budgetrahmen mit Kaufmännischer Direktion abstimmen und schriftlich fixieren",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 1,
+   "nr": "1.03",
+   "text": "Kostenschätzung Bau nach DIN 276 durch Fachplaner aufstellen lassen",
+   "gewerke": "AR",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 1,
+   "nr": "1.04",
+   "text": "Baunebenkosten, Planungshonorare (HOAI) und Reserven (mind. 10 %) einplanen",
+   "gewerke": "PL,AR",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 1,
+   "nr": "1.05",
+   "text": "Förderantrag vorbereiten: Bedarfsbegründung, Kostenaufstellung, Terminplan",
+   "gewerke": "PL,VG",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 1,
+   "nr": "1.06",
+   "text": "Fördervoraussetzungen und Auflagen dokumentieren (Zweckbindung, Nachweisfristen)",
+   "gewerke": "PL,VG",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 1,
+   "nr": "1.07",
+   "text": "Finanzierungsart Kauf/Leasing/Miete/Ratenkauf bewerten",
+   "gewerke": "PL,VG",
+   "fuehrend": "VG",
+   "prio": "normal"
+  },
+  {
+   "phase": 1,
+   "nr": "1.08",
+   "text": "Wartungs- und Servicekosten (Vollwartung vs. Teilwartung) über Laufzeit kalkulieren",
+   "gewerke": "MT,VG",
+   "fuehrend": "MT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 1,
+   "nr": "1.09",
+   "text": "Energie- und Medienkosten (Strom, Kälte, Wasser) überschlägig ermitteln",
+   "gewerke": "ELT,KÄL,SAN",
+   "fuehrend": "ELT",
+   "prio": "normal"
+  },
+  {
+   "phase": 1,
+   "nr": "1.10",
+   "text": "Personalbedarf und Qualifikation für Betrieb prüfen (MTRA, Physik, Wartung)",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 1,
+   "nr": "1.11",
+   "text": "Freigabe der Finanzierung durch Vorstand/Aufsichtsgremium einholen",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 1,
+   "nr": "1.12",
+   "text": "Mittelabfluss-/Zahlungsplan mit Meilensteinen aufstellen",
+   "gewerke": "PL,VG",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 2,
+   "nr": "2.01",
+   "text": "Betriebskonzept erstellen: Betriebszeiten, Patientenpfade, Notfallverfügbarkeit",
+   "gewerke": "PL,MT",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 2,
+   "nr": "2.02",
+   "text": "Workflow-Analyse: Anmeldung, Vorbereitung, Untersuchung, Befundung, Übergaben",
+   "gewerke": "PL,MT,HYG",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 2,
+   "nr": "2.03",
+   "text": "Raumprogramm nach DIN 13080 ableiten (Untersuchung, Technik, Bedienung, Vorbereitung, Warten)",
+   "gewerke": "AR,MT",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 2,
+   "nr": "2.04",
+   "text": "Flächenbedarf je Raum mit Herstellervorgaben abgleichen",
+   "gewerke": "AR,MT",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 2,
+   "nr": "2.05",
+   "text": "Personalflüsse und Patiententransporte (Betten, Liegend, Notfall) planen",
+   "gewerke": "PL,AR,HYG",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 2,
+   "nr": "2.06",
+   "text": "Anbindung an Notaufnahme, OP, Intensivstation bewerten",
+   "gewerke": "PL,AR",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 2,
+   "nr": "2.07",
+   "text": "Anforderungen Patientensicherheit/Überwachung definieren (Monitoring, Notruf, Reanimation)",
+   "gewerke": "MT,ELT,AS",
+   "fuehrend": "MT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 2,
+   "nr": "2.08",
+   "text": "Anforderungen Barrierefreiheit und Patientenkomfort festlegen",
+   "gewerke": "AR",
+   "fuehrend": "AR",
+   "prio": "normal"
+  },
+  {
+   "phase": 2,
+   "nr": "2.09",
+   "text": "Hygienekonzept-Eckpunkte mit Krankenhaushygiene abstimmen (Raumklassen, Aufbereitung)",
+   "gewerke": "HYG",
+   "fuehrend": "HYG",
+   "prio": "hoch"
+  },
+  {
+   "phase": 2,
+   "nr": "2.10",
+   "text": "Anforderungen Anästhesie-Arbeitsplatz klären (Gase, Absaugung, Monitoring)",
+   "gewerke": "MT,SAN",
+   "fuehrend": "MT",
+   "prio": "normal",
+   "geraetetypen": "MRT,CT,Angiographie,Hybrid-OP,PET-CT"
+  },
+  {
+   "phase": 2,
+   "nr": "2.11",
+   "text": "Kontrastmittel-Lagerung und -Vorbereitung planen",
+   "gewerke": "MT,HYG,SAN",
+   "fuehrend": "MT",
+   "prio": "normal"
+  },
+  {
+   "phase": 2,
+   "nr": "2.12",
+   "text": "Radiopharmaka-Handling und Abklinganforderungen klären",
+   "gewerke": "MT,StrS,HYG",
+   "fuehrend": "StrS",
+   "prio": "hoch",
+   "geraetetypen": "PET-CT"
+  },
+  {
+   "phase": 2,
+   "nr": "2.13",
+   "text": "Betreiberverantwortung nach MPBetreibV organisatorisch zuordnen",
+   "gewerke": "MT,PL",
+   "fuehrend": "MT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 2,
+   "nr": "2.14",
+   "text": "Schulungs- und Einweisungskonzept für Anwender skizzieren",
+   "gewerke": "MT",
+   "fuehrend": "MT",
+   "prio": "normal"
+  },
+  {
+   "phase": 3,
+   "nr": "3.01",
+   "text": "Standortalternativen bewerten (Flächen, Anbindung, Bauaufwand, Betrieb während Bau)",
+   "gewerke": "PL,AR",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 3,
+   "nr": "3.02",
+   "text": "Bestandspläne beschaffen und auf Aktualität prüfen (Architektur, TGA, Statik)",
+   "gewerke": "AR",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 3,
+   "nr": "3.03",
+   "text": "Statik/Tragfähigkeit der Decke für Gerätegewicht prüfen lassen (Gutachten)",
+   "gewerke": "AR",
+   "fuehrend": "AR",
+   "prio": "hoch",
+   "hinweis": "MRT-Magnete 4–10 t, CT-Gantry 2–3 t"
+  },
+  {
+   "phase": 3,
+   "nr": "3.04",
+   "text": "Schwingungsuntersuchung am Aufstellort durchführen (Herstellergrenzwerte)",
+   "gewerke": "AR,MT",
+   "fuehrend": "AR",
+   "prio": "hoch",
+   "geraetetypen": "MRT,CT,PET-CT,Angiographie"
+  },
+  {
+   "phase": 3,
+   "nr": "3.05",
+   "text": "Transportweg und Einbringöffnung prüfen: Maße, Lasten, Kranstellplatz, Zwischenlager",
+   "gewerke": "AR,MT,PL",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 3,
+   "nr": "3.06",
+   "text": "Magnetfeld-Umgebungsanalyse: benachbarte Nutzung, Aufzüge, Stahlbau, bewegte Massen",
+   "gewerke": "MT,AR",
+   "fuehrend": "MT",
+   "prio": "hoch",
+   "geraetetypen": "MRT"
+  },
+  {
+   "phase": 3,
+   "nr": "3.07",
+   "text": "HF-Störumgebung messen (Sender, Bahn, Funkdienste)",
+   "gewerke": "MT,ELT",
+   "fuehrend": "MT",
+   "prio": "normal",
+   "geraetetypen": "MRT"
+  },
+  {
+   "phase": 3,
+   "nr": "3.08",
+   "text": "Bestand Elektroversorgung prüfen: Trafoleistung, NSHV-Reserven, Netzform, Kurzschlussleistung",
+   "gewerke": "ELT",
+   "fuehrend": "ELT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 3,
+   "nr": "3.09",
+   "text": "Bestand Netzersatz/USV prüfen (AV/SV/ZSV-Kapazitäten)",
+   "gewerke": "ELT",
+   "fuehrend": "ELT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 3,
+   "nr": "3.10",
+   "text": "Bestand Kälteversorgung prüfen: Kaltwassernetz, Reserven, Redundanz",
+   "gewerke": "KÄL",
+   "fuehrend": "KÄL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 3,
+   "nr": "3.11",
+   "text": "Bestand RLT prüfen: Anlagenkapazität, Kanalführung, Außenluftqualität",
+   "gewerke": "LÜF",
+   "fuehrend": "LÜF",
+   "prio": "normal"
+  },
+  {
+   "phase": 3,
+   "nr": "3.12",
+   "text": "Bestand Sanitär/Medizingase prüfen (Leitungen, Druck, Entnahmestellen)",
+   "gewerke": "SAN",
+   "fuehrend": "SAN",
+   "prio": "normal"
+  },
+  {
+   "phase": 3,
+   "nr": "3.13",
+   "text": "Bestand IT-Infrastruktur prüfen: Netzwerkverteiler, LWL-Strecken, Redundanz",
+   "gewerke": "IT",
+   "fuehrend": "IT",
+   "prio": "normal"
+  },
+  {
+   "phase": 3,
+   "nr": "3.14",
+   "text": "Schadstoffkataster prüfen (Asbest, KMF, PCB) und Beprobung veranlassen",
+   "gewerke": "AR,AS",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 3,
+   "nr": "3.15",
+   "text": "Brandschutzbestand erfassen: Abschnitte, Fluchtwege, Anlagentechnik",
+   "gewerke": "BS,AR",
+   "fuehrend": "BS",
+   "prio": "hoch"
+  },
+  {
+   "phase": 3,
+   "nr": "3.16",
+   "text": "Strahlenschutz-Bestandssituation dokumentieren (vorhandene Abschirmungen, Genehmigungen)",
+   "gewerke": "StrS",
+   "fuehrend": "StrS",
+   "prio": "normal",
+   "geraetetypen": "CT,Angiographie,Hybrid-OP,PET-CT,Linearbeschleuniger"
+  },
+  {
+   "phase": 3,
+   "nr": "3.17",
+   "text": "Bauzustand angrenzender Bereiche dokumentieren (Fotos, Risskartierung vor Bau)",
+   "gewerke": "AR",
+   "fuehrend": "AR",
+   "prio": "normal"
+  },
+  {
+   "phase": 3,
+   "nr": "3.18",
+   "text": "Interimsbetrieb am Standort planen: Lärm, Staub, Erschütterung, Zugänge",
+   "gewerke": "PL,AR,HYG,AS",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 3,
+   "nr": "3.19",
+   "text": "Baugrund-/Fundamentprüfung bei Erdgeschoss-/Anbaulösung",
+   "gewerke": "AR",
+   "fuehrend": "AR",
+   "prio": "normal"
+  },
+  {
+   "phase": 3,
+   "nr": "3.20",
+   "text": "Standortentscheidung dokumentieren und freigeben lassen",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 4,
+   "nr": "4.01",
+   "text": "Planungsteam beauftragen und Schnittstellenmatrix der Gewerke erstellen",
+   "gewerke": "PL,AR",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 4,
+   "nr": "4.02",
+   "text": "Raumbuch anlegen und mit Soll-Anforderungen je Gewerk füllen",
+   "gewerke": "PL,AR,MT",
+   "fuehrend": "PL",
+   "prio": "hoch",
+   "hinweis": "Grundlage für alle Fachplanungen"
+  },
+  {
+   "phase": 4,
+   "nr": "4.03",
+   "text": "Herstellervorgaben (Site Planning Guide) einarbeiten und versionieren",
+   "gewerke": "MT",
+   "fuehrend": "MT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 4,
+   "nr": "4.04",
+   "text": "Entwurfsplanung Architektur: Grundrisse, Schnitte, Türbreiten, Fluchtwege",
+   "gewerke": "AR",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 4,
+   "nr": "4.05",
+   "text": "Werkplanung mit finalen Gerätemaßen und Fundamentplan abgleichen",
+   "gewerke": "AR,MT",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 4,
+   "nr": "4.06",
+   "text": "Bodenaufbau planen: Lastverteilplatte, Schwingungsentkopplung, Leitfähigkeit",
+   "gewerke": "AR",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 4,
+   "nr": "4.07",
+   "text": "Deckenkonstruktion für Deckenstative/Monitorampeln auslegen",
+   "gewerke": "AR,MT",
+   "fuehrend": "AR",
+   "prio": "normal",
+   "geraetetypen": "Angiographie,Hybrid-OP,CT"
+  },
+  {
+   "phase": 4,
+   "nr": "4.08",
+   "text": "HF-Kabine planen: Schirmklasse, Tür, Fenster, Filterplatte, Durchführungen",
+   "gewerke": "MT,AR,ELT",
+   "fuehrend": "MT",
+   "prio": "hoch",
+   "geraetetypen": "MRT"
+  },
+  {
+   "phase": 4,
+   "nr": "4.09",
+   "text": "Quenchrohr-Führung planen (Querschnitt, Ausblasort, Wetterschutz, Vogelschutz)",
+   "gewerke": "MT,AR,LÜF",
+   "fuehrend": "MT",
+   "prio": "hoch",
+   "geraetetypen": "MRT"
+  },
+  {
+   "phase": 4,
+   "nr": "4.10",
+   "text": "Magnetfeldzonen (0,5 mT-Linie) planen und Zutrittskonzept ableiten",
+   "gewerke": "MT,StrS,AS",
+   "fuehrend": "MT",
+   "prio": "hoch",
+   "geraetetypen": "MRT"
+  },
+  {
+   "phase": 4,
+   "nr": "4.11",
+   "text": "Strahlenschutzberechnung beauftragen (Bleigleichwerte Wände/Türen/Fenster/Decken)",
+   "gewerke": "StrS",
+   "fuehrend": "StrS",
+   "prio": "hoch",
+   "geraetetypen": "CT,Angiographie,Hybrid-OP,PET-CT,Linearbeschleuniger"
+  },
+  {
+   "phase": 4,
+   "nr": "4.12",
+   "text": "Elektroplanung: Anschlussleistung, Einspeisung, Unterverteilung Gerät, Selektivität",
+   "gewerke": "ELT",
+   "fuehrend": "ELT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 4,
+   "nr": "4.13",
+   "text": "AV/SV/ZSV-Konzept je Raum festlegen (DIN VDE 0100-710, Raumgruppen)",
+   "gewerke": "ELT",
+   "fuehrend": "ELT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 4,
+   "nr": "4.14",
+   "text": "USV-Bedarf für Rechner/Injektor/Notbeleuchtung dimensionieren",
+   "gewerke": "ELT",
+   "fuehrend": "ELT",
+   "prio": "normal"
+  },
+  {
+   "phase": 4,
+   "nr": "4.15",
+   "text": "Potentialausgleich und Erdung planen (zentraler PA-Punkt, ZSV-Bereiche)",
+   "gewerke": "ELT",
+   "fuehrend": "ELT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 4,
+   "nr": "4.16",
+   "text": "Beleuchtungsplanung: Untersuchungslicht, Dimmung, Patientenbeleuchtung, Notlicht",
+   "gewerke": "ELT,AR",
+   "fuehrend": "ELT",
+   "prio": "normal"
+  },
+  {
+   "phase": 4,
+   "nr": "4.17",
+   "text": "Kabelwege/Trassen planen; Trennung Energie/Daten/geräteeigene Kabel",
+   "gewerke": "ELT,IT,MT",
+   "fuehrend": "ELT",
+   "prio": "normal"
+  },
+  {
+   "phase": 4,
+   "nr": "4.18",
+   "text": "Kühllastberechnung Technikraum/Untersuchungsraum erstellen",
+   "gewerke": "KÄL,LÜF",
+   "fuehrend": "KÄL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 4,
+   "nr": "4.19",
+   "text": "Kaltwasserversorgung Gerät planen (Vorlauftemperatur, Redundanz, Notkühlung)",
+   "gewerke": "KÄL",
+   "fuehrend": "KÄL",
+   "prio": "hoch",
+   "geraetetypen": "MRT,CT,PET-CT,Linearbeschleuniger"
+  },
+  {
+   "phase": 4,
+   "nr": "4.20",
+   "text": "RLT-Planung: Luftwechsel, Druckstufen, Filterklassen, Temperatur-/Feuchtefenster",
+   "gewerke": "LÜF,HYG",
+   "fuehrend": "LÜF",
+   "prio": "hoch"
+  },
+  {
+   "phase": 4,
+   "nr": "4.21",
+   "text": "Sauerstoffüberwachung Technikraum/Untersuchungsraum planen (Heliumverdrängung)",
+   "gewerke": "MSR,MT,AS",
+   "fuehrend": "MSR",
+   "prio": "hoch",
+   "geraetetypen": "MRT"
+  },
+  {
+   "phase": 4,
+   "nr": "4.22",
+   "text": "Heizlast und Wärmeabgabe bewerten; Nachheizung/Kühlung Bedienraum",
+   "gewerke": "HZG,LÜF",
+   "fuehrend": "HZG",
+   "prio": "niedrig"
+  },
+  {
+   "phase": 4,
+   "nr": "4.23",
+   "text": "Sanitärplanung: Waschplätze, Ausgussbecken, Bodenabläufe, Rückstausicherung",
+   "gewerke": "SAN,HYG",
+   "fuehrend": "SAN",
+   "prio": "normal"
+  },
+  {
+   "phase": 4,
+   "nr": "4.24",
+   "text": "Medizinische Gase planen: O2, Druckluft, Vakuum, Entnahmestellen, AGFS",
+   "gewerke": "SAN,MT",
+   "fuehrend": "SAN",
+   "prio": "normal"
+  },
+  {
+   "phase": 4,
+   "nr": "4.25",
+   "text": "MSR/GLT-Planung: Datenpunkte, Störmeldungen, Aufschaltung Leitwarte",
+   "gewerke": "MSR",
+   "fuehrend": "MSR",
+   "prio": "normal"
+  },
+  {
+   "phase": 4,
+   "nr": "4.26",
+   "text": "Brandschutzkonzept fortschreiben: Abschottungen, Melder, Wandhydranten, Feuerwehrplan",
+   "gewerke": "BS,AR",
+   "fuehrend": "BS",
+   "prio": "hoch"
+  },
+  {
+   "phase": 4,
+   "nr": "4.27",
+   "text": "Türen/Zargen: Strahlenschutz, HF-Dichtung, Fluchtweg, Automatik, Breiten",
+   "gewerke": "AR,StrS,MT",
+   "fuehrend": "AR",
+   "prio": "normal"
+  },
+  {
+   "phase": 4,
+   "nr": "4.28",
+   "text": "IT-Planung: Datendosen, WLAN, Netztrennung Medizintechnik, Firewallzonen",
+   "gewerke": "IT",
+   "fuehrend": "IT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 4,
+   "nr": "4.29",
+   "text": "Planfreigabe Entwurf durch Nutzer und Betreiber dokumentieren; Planstand einfrieren",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "hoch",
+   "hinweis": "Raumbuch-Planstand „Entwurf\" erzeugen"
+  },
+  {
+   "phase": 4,
+   "nr": "4.30",
+   "text": "Ausführungsplanung aller Gewerke koordinieren und Kollisionsprüfung durchführen",
+   "gewerke": "PL,AR",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 5,
+   "nr": "5.01",
+   "text": "Baugenehmigung/Bauanzeige klären; Bauantrag mit Behörde abstimmen",
+   "gewerke": "AR,PL",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 5,
+   "nr": "5.02",
+   "text": "Strahlenschutz-Genehmigung bzw. -Anzeige nach StrlSchG vorbereiten",
+   "gewerke": "StrS",
+   "fuehrend": "StrS",
+   "prio": "hoch",
+   "geraetetypen": "CT,Angiographie,Hybrid-OP,PET-CT,Linearbeschleuniger"
+  },
+  {
+   "phase": 5,
+   "nr": "5.03",
+   "text": "Strahlenschutzbeauftragten benennen und Zuständigkeiten festlegen",
+   "gewerke": "StrS,PL",
+   "fuehrend": "StrS",
+   "prio": "hoch",
+   "geraetetypen": "CT,Angiographie,Hybrid-OP,PET-CT,Linearbeschleuniger"
+  },
+  {
+   "phase": 5,
+   "nr": "5.04",
+   "text": "Sachverständigen für Strahlenschutzprüfung frühzeitig einbinden",
+   "gewerke": "StrS",
+   "fuehrend": "StrS",
+   "prio": "hoch",
+   "geraetetypen": "CT,Angiographie,Hybrid-OP,PET-CT,Linearbeschleuniger"
+  },
+  {
+   "phase": 5,
+   "nr": "5.05",
+   "text": "Umgangsgenehmigung radioaktive Stoffe beantragen",
+   "gewerke": "StrS",
+   "fuehrend": "StrS",
+   "prio": "hoch",
+   "geraetetypen": "PET-CT"
+  },
+  {
+   "phase": 5,
+   "nr": "5.06",
+   "text": "Anzeige nach MPBetreibV/Anzeigepflichten gegenüber Behörden terminieren",
+   "gewerke": "MT,PL",
+   "fuehrend": "MT",
+   "prio": "normal"
+  },
+  {
+   "phase": 5,
+   "nr": "5.07",
+   "text": "Arbeitsstättenrechtliche Anforderungen prüfen (ASR, Lüftung, Beleuchtung, Flucht)",
+   "gewerke": "AS,AR",
+   "fuehrend": "AS",
+   "prio": "normal"
+  },
+  {
+   "phase": 5,
+   "nr": "5.08",
+   "text": "Gefährdungsbeurteilung Magnetfeld erstellen (Zutritt, Implantatträger, Arbeitsmittel)",
+   "gewerke": "AS,MT",
+   "fuehrend": "AS",
+   "prio": "hoch",
+   "geraetetypen": "MRT"
+  },
+  {
+   "phase": 5,
+   "nr": "5.09",
+   "text": "Druckbehälter-/Kryogenik-Anforderungen prüfen (Helium, Sicherheitsventile)",
+   "gewerke": "AS,MT",
+   "fuehrend": "AS",
+   "prio": "normal",
+   "geraetetypen": "MRT"
+  },
+  {
+   "phase": 5,
+   "nr": "5.10",
+   "text": "Brandschutznachweis/Abweichungen mit Prüfingenieur klären",
+   "gewerke": "BS",
+   "fuehrend": "BS",
+   "prio": "hoch"
+  },
+  {
+   "phase": 5,
+   "nr": "5.11",
+   "text": "Denkmalschutz/Bestandsschutz-Belange klären (falls einschlägig)",
+   "gewerke": "AR",
+   "fuehrend": "AR",
+   "prio": "niedrig"
+  },
+  {
+   "phase": 5,
+   "nr": "5.12",
+   "text": "Beteiligung Personalrat und Datenschutz für Einführung/Überwachungstechnik einleiten",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 5,
+   "nr": "5.13",
+   "text": "Hygienefreigabe der Planung durch Krankenhaushygiene einholen",
+   "gewerke": "HYG",
+   "fuehrend": "HYG",
+   "prio": "normal"
+  },
+  {
+   "phase": 5,
+   "nr": "5.14",
+   "text": "Aufsichtsbehörde Arbeitsschutz informieren (falls anzeigepflichtige Baustelle)",
+   "gewerke": "AS",
+   "fuehrend": "AS",
+   "prio": "niedrig"
+  },
+  {
+   "phase": 5,
+   "nr": "5.15",
+   "text": "SiGe-Koordinator bestellen und SiGe-Plan aufstellen lassen",
+   "gewerke": "AS,AR",
+   "fuehrend": "AS",
+   "prio": "normal"
+  },
+  {
+   "phase": 5,
+   "nr": "5.16",
+   "text": "Genehmigungsauflagen in Planung und Ausschreibung übernehmen (Auflagenliste führen)",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 5,
+   "nr": "5.17",
+   "text": "Entwässerungs-/Abwasseranforderungen klären (Abklinganlage, Amalgam u. ä.)",
+   "gewerke": "SAN,StrS",
+   "fuehrend": "SAN",
+   "prio": "normal",
+   "geraetetypen": "PET-CT"
+  },
+  {
+   "phase": 5,
+   "nr": "5.18",
+   "text": "Genehmigungsstatus-Übersicht führen und im Lenkungskreis berichten",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 6,
+   "nr": "6.01",
+   "text": "Vergabestrategie festlegen (Verfahrensart, Lose Gerät/Bau, Wartung)",
+   "gewerke": "VG,PL",
+   "fuehrend": "VG",
+   "prio": "hoch"
+  },
+  {
+   "phase": 6,
+   "nr": "6.02",
+   "text": "Leistungsverzeichnis Großgerät erstellen (technische Mindestanforderungen, Optionen, Applikation)",
+   "gewerke": "MT,VG",
+   "fuehrend": "MT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 6,
+   "nr": "6.03",
+   "text": "Bewertungsmatrix und Zuschlagskriterien definieren (Preis, Technik, Service, TCO)",
+   "gewerke": "VG,MT",
+   "fuehrend": "VG",
+   "prio": "hoch"
+  },
+  {
+   "phase": 6,
+   "nr": "6.04",
+   "text": "Cybersecurity-Anforderungen in LV aufnehmen (MDS2, Patchprozess, Fernwartung, Härtung)",
+   "gewerke": "IT,MT,VG",
+   "fuehrend": "IT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 6,
+   "nr": "6.05",
+   "text": "IT-Schnittstellen ausschreiben (DICOM, HL7/RIS-PACS, Worklist, Dosismanagement)",
+   "gewerke": "IT,MT",
+   "fuehrend": "IT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 6,
+   "nr": "6.06",
+   "text": "Bau-/TGA-Leistungen ausschreiben (Lose, Terminvorgaben, Baustellenlogistik)",
+   "gewerke": "AR,VG",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 6,
+   "nr": "6.07",
+   "text": "Wartungsvertrag ausschreiben/verhandeln (Reaktionszeiten, Verfügbarkeit, Remote-Service)",
+   "gewerke": "VG,MT",
+   "fuehrend": "VG",
+   "prio": "hoch"
+  },
+  {
+   "phase": 6,
+   "nr": "6.08",
+   "text": "Einweisungs-/Schulungsleistungen und Applikationstage vertraglich festlegen",
+   "gewerke": "MT,VG",
+   "fuehrend": "MT",
+   "prio": "normal"
+  },
+  {
+   "phase": 6,
+   "nr": "6.09",
+   "text": "Demontage/Rücknahme Altgerät in LV aufnehmen",
+   "gewerke": "MT,VG",
+   "fuehrend": "MT",
+   "prio": "normal"
+  },
+  {
+   "phase": 6,
+   "nr": "6.10",
+   "text": "Lieferbedingungen definieren: Einbringung, Versicherung, Gefahrübergang, Zwischenlager",
+   "gewerke": "VG,MT,AR",
+   "fuehrend": "VG",
+   "prio": "normal"
+  },
+  {
+   "phase": 6,
+   "nr": "6.11",
+   "text": "Bietergespräche/Teststellungen bzw. Referenzbesichtigungen durchführen",
+   "gewerke": "MT,VG",
+   "fuehrend": "MT",
+   "prio": "normal"
+  },
+  {
+   "phase": 6,
+   "nr": "6.12",
+   "text": "Angebote technisch prüfen und Site-Planning-Anforderungen vergleichen",
+   "gewerke": "MT,AR,ELT,KÄL",
+   "fuehrend": "MT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 6,
+   "nr": "6.13",
+   "text": "Vergabevermerk erstellen; Zuschlag dokumentieren",
+   "gewerke": "VG",
+   "fuehrend": "VG",
+   "prio": "hoch"
+  },
+  {
+   "phase": 6,
+   "nr": "6.14",
+   "text": "Verhandlungsergebnisse (Preise, Optionen, Termine) im Vertrag fixieren",
+   "gewerke": "VG,PL",
+   "fuehrend": "VG",
+   "prio": "hoch"
+  },
+  {
+   "phase": 6,
+   "nr": "6.15",
+   "text": "Bestellung auslösen und Auftragsbestätigung mit Lieferterminen ablegen",
+   "gewerke": "VG",
+   "fuehrend": "VG",
+   "prio": "hoch"
+  },
+  {
+   "phase": 6,
+   "nr": "6.16",
+   "text": "Finale Herstellerplanung (verbindliche Installationszeichnungen) anfordern",
+   "gewerke": "MT,AR",
+   "fuehrend": "MT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 6,
+   "nr": "6.17",
+   "text": "Bauverträge schließen; Nachunternehmerliste und Bürgschaften prüfen",
+   "gewerke": "AR,VG",
+   "fuehrend": "VG",
+   "prio": "normal"
+  },
+  {
+   "phase": 6,
+   "nr": "6.18",
+   "text": "Terminplan mit allen Auftragnehmern verbindlich abstimmen (Bau, Lieferung, IBN)",
+   "gewerke": "PL,AR,MT",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 6,
+   "nr": "6.19",
+   "text": "Versicherungen prüfen (Bauleistung, Transport, Montage)",
+   "gewerke": "PL,VG",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 6,
+   "nr": "6.20",
+   "text": "Förderrechtliche Vergabedokumentation sicherstellen (Prüfpfad)",
+   "gewerke": "VG,PL",
+   "fuehrend": "VG",
+   "prio": "normal"
+  },
+  {
+   "phase": 7,
+   "nr": "7.01",
+   "text": "MDS2-Dokument des Herstellers anfordern und bewerten",
+   "gewerke": "IT,MT",
+   "fuehrend": "IT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 7,
+   "nr": "7.02",
+   "text": "Netzsegmentierung festlegen (Medizintechnik-VLAN, Firewall-Regeln, Zonenmodell)",
+   "gewerke": "IT",
+   "fuehrend": "IT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 7,
+   "nr": "7.03",
+   "text": "IP-Adresskonzept und Namenskonvention abstimmen",
+   "gewerke": "IT",
+   "fuehrend": "IT",
+   "prio": "normal"
+  },
+  {
+   "phase": 7,
+   "nr": "7.04",
+   "text": "Fernwartungszugang definieren (VPN, Jump-Host, Protokollierung, Freigabeprozess)",
+   "gewerke": "IT,MT",
+   "fuehrend": "IT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 7,
+   "nr": "7.05",
+   "text": "Patch- und Updateprozess mit Hersteller vereinbaren (Verantwortung, Zyklen)",
+   "gewerke": "IT,MT",
+   "fuehrend": "IT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 7,
+   "nr": "7.06",
+   "text": "Virenschutz/Whitelisting-Konzept für Modalität klären",
+   "gewerke": "IT",
+   "fuehrend": "IT",
+   "prio": "normal"
+  },
+  {
+   "phase": 7,
+   "nr": "7.07",
+   "text": "Schnittstellen konfigurieren: DICOM-Knoten, Worklist, MPPS, Storage-Commitment",
+   "gewerke": "IT,MT",
+   "fuehrend": "IT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 7,
+   "nr": "7.08",
+   "text": "RIS/PACS-Integration testen (Testumgebung, Testpatienten, Mapping)",
+   "gewerke": "IT,MT",
+   "fuehrend": "IT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 7,
+   "nr": "7.09",
+   "text": "Dosismanagement-Anbindung einrichten",
+   "gewerke": "IT,MT,StrS",
+   "fuehrend": "IT",
+   "prio": "normal",
+   "geraetetypen": "CT,Angiographie,Hybrid-OP,PET-CT"
+  },
+  {
+   "phase": 7,
+   "nr": "7.10",
+   "text": "Backup-/Restore-Konzept für Gerätekonfiguration klären",
+   "gewerke": "IT,MT",
+   "fuehrend": "IT",
+   "prio": "normal"
+  },
+  {
+   "phase": 7,
+   "nr": "7.11",
+   "text": "AD-/Benutzerkonzept am Gerät festlegen (persönliche Kennungen, Rollen)",
+   "gewerke": "IT,MT",
+   "fuehrend": "IT",
+   "prio": "normal"
+  },
+  {
+   "phase": 7,
+   "nr": "7.12",
+   "text": "Zeitsynchronisation (NTP) und Protokollierung einrichten",
+   "gewerke": "IT",
+   "fuehrend": "IT",
+   "prio": "niedrig"
+  },
+  {
+   "phase": 7,
+   "nr": "7.13",
+   "text": "Risikobewertung Informationssicherheit (B3S-Kontext) dokumentieren",
+   "gewerke": "IT,PL",
+   "fuehrend": "IT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 7,
+   "nr": "7.14",
+   "text": "Freigabe der IT-Sicherheitskonzeption durch ISB einholen",
+   "gewerke": "IT,PL",
+   "fuehrend": "IT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 7,
+   "nr": "7.15",
+   "text": "Notfallkonzept IT-Ausfall (Offline-Betrieb, Downtime-Formulare) erstellen",
+   "gewerke": "IT,MT",
+   "fuehrend": "IT",
+   "prio": "normal"
+  },
+  {
+   "phase": 7,
+   "nr": "7.16",
+   "text": "Datenschutz-Folgenabschätzung prüfen/erstellen (Patientendaten am Gerät)",
+   "gewerke": "IT,PL",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 7,
+   "nr": "7.17",
+   "text": "WLAN-Ausleuchtung für mobile Workflows prüfen",
+   "gewerke": "IT",
+   "fuehrend": "IT",
+   "prio": "niedrig"
+  },
+  {
+   "phase": 7,
+   "nr": "7.18",
+   "text": "Lizenz- und Zertifikatsverwaltung klären (DICOM-TLS, Serverzertifikate)",
+   "gewerke": "IT",
+   "fuehrend": "IT",
+   "prio": "niedrig"
+  },
+  {
+   "phase": 8,
+   "nr": "8.01",
+   "text": "Baustelleneinrichtung planen: Flächen, Container, Kran, Schuttwege, Anlieferzone",
+   "gewerke": "AR,PL",
+   "fuehrend": "AR",
+   "prio": "normal"
+  },
+  {
+   "phase": 8,
+   "nr": "8.02",
+   "text": "Baustellenordnung Klinik und Zutrittsregelung kommunizieren",
+   "gewerke": "AR,AS,HYG",
+   "fuehrend": "AR",
+   "prio": "normal"
+  },
+  {
+   "phase": 8,
+   "nr": "8.03",
+   "text": "Interims-/Umzugsplanung für betroffene Nutzer umsetzen",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 8,
+   "nr": "8.04",
+   "text": "Staubschutz-/Hygieneschutzkonzept mit Krankenhaushygiene festlegen (Schleusen, Unterdruck)",
+   "gewerke": "HYG,AR",
+   "fuehrend": "HYG",
+   "prio": "hoch"
+  },
+  {
+   "phase": 8,
+   "nr": "8.05",
+   "text": "Lärm-/Erschütterungsfenster mit Klinikbetrieb vereinbaren",
+   "gewerke": "AR,PL",
+   "fuehrend": "AR",
+   "prio": "normal"
+  },
+  {
+   "phase": 8,
+   "nr": "8.06",
+   "text": "Medienfreischaltungen planen (Strom, Wasser, Gase) und Abschaltanträge stellen",
+   "gewerke": "ELT,SAN,KÄL,LÜF",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 8,
+   "nr": "8.07",
+   "text": "Provisorien planen (Ersatzversorgung, Umleitungen von Trassen)",
+   "gewerke": "ELT,SAN,LÜF",
+   "fuehrend": "ELT",
+   "prio": "normal"
+  },
+  {
+   "phase": 8,
+   "nr": "8.08",
+   "text": "Bestandsleitungen orten und kennzeichnen (Leitungsauskunft, Suchschlitze)",
+   "gewerke": "AR,ELT,SAN",
+   "fuehrend": "AR",
+   "prio": "normal"
+  },
+  {
+   "phase": 8,
+   "nr": "8.09",
+   "text": "Schadstoffsanierung beauftragen und freimessen lassen",
+   "gewerke": "AR,AS",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 8,
+   "nr": "8.10",
+   "text": "Brandschutz während Bauphase organisieren (BMA-Abschaltungen, Heißarbeiten, Brandwachen)",
+   "gewerke": "BS,AS",
+   "fuehrend": "BS",
+   "prio": "hoch"
+  },
+  {
+   "phase": 8,
+   "nr": "8.11",
+   "text": "Fluchtwegkonzept Bauphase mit Feuerwehr/Brandschutzbeauftragtem abstimmen",
+   "gewerke": "BS,AR",
+   "fuehrend": "BS",
+   "prio": "normal"
+  },
+  {
+   "phase": 8,
+   "nr": "8.12",
+   "text": "Anlaufbesprechung mit allen Gewerken durchführen; Bauzeitenplan detaillieren",
+   "gewerke": "PL,AR",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 8,
+   "nr": "8.13",
+   "text": "Bautagebuch-Führung und Fotodokumentation festlegen",
+   "gewerke": "AR,PL",
+   "fuehrend": "AR",
+   "prio": "normal"
+  },
+  {
+   "phase": 8,
+   "nr": "8.14",
+   "text": "Beweissicherung Nachbarbereiche abschließen",
+   "gewerke": "AR",
+   "fuehrend": "AR",
+   "prio": "normal"
+  },
+  {
+   "phase": 8,
+   "nr": "8.15",
+   "text": "Altgeräte-Demontage terminieren: Abtransport, ggf. Heliumabbau, Verwertungsnachweis",
+   "gewerke": "MT,AR",
+   "fuehrend": "MT",
+   "prio": "normal"
+  },
+  {
+   "phase": 8,
+   "nr": "8.16",
+   "text": "Freigabe Baubeginn dokumentieren",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 9,
+   "nr": "9.01",
+   "text": "Abbruch-/Demontagearbeiten überwachen; Entsorgungsnachweise sammeln",
+   "gewerke": "AR",
+   "fuehrend": "AR",
+   "prio": "normal"
+  },
+  {
+   "phase": 9,
+   "nr": "9.02",
+   "text": "Rohbau: Durchbrüche, Fundamentplatte, Estrich, Bodenqualität prüfen",
+   "gewerke": "AR",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 9,
+   "nr": "9.03",
+   "text": "Lastverteilplatte/Fundament nach Herstellerplan herstellen und abnehmen",
+   "gewerke": "AR,MT",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 9,
+   "nr": "9.04",
+   "text": "Maßkontrolle Rohbau gegen Installationszeichnung (Achsen, Höhen, Toleranzen)",
+   "gewerke": "AR,MT",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 9,
+   "nr": "9.05",
+   "text": "Bleiabschirmung einbauen; Fugen/Stöße/Durchdringungen dokumentieren",
+   "gewerke": "StrS,AR",
+   "fuehrend": "StrS",
+   "prio": "hoch",
+   "hinweis": "Fotodokumentation vor Beplankung",
+   "geraetetypen": "CT,Angiographie,Hybrid-OP,PET-CT,Linearbeschleuniger"
+  },
+  {
+   "phase": 9,
+   "nr": "9.06",
+   "text": "Bleigleichwert-Zwischenprüfung vor Verschließen der Wände",
+   "gewerke": "StrS",
+   "fuehrend": "StrS",
+   "prio": "hoch",
+   "geraetetypen": "CT,Angiographie,Hybrid-OP,PET-CT,Linearbeschleuniger"
+  },
+  {
+   "phase": 9,
+   "nr": "9.07",
+   "text": "HF-Kabine montieren (Boden, Wände, Decke, Tür, Fenster, Filterplatte)",
+   "gewerke": "MT,AR",
+   "fuehrend": "MT",
+   "prio": "hoch",
+   "geraetetypen": "MRT"
+  },
+  {
+   "phase": 9,
+   "nr": "9.08",
+   "text": "HF-Zwischenmessung nach Kabinenmontage durchführen und protokollieren",
+   "gewerke": "MT",
+   "fuehrend": "MT",
+   "prio": "hoch",
+   "hinweis": "Vor Innenausbau!",
+   "geraetetypen": "MRT"
+  },
+  {
+   "phase": 9,
+   "nr": "9.09",
+   "text": "Quenchrohr installieren; Dichtheit und Ausblasbereich sichern",
+   "gewerke": "MT,LÜF,AR",
+   "fuehrend": "MT",
+   "prio": "hoch",
+   "geraetetypen": "MRT"
+  },
+  {
+   "phase": 9,
+   "nr": "9.10",
+   "text": "Elektro-Rohinstallation: Trassen, Leerrohre, Unterverteilung, Zählerplätze",
+   "gewerke": "ELT",
+   "fuehrend": "ELT",
+   "prio": "normal"
+  },
+  {
+   "phase": 9,
+   "nr": "9.11",
+   "text": "Geräteeinspeisung verlegen und Querschnitte prüfen",
+   "gewerke": "ELT",
+   "fuehrend": "ELT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 9,
+   "nr": "9.12",
+   "text": "Potentialausgleich installieren; Messprotokoll Rohinstallation",
+   "gewerke": "ELT",
+   "fuehrend": "ELT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 9,
+   "nr": "9.13",
+   "text": "Kaltwasserleitungen verlegen, spülen, Druckprobe durchführen",
+   "gewerke": "KÄL,SAN",
+   "fuehrend": "KÄL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 9,
+   "nr": "9.14",
+   "text": "RLT-Kanäle montieren; Dichtheitsklasse prüfen; Brandschutzklappen einbauen",
+   "gewerke": "LÜF,BS",
+   "fuehrend": "LÜF",
+   "prio": "normal"
+  },
+  {
+   "phase": 9,
+   "nr": "9.15",
+   "text": "Sanitär-/Gase-Rohinstallation; Druckproben medizinische Gase protokollieren",
+   "gewerke": "SAN",
+   "fuehrend": "SAN",
+   "prio": "hoch"
+  },
+  {
+   "phase": 9,
+   "nr": "9.16",
+   "text": "MSR-Verkabelung und Feldgeräte installieren",
+   "gewerke": "MSR",
+   "fuehrend": "MSR",
+   "prio": "normal"
+  },
+  {
+   "phase": 9,
+   "nr": "9.17",
+   "text": "IT-Verkabelung: Datendosen, LWL, Rangierung; Messprotokolle Klasse EA",
+   "gewerke": "IT",
+   "fuehrend": "IT",
+   "prio": "normal"
+  },
+  {
+   "phase": 9,
+   "nr": "9.18",
+   "text": "Brandabschottungen herstellen und kennzeichnen (Abschottungsliste)",
+   "gewerke": "BS",
+   "fuehrend": "BS",
+   "prio": "hoch"
+  },
+  {
+   "phase": 9,
+   "nr": "9.19",
+   "text": "Türen/Zargen einbauen (Strahlenschutz-, HF-, Fluchtwegtüren) und einstellen",
+   "gewerke": "AR,StrS",
+   "fuehrend": "AR",
+   "prio": "normal"
+  },
+  {
+   "phase": 9,
+   "nr": "9.20",
+   "text": "Decken schließen erst nach Freigabe aller Zwischenprüfungen",
+   "gewerke": "AR,PL",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 9,
+   "nr": "9.21",
+   "text": "Innenausbau: Böden (leitfähig), Wände, Strahlenschutz-Sichtfenster, Einbauten",
+   "gewerke": "AR",
+   "fuehrend": "AR",
+   "prio": "normal"
+  },
+  {
+   "phase": 9,
+   "nr": "9.22",
+   "text": "Baubesprechungen wöchentlich führen; offene Punkte nachverfolgen",
+   "gewerke": "PL,AR",
+   "fuehrend": "AR",
+   "prio": "normal"
+  },
+  {
+   "phase": 9,
+   "nr": "9.23",
+   "text": "Bautagebuch mit Fotos je Bauzustand führen",
+   "gewerke": "AR",
+   "fuehrend": "AR",
+   "prio": "normal"
+  },
+  {
+   "phase": 9,
+   "nr": "9.24",
+   "text": "Mängel laufend erfassen und mit Fristen verfolgen",
+   "gewerke": "AR,PL",
+   "fuehrend": "AR",
+   "prio": "normal"
+  },
+  {
+   "phase": 9,
+   "nr": "9.25",
+   "text": "Änderungsmanagement: Nachträge bewerten, freigeben, dokumentieren",
+   "gewerke": "PL,VG,AR",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 9,
+   "nr": "9.26",
+   "text": "Raumbuch-Planstand „Ausführung\" fortschreiben",
+   "gewerke": "PL,AR",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 10,
+   "nr": "10.01",
+   "text": "Liefertermin bestätigen; Anlieferlogistik final abstimmen (Uhrzeit, Route, Sperrungen)",
+   "gewerke": "MT,PL,AR",
+   "fuehrend": "MT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 10,
+   "nr": "10.02",
+   "text": "Kranstellung/Schwertransport genehmigen lassen (Straßensperrung, Polizei)",
+   "gewerke": "AR,PL",
+   "fuehrend": "AR",
+   "prio": "normal"
+  },
+  {
+   "phase": 10,
+   "nr": "10.03",
+   "text": "Einbringweg vorbereiten: Schutzmaßnahmen, Bodenplatten, Demontagen",
+   "gewerke": "AR,MT",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 10,
+   "nr": "10.04",
+   "text": "Bauseitige Voraussetzungen nach Hersteller-Checkliste bestätigen (Ready-for-Delivery)",
+   "gewerke": "MT,AR,ELT,KÄL",
+   "fuehrend": "MT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 10,
+   "nr": "10.05",
+   "text": "Baureinigung/Feinstaubfreiheit vor Einbringung sicherstellen",
+   "gewerke": "AR,HYG",
+   "fuehrend": "AR",
+   "prio": "normal"
+  },
+  {
+   "phase": 10,
+   "nr": "10.06",
+   "text": "Anlieferung überwachen; Transportschäden sofort dokumentieren",
+   "gewerke": "MT",
+   "fuehrend": "MT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 10,
+   "nr": "10.07",
+   "text": "Magnet einbringen und positionieren; Achsen/Feldlage prüfen",
+   "gewerke": "MT,AR",
+   "fuehrend": "MT",
+   "prio": "hoch",
+   "geraetetypen": "MRT"
+  },
+  {
+   "phase": 10,
+   "nr": "10.08",
+   "text": "Gantry/System einbringen und auf Fundament montieren",
+   "gewerke": "MT",
+   "fuehrend": "MT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 10,
+   "nr": "10.09",
+   "text": "Heliumbefüllung/Kryostat-Arbeiten begleiten; Sicherheitsbereich absichern",
+   "gewerke": "MT,AS",
+   "fuehrend": "MT",
+   "prio": "hoch",
+   "geraetetypen": "MRT"
+  },
+  {
+   "phase": 10,
+   "nr": "10.10",
+   "text": "Geräteeigene Verkabelung durch Hersteller; Schnittstellen zu Bauseite klären",
+   "gewerke": "MT,ELT",
+   "fuehrend": "MT",
+   "prio": "normal"
+  },
+  {
+   "phase": 10,
+   "nr": "10.11",
+   "text": "Kaltwasseranschluss Gerät herstellen; Durchfluss/Temperatur einregulieren",
+   "gewerke": "KÄL,MT",
+   "fuehrend": "KÄL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 10,
+   "nr": "10.12",
+   "text": "Deckenstative/Monitorampeln montieren und Traglast prüfen",
+   "gewerke": "MT,AR",
+   "fuehrend": "MT",
+   "prio": "normal",
+   "geraetetypen": "Angiographie,Hybrid-OP,CT"
+  },
+  {
+   "phase": 10,
+   "nr": "10.13",
+   "text": "Patiententisch, Injektor, Zubehör montieren und anschließen",
+   "gewerke": "MT",
+   "fuehrend": "MT",
+   "prio": "normal"
+  },
+  {
+   "phase": 10,
+   "nr": "10.14",
+   "text": "HF-Enddichtung nach Kabeldurchführungen prüfen",
+   "gewerke": "MT",
+   "fuehrend": "MT",
+   "prio": "hoch",
+   "geraetetypen": "MRT"
+  },
+  {
+   "phase": 10,
+   "nr": "10.15",
+   "text": "Montagefortschritt und Restpunkte des Herstellers protokollieren",
+   "gewerke": "MT,PL",
+   "fuehrend": "MT",
+   "prio": "normal"
+  },
+  {
+   "phase": 10,
+   "nr": "10.16",
+   "text": "Erstinbetriebnahme durch Hersteller (Power-on) begleiten",
+   "gewerke": "MT,ELT",
+   "fuehrend": "MT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 10,
+   "nr": "10.17",
+   "text": "Magnetfeld-Kennzeichnung und Zutrittskontrolle aktivieren",
+   "gewerke": "MT,AS,StrS",
+   "fuehrend": "MT",
+   "prio": "hoch",
+   "geraetetypen": "MRT"
+  },
+  {
+   "phase": 10,
+   "nr": "10.18",
+   "text": "Einweisung Baustellenpersonal in Gefahrenbereiche (Magnet, Strahlung)",
+   "gewerke": "AS,MT",
+   "fuehrend": "AS",
+   "prio": "normal"
+  },
+  {
+   "phase": 11,
+   "nr": "11.01",
+   "text": "Elektrische Sicherheitsprüfungen: Schleifenimpedanz, Iso-Messung, RCD-Tests",
+   "gewerke": "ELT",
+   "fuehrend": "ELT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 11,
+   "nr": "11.02",
+   "text": "Abnahmemessung DIN VDE 0100-710: PA, ZSV-Umschaltzeiten, IT-System-Überwachung",
+   "gewerke": "ELT",
+   "fuehrend": "ELT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 11,
+   "nr": "11.03",
+   "text": "Netzersatzprobe: Lastübernahme AV/SV/ZSV mit Gerät im Betrieb testen",
+   "gewerke": "ELT,MT",
+   "fuehrend": "ELT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 11,
+   "nr": "11.04",
+   "text": "USV-Autonomietest unter Last durchführen",
+   "gewerke": "ELT",
+   "fuehrend": "ELT",
+   "prio": "normal"
+  },
+  {
+   "phase": 11,
+   "nr": "11.05",
+   "text": "HF-Endmessung Kabine mit Protokoll (Schirmdämpfung über Frequenzband)",
+   "gewerke": "MT",
+   "fuehrend": "MT",
+   "prio": "hoch",
+   "geraetetypen": "MRT"
+  },
+  {
+   "phase": 11,
+   "nr": "11.06",
+   "text": "Magnetfeldkarte messen und 0,5-mT-Zone kennzeichnen",
+   "gewerke": "MT,StrS",
+   "fuehrend": "MT",
+   "prio": "hoch",
+   "geraetetypen": "MRT"
+  },
+  {
+   "phase": 11,
+   "nr": "11.07",
+   "text": "Strahlenschutz-Abnahmemessung durch Sachverständigen (Ortsdosisleistung)",
+   "gewerke": "StrS",
+   "fuehrend": "StrS",
+   "prio": "hoch",
+   "geraetetypen": "CT,Angiographie,Hybrid-OP,PET-CT,Linearbeschleuniger"
+  },
+  {
+   "phase": 11,
+   "nr": "11.08",
+   "text": "Sauerstoffmangel-Warnanlage kalibrieren und Alarmkette testen",
+   "gewerke": "MSR,AS",
+   "fuehrend": "MSR",
+   "prio": "hoch",
+   "geraetetypen": "MRT"
+  },
+  {
+   "phase": 11,
+   "nr": "11.09",
+   "text": "RLT einregulieren: Volumenströme, Druckstufen, Temperatur-/Feuchtefahrt",
+   "gewerke": "LÜF",
+   "fuehrend": "LÜF",
+   "prio": "hoch"
+  },
+  {
+   "phase": 11,
+   "nr": "11.10",
+   "text": "Hygiene-Abnahme RLT (ggf. Luftkeimmessung) durchführen",
+   "gewerke": "HYG,LÜF",
+   "fuehrend": "HYG",
+   "prio": "normal"
+  },
+  {
+   "phase": 11,
+   "nr": "11.11",
+   "text": "Kälteanlage einregulieren; Redundanz-/Störszenarien testen (Notkühlung)",
+   "gewerke": "KÄL",
+   "fuehrend": "KÄL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 11,
+   "nr": "11.12",
+   "text": "Medizinische Gase: Abnahmeprüfung, Reinheitsmessung, Kennzeichnung",
+   "gewerke": "SAN",
+   "fuehrend": "SAN",
+   "prio": "hoch"
+  },
+  {
+   "phase": 11,
+   "nr": "11.13",
+   "text": "GLT-Aufschaltung testen: Datenpunkte, Störmeldungen, Trending",
+   "gewerke": "MSR",
+   "fuehrend": "MSR",
+   "prio": "normal"
+  },
+  {
+   "phase": 11,
+   "nr": "11.14",
+   "text": "BMA/Sprinkler-Anpassungen prüfen und Wirk-Prinzip-Prüfung durchführen",
+   "gewerke": "BS,MSR",
+   "fuehrend": "BS",
+   "prio": "hoch"
+  },
+  {
+   "phase": 11,
+   "nr": "11.15",
+   "text": "Quench-Notfallszenario prüfen (Auslöseorgane, Türöffnung, Lüftungsverhalten)",
+   "gewerke": "MT,AS,LÜF",
+   "fuehrend": "MT",
+   "prio": "hoch",
+   "geraetetypen": "MRT"
+  },
+  {
+   "phase": 11,
+   "nr": "11.16",
+   "text": "Bildqualitäts- und Kalibriermessungen des Herstellers begleiten (Phantome)",
+   "gewerke": "MT",
+   "fuehrend": "MT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 11,
+   "nr": "11.17",
+   "text": "Abnahmeprüfung nach QS-Richtlinie/DIN 6868 ff. mit Medizinphysik durchführen",
+   "gewerke": "MT,StrS",
+   "fuehrend": "MT",
+   "prio": "hoch",
+   "geraetetypen": "CT,Angiographie,Hybrid-OP,PET-CT,Linearbeschleuniger"
+  },
+  {
+   "phase": 11,
+   "nr": "11.18",
+   "text": "IT-Integrationstest im Wirkbetrieb: Worklist, Bildversand, Befundworkflow, Dosisdaten",
+   "gewerke": "IT,MT",
+   "fuehrend": "IT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 11,
+   "nr": "11.19",
+   "text": "Fernwartungszugang produktiv testen und protokollieren",
+   "gewerke": "IT,MT",
+   "fuehrend": "IT",
+   "prio": "normal"
+  },
+  {
+   "phase": 11,
+   "nr": "11.20",
+   "text": "DGUV-V3-Prüfung ortsveränderlicher/ortsfester Anlagen dokumentieren",
+   "gewerke": "ELT,AS",
+   "fuehrend": "ELT",
+   "prio": "normal"
+  },
+  {
+   "phase": 11,
+   "nr": "11.21",
+   "text": "Messprotokolle aller Gewerke einsammeln und im Dokumentenregister ablegen",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 11,
+   "nr": "11.22",
+   "text": "Restpunkte aus Inbetriebnahme in Mängelliste überführen",
+   "gewerke": "PL,AR",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 12,
+   "nr": "12.01",
+   "text": "Bau-Abnahmen je Gewerk (VOB) mit Mängellisten durchführen",
+   "gewerke": "AR,PL",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 12,
+   "nr": "12.02",
+   "text": "TGA-Abnahmen: ELT, RLT, Kälte, Sanitär, MSR mit Protokollen",
+   "gewerke": "ELT,LÜF,KÄL,SAN,MSR",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 12,
+   "nr": "12.03",
+   "text": "Brandschutz-Abnahme: Abschottungen, Türen, BMA, Feuerwehrpläne aktualisiert",
+   "gewerke": "BS",
+   "fuehrend": "BS",
+   "prio": "hoch"
+  },
+  {
+   "phase": 12,
+   "nr": "12.04",
+   "text": "Sachverständigen-Abnahme Strahlenschutz und Behördenfreigabe einholen",
+   "gewerke": "StrS",
+   "fuehrend": "StrS",
+   "prio": "hoch",
+   "geraetetypen": "CT,Angiographie,Hybrid-OP,PET-CT,Linearbeschleuniger"
+  },
+  {
+   "phase": 12,
+   "nr": "12.05",
+   "text": "Hygiene-Endabnahme und Schlussreinigung freigeben",
+   "gewerke": "HYG",
+   "fuehrend": "HYG",
+   "prio": "normal"
+  },
+  {
+   "phase": 12,
+   "nr": "12.06",
+   "text": "Arbeitsschutz-Begehung: Kennzeichnung, Fluchtwege, Notfallausstattung",
+   "gewerke": "AS",
+   "fuehrend": "AS",
+   "prio": "normal"
+  },
+  {
+   "phase": 12,
+   "nr": "12.07",
+   "text": "Geräteabnahme mit Hersteller: Funktionsnachweis, Spezifikationsabgleich, Restpunkte",
+   "gewerke": "MT,PL",
+   "fuehrend": "MT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 12,
+   "nr": "12.08",
+   "text": "Abnahmeprüfung Medizinprodukt inkl. sicherheitstechnischer Kontrolle dokumentieren",
+   "gewerke": "MT",
+   "fuehrend": "MT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 12,
+   "nr": "12.09",
+   "text": "Konstanzprüfungs-Baseline aufnehmen und QS-Zyklen festlegen",
+   "gewerke": "MT,StrS",
+   "fuehrend": "MT",
+   "prio": "normal",
+   "geraetetypen": "CT,Angiographie,Hybrid-OP,PET-CT,Linearbeschleuniger"
+  },
+  {
+   "phase": 12,
+   "nr": "12.10",
+   "text": "Medizinproduktebuch/Bestandsverzeichnis anlegen (MPBetreibV)",
+   "gewerke": "MT",
+   "fuehrend": "MT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 12,
+   "nr": "12.11",
+   "text": "Ersteinweisung durch Hersteller für Gerätebeauftragte durchführen (§ 10 MPBetreibV)",
+   "gewerke": "MT",
+   "fuehrend": "MT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 12,
+   "nr": "12.12",
+   "text": "Einweisungsnachweise aller Anwender einsammeln und ablegen",
+   "gewerke": "MT",
+   "fuehrend": "MT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 12,
+   "nr": "12.13",
+   "text": "Einweisung Technik/Betrieb: Medienversorgung, Störmeldungen, Notabschaltungen",
+   "gewerke": "MT,ELT,KÄL,LÜF,MSR",
+   "fuehrend": "MT",
+   "prio": "normal"
+  },
+  {
+   "phase": 12,
+   "nr": "12.14",
+   "text": "Notfallunterweisungen: Quench, Brand im MR-Bereich, Kontrastmittelzwischenfall",
+   "gewerke": "AS,MT",
+   "fuehrend": "AS",
+   "prio": "hoch",
+   "geraetetypen": "MRT"
+  },
+  {
+   "phase": 12,
+   "nr": "12.15",
+   "text": "Strahlenschutzunterweisungen durchführen und dokumentieren",
+   "gewerke": "StrS",
+   "fuehrend": "StrS",
+   "prio": "hoch",
+   "geraetetypen": "CT,Angiographie,Hybrid-OP,PET-CT,Linearbeschleuniger"
+  },
+  {
+   "phase": 12,
+   "nr": "12.16",
+   "text": "Abnahmereife-Prüfung im System: offene Punkte, fehlende Dokumente, offene Mängel",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "hoch",
+   "hinweis": "Bericht „Abnahmereife\" nutzen"
+  },
+  {
+   "phase": 12,
+   "nr": "12.17",
+   "text": "Mängelbeseitigung nachverfolgen; Nachabnahmen terminieren",
+   "gewerke": "AR,PL",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 12,
+   "nr": "12.18",
+   "text": "Bestandsdokumentation einfordern: Revisionspläne, Schemata, Berechnungen",
+   "gewerke": "AR,ELT,LÜF,KÄL,SAN",
+   "fuehrend": "AR",
+   "prio": "hoch"
+  },
+  {
+   "phase": 12,
+   "nr": "12.19",
+   "text": "Raumbuch als „As built\" einfrieren",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 12,
+   "nr": "12.20",
+   "text": "Gewährleistungsfristen erfassen (Beginn, Dauer je Vertrag) und Wiedervorlagen setzen",
+   "gewerke": "PL,VG",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 12,
+   "nr": "12.21",
+   "text": "Versicherungsmeldung Inbetriebnahme/Neuwert an Betreiberversicherung",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "niedrig"
+  },
+  {
+   "phase": 12,
+   "nr": "12.22",
+   "text": "Behördliche Betriebsfreigaben vollständig ablegen",
+   "gewerke": "PL,StrS",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 12,
+   "nr": "12.23",
+   "text": "Probebetrieb mit Testpatienten/Phantomen im Realworkflow durchführen",
+   "gewerke": "MT,IT,PL",
+   "fuehrend": "MT",
+   "prio": "normal"
+  },
+  {
+   "phase": 12,
+   "nr": "12.24",
+   "text": "Übergabeprotokoll Bau→Betrieb unterzeichnen",
+   "gewerke": "PL,AR",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 12,
+   "nr": "12.25",
+   "text": "Restleistungsliste mit Terminen vereinbaren",
+   "gewerke": "AR,PL",
+   "fuehrend": "AR",
+   "prio": "normal"
+  },
+  {
+   "phase": 12,
+   "nr": "12.26",
+   "text": "Schlüssel-/Transponderübergabe und Zutrittsberechtigungen einrichten",
+   "gewerke": "AR,PL",
+   "fuehrend": "AR",
+   "prio": "niedrig"
+  },
+  {
+   "phase": 13,
+   "nr": "13.01",
+   "text": "Go-Live-Termin mit Klinik, IT und Hersteller festlegen; Erstbelegungsplan erstellen",
+   "gewerke": "PL,MT",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 13,
+   "nr": "13.02",
+   "text": "Erster Patiententag mit Applikationsbegleitung des Herstellers",
+   "gewerke": "MT",
+   "fuehrend": "MT",
+   "prio": "hoch"
+  },
+  {
+   "phase": 13,
+   "nr": "13.03",
+   "text": "Hypercare-Phase vereinbaren (erhöhte Supportbereitschaft erste Wochen)",
+   "gewerke": "MT,IT",
+   "fuehrend": "MT",
+   "prio": "normal"
+  },
+  {
+   "phase": 13,
+   "nr": "13.04",
+   "text": "Terminplanung/RIS-Slots aktivieren; Untersuchungsprotokolle freigeben",
+   "gewerke": "IT,MT",
+   "fuehrend": "MT",
+   "prio": "normal"
+  },
+  {
+   "phase": 13,
+   "nr": "13.05",
+   "text": "Störmelde- und Eskalationswege für Betrieb kommunizieren (Hotline, Ticket)",
+   "gewerke": "MT,IT,MSR",
+   "fuehrend": "MT",
+   "prio": "normal"
+  },
+  {
+   "phase": 13,
+   "nr": "13.06",
+   "text": "Wartungsvertrag aktivieren; erste Wartung terminieren",
+   "gewerke": "MT,VG",
+   "fuehrend": "MT",
+   "prio": "normal"
+  },
+  {
+   "phase": 13,
+   "nr": "13.07",
+   "text": "Verbrauchsmaterial/Zubehör-Erstausstattung prüfen (Spulen, Phantome, KM)",
+   "gewerke": "MT",
+   "fuehrend": "MT",
+   "prio": "niedrig"
+  },
+  {
+   "phase": 13,
+   "nr": "13.08",
+   "text": "Betriebsanweisungen aushängen (Magnetfeld, Strahlenschutz, Notfall)",
+   "gewerke": "AS,StrS,MT",
+   "fuehrend": "AS",
+   "prio": "normal"
+  },
+  {
+   "phase": 13,
+   "nr": "13.09",
+   "text": "Reinigungs-/Aufbereitungsplan mit Hygiene in Betrieb nehmen",
+   "gewerke": "HYG",
+   "fuehrend": "HYG",
+   "prio": "normal"
+  },
+  {
+   "phase": 13,
+   "nr": "13.10",
+   "text": "Energie-/Medienverbräuche Startwerte ablesen (Benchmark)",
+   "gewerke": "ELT,KÄL,MSR",
+   "fuehrend": "MSR",
+   "prio": "niedrig"
+  },
+  {
+   "phase": 13,
+   "nr": "13.11",
+   "text": "CAFM-Übergabe: Räume, Anlagen, Wartungspläne, As-built-Raumbuch exportieren",
+   "gewerke": "PL,MSR,AR",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 13,
+   "nr": "13.12",
+   "text": "Feedbackrunde Nutzer nach 2–4 Wochen durchführen; Nachjustierungen ableiten",
+   "gewerke": "PL,MT",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 13,
+   "nr": "13.13",
+   "text": "Leistungsdaten erste Wochen auswerten (Untersuchungszahlen, Ausfälle)",
+   "gewerke": "PL,MT",
+   "fuehrend": "PL",
+   "prio": "niedrig"
+  },
+  {
+   "phase": 13,
+   "nr": "13.14",
+   "text": "Offene Restpunkte aus Hypercare in Regelprozesse überführen",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 14,
+   "nr": "14.01",
+   "text": "Dokumentenregister auf Vollständigkeit prüfen (alle „benötigt\" erhalten)",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "hoch",
+   "hinweis": "Vollständigkeitsbericht nutzen"
+  },
+  {
+   "phase": 14,
+   "nr": "14.02",
+   "text": "Projektakte final exportieren und revisionssicher ablegen (10 Jahre)",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 14,
+   "nr": "14.03",
+   "text": "Schlussrechnungen prüfen; Kostenfeststellung nach DIN 276 erstellen",
+   "gewerke": "PL,VG,AR",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 14,
+   "nr": "14.04",
+   "text": "Fördermittel-Verwendungsnachweis fristgerecht einreichen",
+   "gewerke": "PL,VG",
+   "fuehrend": "PL",
+   "prio": "hoch"
+  },
+  {
+   "phase": 14,
+   "nr": "14.05",
+   "text": "Bürgschaften/Einbehalte nach Mängelfreiheit freigeben",
+   "gewerke": "VG,AR",
+   "fuehrend": "VG",
+   "prio": "normal"
+  },
+  {
+   "phase": 14,
+   "nr": "14.06",
+   "text": "Gewährleistungsbegehung Jahr 1 terminieren (Wiedervorlage)",
+   "gewerke": "AR,PL",
+   "fuehrend": "AR",
+   "prio": "normal"
+  },
+  {
+   "phase": 14,
+   "nr": "14.07",
+   "text": "Altgeräte-Verwertung abschließen: Löschnachweis Datenträger, Entsorgungsbelege",
+   "gewerke": "MT,IT",
+   "fuehrend": "MT",
+   "prio": "normal"
+  },
+  {
+   "phase": 14,
+   "nr": "14.08",
+   "text": "Projektabschlussbericht für Lenkungskreis erstellen (Kosten, Termine, Qualität)",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 14,
+   "nr": "14.09",
+   "text": "Lessons Learned-Workshop durchführen; Vorschläge für Vorlagenversion erfassen",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "normal",
+   "hinweis": "Erkenntnisse als Vorlagen-Vorschläge einreichen"
+  },
+  {
+   "phase": 14,
+   "nr": "14.10",
+   "text": "Checklisten-/Vorlagenpflege: neue Punkte in nächste Vorlagenversion übernehmen",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 14,
+   "nr": "14.11",
+   "text": "Projektorganisation auflösen; Verantwortungsübergang an Linienbetrieb bestätigen",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "normal"
+  },
+  {
+   "phase": 14,
+   "nr": "14.12",
+   "text": "Nachkalkulation Wirtschaftlichkeit nach 12 Monaten einplanen",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "niedrig"
+  },
+  {
+   "phase": 14,
+   "nr": "14.13",
+   "text": "Projekt im System archivieren",
+   "gewerke": "PL",
+   "fuehrend": "PL",
+   "prio": "normal"
+  }
+ ],
+ "dokumente": [
+  {
+   "bereich": "A",
+   "nr": "A.01",
+   "titel": "Bedarfsanforderung / Projektauftrag",
+   "gewerk": "PL",
+   "beschreibung": "Freigegebener Projektauftrag mit Bedarfsbegründung der Klinik"
+  },
+  {
+   "bereich": "A",
+   "nr": "A.02",
+   "titel": "Wirtschaftlichkeitsbetrachtung",
+   "gewerk": "PL",
+   "beschreibung": "Investitions- und Betriebskostenrechnung mit Amortisation"
+  },
+  {
+   "bereich": "A",
+   "nr": "A.03",
+   "titel": "Förderbescheid inkl. Auflagen",
+   "gewerk": "PL",
+   "beschreibung": "Bewilligung der Fördermittel mit Nebenbestimmungen"
+  },
+  {
+   "bereich": "A",
+   "nr": "A.04",
+   "titel": "Baugenehmigung / Bauanzeige",
+   "gewerk": "AR",
+   "beschreibung": "Baurechtliche Freigabe der Umbaumaßnahme"
+  },
+  {
+   "bereich": "A",
+   "nr": "A.05",
+   "titel": "Strahlenschutz-Genehmigung/-Anzeige",
+   "gewerk": "StrS",
+   "beschreibung": "Genehmigung bzw. Anzeige nach StrlSchG für den Betrieb"
+  },
+  {
+   "bereich": "A",
+   "nr": "A.06",
+   "titel": "Bestellung Strahlenschutzbeauftragter",
+   "gewerk": "StrS",
+   "beschreibung": "Benennungsschreiben mit Zuständigkeitsbereich"
+  },
+  {
+   "bereich": "A",
+   "nr": "A.07",
+   "titel": "Statik-Gutachten Aufstellort",
+   "gewerk": "AR",
+   "beschreibung": "Tragfähigkeitsnachweis für Gerätelasten"
+  },
+  {
+   "bereich": "A",
+   "nr": "A.08",
+   "titel": "Schwingungsgutachten",
+   "gewerk": "AR",
+   "beschreibung": "Messbericht Schwingungen mit Bewertung gegen Herstellergrenzwerte"
+  },
+  {
+   "bereich": "A",
+   "nr": "A.09",
+   "titel": "Schadstoffgutachten / Freimessung",
+   "gewerk": "AS",
+   "beschreibung": "Beprobung und Freigabe nach Sanierung"
+  },
+  {
+   "bereich": "A",
+   "nr": "A.10",
+   "titel": "Gefährdungsbeurteilungen (Magnetfeld/Baustelle)",
+   "gewerk": "AS",
+   "beschreibung": "GBU nach ArbSchG inkl. Maßnahmen"
+  },
+  {
+   "bereich": "B",
+   "nr": "B.01",
+   "titel": "Leistungsverzeichnis Großgerät",
+   "gewerk": "VG",
+   "beschreibung": "Ausschreibungsunterlage mit technischen Anforderungen"
+  },
+  {
+   "bereich": "B",
+   "nr": "B.02",
+   "titel": "Vergabevermerk / Zuschlagsdokumentation",
+   "gewerk": "VG",
+   "beschreibung": "Dokumentation der Angebotswertung und Vergabeentscheidung"
+  },
+  {
+   "bereich": "B",
+   "nr": "B.03",
+   "titel": "Kaufvertrag / Auftragsbestätigung Gerät",
+   "gewerk": "VG",
+   "beschreibung": "Vertragsdokument mit Lieferumfang, Preisen und Terminen"
+  },
+  {
+   "bereich": "B",
+   "nr": "B.04",
+   "titel": "Wartungs-/Servicevertrag",
+   "gewerk": "VG",
+   "beschreibung": "Vollwartungs- oder Servicevertrag mit Reaktionszeiten"
+  },
+  {
+   "bereich": "B",
+   "nr": "B.05",
+   "titel": "Finale Installationsplanung des Herstellers",
+   "gewerk": "MT",
+   "beschreibung": "Verbindliche Installationszeichnungen und bauseitige Anforderungen"
+  },
+  {
+   "bereich": "B",
+   "nr": "B.06",
+   "titel": "Bauverträge / Nachunternehmerliste",
+   "gewerk": "AR",
+   "beschreibung": "VOB-Verträge der Baugewerke"
+  },
+  {
+   "bereich": "B",
+   "nr": "B.07",
+   "titel": "Terminplan (Vertragsbasis)",
+   "gewerk": "PL",
+   "beschreibung": "Abgestimmter Rahmenterminplan als Vertragsbestandteil"
+  },
+  {
+   "bereich": "B",
+   "nr": "B.08",
+   "titel": "Transport- und Montageversicherungsnachweis",
+   "gewerk": "VG",
+   "beschreibung": "Versicherungsbestätigung für Lieferung und Montage"
+  },
+  {
+   "bereich": "B",
+   "nr": "B.09",
+   "titel": "Bürgschaften (Anzahlung/Gewährleistung)",
+   "gewerk": "VG",
+   "beschreibung": "Sicherheiten gemäß Vertrag"
+  },
+  {
+   "bereich": "B",
+   "nr": "B.10",
+   "titel": "Demontage-/Rücknahmevereinbarung Altgerät",
+   "gewerk": "MT",
+   "beschreibung": "Regelung zu Abbau, Abtransport und Verwertung"
+  },
+  {
+   "bereich": "C",
+   "nr": "C.01",
+   "titel": "MDS2-Formular des Herstellers",
+   "gewerk": "IT",
+   "beschreibung": "Manufacturer Disclosure Statement for Medical Device Security"
+  },
+  {
+   "bereich": "C",
+   "nr": "C.02",
+   "titel": "IT-Sicherheitskonzept / Netzsegmentierung",
+   "gewerk": "IT",
+   "beschreibung": "Zonenmodell, Firewall-Regeln, Härtungsvorgaben"
+  },
+  {
+   "bereich": "C",
+   "nr": "C.03",
+   "titel": "Fernwartungsvereinbarung",
+   "gewerk": "IT",
+   "beschreibung": "Zugriffsweg, Protokollierung und Freigabeprozess"
+  },
+  {
+   "bereich": "C",
+   "nr": "C.04",
+   "titel": "Patch- und Update-Vereinbarung",
+   "gewerk": "IT",
+   "beschreibung": "Verantwortlichkeiten und Zyklen für Sicherheitsupdates"
+  },
+  {
+   "bereich": "C",
+   "nr": "C.05",
+   "titel": "Netzplan / IP-Konzept Modalität",
+   "gewerk": "IT",
+   "beschreibung": "Netzwerkanbindung mit Adressen und VLANs"
+  },
+  {
+   "bereich": "C",
+   "nr": "C.06",
+   "titel": "Schnittstellenspezifikation DICOM/HL7",
+   "gewerk": "IT",
+   "beschreibung": "Conformance Statements und Mapping-Festlegungen"
+  },
+  {
+   "bereich": "C",
+   "nr": "C.07",
+   "titel": "Integrationstest-Protokoll RIS/PACS",
+   "gewerk": "IT",
+   "beschreibung": "Nachweis der erfolgreichen Anbindung inkl. Worklist"
+  },
+  {
+   "bereich": "C",
+   "nr": "C.08",
+   "titel": "Freigabe Informationssicherheit (ISB)",
+   "gewerk": "IT",
+   "beschreibung": "Freigabeerklärung des Informationssicherheitsbeauftragten"
+  },
+  {
+   "bereich": "C",
+   "nr": "C.09",
+   "titel": "Datenschutz-Dokumentation (DSFA/VVT-Beitrag)",
+   "gewerk": "PL",
+   "beschreibung": "Datenschutzrechtliche Bewertung der Verarbeitung"
+  },
+  {
+   "bereich": "C",
+   "nr": "C.10",
+   "titel": "IT-Notfallkonzept Modalität",
+   "gewerk": "IT",
+   "beschreibung": "Downtime-Verfahren und Wiederanlaufplan"
+  },
+  {
+   "bereich": "D",
+   "nr": "D.01",
+   "titel": "Strahlenschutzberechnung",
+   "gewerk": "StrS",
+   "beschreibung": "Berechnung der Abschirmung mit Bleigleichwerten"
+  },
+  {
+   "bereich": "D",
+   "nr": "D.02",
+   "titel": "Bleigleichwert-Nachweis / Einbaudokumentation",
+   "gewerk": "StrS",
+   "beschreibung": "Materialnachweise und Fotodokumentation der Abschirmung"
+  },
+  {
+   "bereich": "D",
+   "nr": "D.03",
+   "titel": "HF-Zwischenmessung Kabine",
+   "gewerk": "MT",
+   "beschreibung": "Messprotokoll Schirmdämpfung nach Kabinenmontage"
+  },
+  {
+   "bereich": "D",
+   "nr": "D.04",
+   "titel": "HF-Endmessung Kabine",
+   "gewerk": "MT",
+   "beschreibung": "Abschlussmessung der HF-Schirmdämpfung"
+  },
+  {
+   "bereich": "D",
+   "nr": "D.05",
+   "titel": "Druckprobenprotokolle Kaltwasser",
+   "gewerk": "KÄL",
+   "beschreibung": "Dichtheitsnachweis der Kühlkreisläufe"
+  },
+  {
+   "bereich": "D",
+   "nr": "D.06",
+   "titel": "Druckproben-/Reinheitsprotokolle medizinische Gase",
+   "gewerk": "SAN",
+   "beschreibung": "Abnahmeprüfung nach DIN EN ISO 7396-1"
+  },
+  {
+   "bereich": "D",
+   "nr": "D.07",
+   "titel": "E-Messprotokolle (Iso, Schleife, RCD)",
+   "gewerk": "ELT",
+   "beschreibung": "Elektrische Sicherheitsmessungen der Installation"
+  },
+  {
+   "bereich": "D",
+   "nr": "D.08",
+   "titel": "Abnahmeprotokoll DIN VDE 0100-710",
+   "gewerk": "ELT",
+   "beschreibung": "Prüfbericht für medizinisch genutzte Bereiche"
+  },
+  {
+   "bereich": "D",
+   "nr": "D.09",
+   "titel": "Netzersatz-/USV-Funktionsprobe",
+   "gewerk": "ELT",
+   "beschreibung": "Protokoll Lastübernahme und Autonomiezeit"
+  },
+  {
+   "bereich": "D",
+   "nr": "D.10",
+   "titel": "RLT-Einregulierungsprotokoll",
+   "gewerk": "LÜF",
+   "beschreibung": "Volumenströme, Druckverhältnisse, Filterklassen"
+  },
+  {
+   "bereich": "D",
+   "nr": "D.11",
+   "titel": "Brandschutz-Abschottungsliste mit Nachweisen",
+   "gewerk": "BS",
+   "beschreibung": "Verzeichnis aller Abschottungen mit Zulassungen"
+  },
+  {
+   "bereich": "D",
+   "nr": "D.12",
+   "titel": "Wirk-Prinzip-Prüfung BMA/Lüftung",
+   "gewerk": "BS",
+   "beschreibung": "Nachweis des Zusammenwirkens der Brandschutztechnik"
+  },
+  {
+   "bereich": "D",
+   "nr": "D.13",
+   "titel": "IT-Verkabelungsmessprotokolle",
+   "gewerk": "IT",
+   "beschreibung": "Abnahmemessung Kupfer/LWL-Strecken"
+  },
+  {
+   "bereich": "D",
+   "nr": "D.14",
+   "titel": "Fundament-/Lastverteilplatten-Abnahme",
+   "gewerk": "AR",
+   "beschreibung": "Nachweis der Ausführung nach Herstellervorgabe"
+  },
+  {
+   "bereich": "E",
+   "nr": "E.01",
+   "titel": "Sachverständigen-Prüfbericht Strahlenschutz",
+   "gewerk": "StrS",
+   "beschreibung": "Prüfung vor Inbetriebnahme mit Behördenfreigabe"
+  },
+  {
+   "bereich": "E",
+   "nr": "E.02",
+   "titel": "Abnahmeprüfung nach QS-Richtlinie",
+   "gewerk": "MT",
+   "beschreibung": "Abnahmeprüfung mit Bezugswerten für Konstanzprüfung"
+  },
+  {
+   "bereich": "E",
+   "nr": "E.03",
+   "titel": "Geräteabnahmeprotokoll Hersteller",
+   "gewerk": "MT",
+   "beschreibung": "Funktionsnachweis und Spezifikationsabgleich"
+  },
+  {
+   "bereich": "E",
+   "nr": "E.04",
+   "titel": "Sicherheitstechnische Kontrolle (STK) Erstprüfung",
+   "gewerk": "MT",
+   "beschreibung": "Erstprüfung nach MPBetreibV"
+  },
+  {
+   "bereich": "E",
+   "nr": "E.05",
+   "titel": "DGUV-V3-Prüfprotokoll",
+   "gewerk": "ELT",
+   "beschreibung": "Elektrische Prüfung der Anlagen und Betriebsmittel"
+  },
+  {
+   "bereich": "E",
+   "nr": "E.06",
+   "titel": "VOB-Abnahmeprotokolle je Gewerk",
+   "gewerk": "AR",
+   "beschreibung": "Förmliche Bauabnahmen mit Mängellisten"
+  },
+  {
+   "bereich": "E",
+   "nr": "E.07",
+   "titel": "Brandschutz-Abnahmebescheinigung",
+   "gewerk": "BS",
+   "beschreibung": "Freigabe durch Prüfsachverständigen"
+  },
+  {
+   "bereich": "E",
+   "nr": "E.08",
+   "titel": "Hygiene-Abnahmeprotokoll",
+   "gewerk": "HYG",
+   "beschreibung": "Freigabe durch Krankenhaushygiene"
+  },
+  {
+   "bereich": "E",
+   "nr": "E.09",
+   "titel": "Magnetfeldkarte / Zonenkennzeichnung",
+   "gewerk": "MT",
+   "beschreibung": "Dokumentation der 0,5-mT-Linie und Zutrittsregelung"
+  },
+  {
+   "bereich": "E",
+   "nr": "E.10",
+   "titel": "Ersteinweisung nach § 10 MPBetreibV",
+   "gewerk": "MT",
+   "beschreibung": "Nachweis der Ersteinweisung durch Herstellerbeauftragten"
+  },
+  {
+   "bereich": "E",
+   "nr": "E.11",
+   "titel": "Einweisungsnachweise Anwender",
+   "gewerk": "MT",
+   "beschreibung": "Unterschriebene Einweisungsliste aller Anwender"
+  },
+  {
+   "bereich": "E",
+   "nr": "E.12",
+   "titel": "Strahlenschutzunterweisungen",
+   "gewerk": "StrS",
+   "beschreibung": "Nachweis der jährlichen Unterweisungen"
+  },
+  {
+   "bereich": "E",
+   "nr": "E.13",
+   "titel": "Notfall-/Quencheinweisung",
+   "gewerk": "AS",
+   "beschreibung": "Unterweisung Notfallszenarien im MR-Bereich"
+  },
+  {
+   "bereich": "F",
+   "nr": "F.01",
+   "titel": "Medizinproduktebuch / Bestandsverzeichnis",
+   "gewerk": "MT",
+   "beschreibung": "Führung nach MPBetreibV ab Inbetriebnahme"
+  },
+  {
+   "bereich": "F",
+   "nr": "F.02",
+   "titel": "Wartungsplan / Wartungsvertrag aktiviert",
+   "gewerk": "MT",
+   "beschreibung": "Terminierte Wartungen und Zuständigkeiten"
+  },
+  {
+   "bereich": "F",
+   "nr": "F.03",
+   "titel": "Revisionsunterlagen / Bestandspläne",
+   "gewerk": "AR",
+   "beschreibung": "As-built-Pläne aller Gewerke"
+  },
+  {
+   "bereich": "F",
+   "nr": "F.04",
+   "titel": "Raumbuch as built",
+   "gewerk": "PL",
+   "beschreibung": "Eingefrorener Raumbuch-Endstand für den Betrieb"
+  },
+  {
+   "bereich": "F",
+   "nr": "F.05",
+   "titel": "Betriebsanweisungen (Magnetfeld/Strahlenschutz/Notfall)",
+   "gewerk": "AS",
+   "beschreibung": "Ausgehängte Anweisungen für den Betrieb"
+  },
+  {
+   "bereich": "F",
+   "nr": "F.06",
+   "titel": "Übergabeprotokoll an Betrieb/CAFM",
+   "gewerk": "PL",
+   "beschreibung": "Formale Übergabe mit Anlagenliste"
+  },
+  {
+   "bereich": "F",
+   "nr": "F.07",
+   "titel": "Gewährleistungsübersicht",
+   "gewerk": "PL",
+   "beschreibung": "Fristen und Ansprechpartner je Vertrag"
+  },
+  {
+   "bereich": "F",
+   "nr": "F.08",
+   "titel": "Verwendungsnachweis Fördermittel",
+   "gewerk": "PL",
+   "beschreibung": "Abschließender Nachweis gegenüber Fördergeber"
+  },
+  {
+   "bereich": "F",
+   "nr": "F.09",
+   "titel": "Entsorgungs-/Verwertungsnachweise Altgerät",
+   "gewerk": "MT",
+   "beschreibung": "Nachweis inkl. Datenträgerlöschung"
+  },
+  {
+   "bereich": "F",
+   "nr": "F.10",
+   "titel": "Projektabschlussbericht",
+   "gewerk": "PL",
+   "beschreibung": "Abschlussbericht mit Kosten- und Terminbilanz"
+  }
+ ],
+ "attribute": [
+  {
+   "gewerk": "AR",
+   "name": "Bodenbelastung",
+   "datentyp": "zahl",
+   "einheit": "kN/m²",
+   "hilfetext": "Zulässige Flächenlast am Aufstellort"
+  },
+  {
+   "gewerk": "AR",
+   "name": "Punktlast Gerät",
+   "datentyp": "zahl",
+   "einheit": "kN",
+   "hilfetext": "Maximale Punktlast je Aufstellfuß"
+  },
+  {
+   "gewerk": "AR",
+   "name": "Lichte Raumhöhe",
+   "datentyp": "zahl",
+   "einheit": "m",
+   "hilfetext": "Nach Ausbau, unter Decke"
+  },
+  {
+   "gewerk": "AR",
+   "name": "Türbreite lichte Öffnung",
+   "datentyp": "zahl",
+   "einheit": "cm",
+   "hilfetext": "Wichtig für Einbringung und Betten"
+  },
+  {
+   "gewerk": "AR",
+   "name": "Bodenbelag",
+   "datentyp": "auswahl",
+   "auswahl_optionen": "PVC leitfähig,Kautschuk,Fliese,Estrich",
+   "hilfetext": "Leitfähigkeit im Untersuchungsraum beachten"
+  },
+  {
+   "gewerk": "AR",
+   "name": "Schwingungsentkopplung",
+   "datentyp": "janein",
+   "hilfetext": "Erforderlich laut Herstellervorgabe?"
+  },
+  {
+   "gewerk": "AR",
+   "name": "Lastverteilplatte",
+   "datentyp": "janein"
+  },
+  {
+   "gewerk": "AR",
+   "name": "Deckenabhängung für Stative",
+   "datentyp": "janein",
+   "hilfetext": "Unterkonstruktion für Deckenstativ/Ampel"
+  },
+  {
+   "gewerk": "ELT",
+   "name": "Anschlussleistung Gerät",
+   "datentyp": "zahl",
+   "einheit": "kVA",
+   "hilfetext": "Lt. Herstellerdatenblatt"
+  },
+  {
+   "gewerk": "ELT",
+   "name": "Einspeisung Querschnitt",
+   "datentyp": "text",
+   "hilfetext": "z. B. 4×95 mm² Cu"
+  },
+  {
+   "gewerk": "ELT",
+   "name": "Steckdosen AV",
+   "datentyp": "zahl",
+   "einheit": "Stk",
+   "hilfetext": "Allgemeine Versorgung"
+  },
+  {
+   "gewerk": "ELT",
+   "name": "Steckdosen SV",
+   "datentyp": "zahl",
+   "einheit": "Stk",
+   "hilfetext": "Sicherheitsversorgung (NEA)"
+  },
+  {
+   "gewerk": "ELT",
+   "name": "Steckdosen ZSV",
+   "datentyp": "zahl",
+   "einheit": "Stk",
+   "hilfetext": "Zusätzliche Sicherheitsversorgung (IT-System)"
+  },
+  {
+   "gewerk": "ELT",
+   "name": "Raumgruppe VDE 0100-710",
+   "datentyp": "auswahl",
+   "auswahl_optionen": "0,1,2"
+  },
+  {
+   "gewerk": "ELT",
+   "name": "Potentialausgleich",
+   "datentyp": "janein",
+   "hilfetext": "Zentraler PA-Punkt vorhanden"
+  },
+  {
+   "gewerk": "ELT",
+   "name": "USV-Versorgung",
+   "datentyp": "janein",
+   "hilfetext": "Für Rechner/Konsole"
+  },
+  {
+   "gewerk": "ELT",
+   "name": "Beleuchtungsstärke",
+   "datentyp": "zahl",
+   "einheit": "lx",
+   "hilfetext": "Nach ASR/DIN EN 12464"
+  },
+  {
+   "gewerk": "ELT",
+   "name": "Dimmbare Beleuchtung",
+   "datentyp": "janein",
+   "hilfetext": "Für Untersuchungsbetrieb"
+  },
+  {
+   "gewerk": "ELT",
+   "name": "Not-Aus Gerät",
+   "datentyp": "janein",
+   "hilfetext": "Position mit Nutzer abstimmen"
+  },
+  {
+   "gewerk": "IT",
+   "name": "Datendosen",
+   "datentyp": "zahl",
+   "einheit": "Stk",
+   "hilfetext": "Doppeldosen RJ45"
+  },
+  {
+   "gewerk": "IT",
+   "name": "LWL-Anbindung",
+   "datentyp": "janein",
+   "hilfetext": "Direktanbindung an Verteiler"
+  },
+  {
+   "gewerk": "IT",
+   "name": "Netzwerksegment/VLAN",
+   "datentyp": "text",
+   "hilfetext": "z. B. VLAN Medizintechnik 210"
+  },
+  {
+   "gewerk": "IT",
+   "name": "WLAN-Ausleuchtung",
+   "datentyp": "janein"
+  },
+  {
+   "gewerk": "IT",
+   "name": "Patchweg dokumentiert",
+   "datentyp": "text",
+   "hilfetext": "Verteiler/Port"
+  },
+  {
+   "gewerk": "MT",
+   "name": "Geräteliste Raum",
+   "datentyp": "text",
+   "hilfetext": "Hauptgerät und Zusatzgeräte"
+  },
+  {
+   "gewerk": "MT",
+   "name": "Deckenstativ",
+   "datentyp": "janein"
+  },
+  {
+   "gewerk": "MT",
+   "name": "Injektor-Standort",
+   "datentyp": "text"
+  },
+  {
+   "gewerk": "MT",
+   "name": "HF-Schirmdämpfung Soll",
+   "datentyp": "zahl",
+   "einheit": "dB",
+   "hilfetext": "Lt. Hersteller, typ. ≥ 90 dB"
+  },
+  {
+   "gewerk": "MT",
+   "name": "Magnetfeld 0,5-mT-Linie",
+   "datentyp": "text",
+   "hilfetext": "Verlauf/Kennzeichnung"
+  },
+  {
+   "gewerk": "MT",
+   "name": "Patientenüberwachung",
+   "datentyp": "text",
+   "hilfetext": "Monitoring, Kamera, Sprechanlage"
+  },
+  {
+   "gewerk": "MT",
+   "name": "Medizinische Gase am Platz",
+   "datentyp": "janein"
+  },
+  {
+   "gewerk": "LÜF",
+   "name": "Luftwechselrate",
+   "datentyp": "zahl",
+   "einheit": "1/h",
+   "hilfetext": "Lt. Hygiene-/Herstellervorgabe"
+  },
+  {
+   "gewerk": "LÜF",
+   "name": "Raumtemperatur Sollbereich",
+   "datentyp": "text",
+   "einheit": "°C",
+   "hilfetext": "z. B. 20–24 °C, ±1 K/h Gradient"
+  },
+  {
+   "gewerk": "LÜF",
+   "name": "Relative Feuchte Sollbereich",
+   "datentyp": "text",
+   "einheit": "%",
+   "hilfetext": "z. B. 40–60 %"
+  },
+  {
+   "gewerk": "LÜF",
+   "name": "Druckstufe",
+   "datentyp": "auswahl",
+   "auswahl_optionen": "Überdruck,Neutral,Unterdruck"
+  },
+  {
+   "gewerk": "LÜF",
+   "name": "Filterklasse Zuluft",
+   "datentyp": "text",
+   "hilfetext": "z. B. ePM1 55% + HEPA je Anforderung"
+  },
+  {
+   "gewerk": "LÜF",
+   "name": "Quench-Abluftführung",
+   "datentyp": "janein",
+   "hilfetext": "Nur MRT: Verhalten bei Quench geklärt"
+  },
+  {
+   "gewerk": "KÄL",
+   "name": "Kühllast Gerät",
+   "datentyp": "zahl",
+   "einheit": "kW",
+   "hilfetext": "Wärmeabgabe an Kaltwasser"
+  },
+  {
+   "gewerk": "KÄL",
+   "name": "Kühllast Raum (Luft)",
+   "datentyp": "zahl",
+   "einheit": "kW",
+   "hilfetext": "Wärmeabgabe an Raumluft"
+  },
+  {
+   "gewerk": "KÄL",
+   "name": "Kaltwasseranschluss",
+   "datentyp": "janein"
+  },
+  {
+   "gewerk": "KÄL",
+   "name": "Vorlauftemperatur",
+   "datentyp": "zahl",
+   "einheit": "°C",
+   "hilfetext": "Lt. Hersteller, typ. 6–12 °C"
+  },
+  {
+   "gewerk": "KÄL",
+   "name": "Redundanz/Notkühlung",
+   "datentyp": "janein",
+   "hilfetext": "Bei Ausfall Hauptkälte"
+  },
+  {
+   "gewerk": "SAN",
+   "name": "Waschplatz",
+   "datentyp": "janein"
+  },
+  {
+   "gewerk": "SAN",
+   "name": "Ausgussbecken",
+   "datentyp": "janein"
+  },
+  {
+   "gewerk": "SAN",
+   "name": "Bodenablauf",
+   "datentyp": "janein",
+   "hilfetext": "Rückstauebene beachten"
+  },
+  {
+   "gewerk": "SAN",
+   "name": "Medizinische Gase",
+   "datentyp": "auswahl",
+   "auswahl_optionen": "O2,Druckluft,Vakuum,O2+Druckluft,O2+Druckluft+Vakuum,keine"
+  },
+  {
+   "gewerk": "SAN",
+   "name": "Gase-Entnahmestellen",
+   "datentyp": "zahl",
+   "einheit": "Stk"
+  },
+  {
+   "gewerk": "StrS",
+   "name": "Bleigleichwert Wände",
+   "datentyp": "zahl",
+   "einheit": "mm Pb",
+   "hilfetext": "Aus Strahlenschutzberechnung"
+  },
+  {
+   "gewerk": "StrS",
+   "name": "Bleigleichwert Tür",
+   "datentyp": "zahl",
+   "einheit": "mm Pb"
+  },
+  {
+   "gewerk": "StrS",
+   "name": "Bleigleichwert Fenster",
+   "datentyp": "zahl",
+   "einheit": "mm Pb",
+   "hilfetext": "Bleiglas Sichtfenster"
+  },
+  {
+   "gewerk": "StrS",
+   "name": "Bleigleichwert Decke/Boden",
+   "datentyp": "zahl",
+   "einheit": "mm Pb"
+  },
+  {
+   "gewerk": "StrS",
+   "name": "Kontrollbereich",
+   "datentyp": "janein",
+   "hilfetext": "Kennzeichnung erforderlich"
+  },
+  {
+   "gewerk": "StrS",
+   "name": "Warnleuchte/Türkontakt",
+   "datentyp": "janein"
+  },
+  {
+   "gewerk": "MSR",
+   "name": "GLT-Aufschaltung",
+   "datentyp": "janein"
+  },
+  {
+   "gewerk": "MSR",
+   "name": "Datenpunkte Anzahl",
+   "datentyp": "zahl",
+   "einheit": "Stk"
+  },
+  {
+   "gewerk": "MSR",
+   "name": "Störmeldung an Leitwarte",
+   "datentyp": "janein",
+   "hilfetext": "Kritische Meldungen definiert"
+  },
+  {
+   "gewerk": "MSR",
+   "name": "O2-Überwachung",
+   "datentyp": "janein",
+   "hilfetext": "Nur MRT-Technik/Untersuchungsraum"
+  },
+  {
+   "gewerk": "MSR",
+   "name": "Temperaturüberwachung Technikraum",
+   "datentyp": "janein"
+  },
+  {
+   "gewerk": "HZG",
+   "name": "Heizlast",
+   "datentyp": "zahl",
+   "einheit": "kW"
+  },
+  {
+   "gewerk": "HZG",
+   "name": "Heizsystem",
+   "datentyp": "auswahl",
+   "auswahl_optionen": "Statisch,Lüftung,Keins"
+  },
+  {
+   "gewerk": "BS",
+   "name": "Brandabschnitt",
+   "datentyp": "text",
+   "hilfetext": "Zuordnung/Bezeichnung"
+  },
+  {
+   "gewerk": "BS",
+   "name": "Brandmelder Anzahl",
+   "datentyp": "zahl",
+   "einheit": "Stk"
+  },
+  {
+   "gewerk": "BS",
+   "name": "Feuerwiderstand Türen",
+   "datentyp": "text",
+   "hilfetext": "z. B. T30-RS"
+  },
+  {
+   "gewerk": "BS",
+   "name": "Löschmittel MR-tauglich",
+   "datentyp": "janein",
+   "hilfetext": "Amagnetischer Feuerlöscher im MR-Bereich"
+  },
+  {
+   "gewerk": "HYG",
+   "name": "Raumklasse Hygiene",
+   "datentyp": "auswahl",
+   "auswahl_optionen": "I,Ia,Ib,II,ohne",
+   "hilfetext": "Einstufung durch Krankenhaushygiene"
+  },
+  {
+   "gewerk": "HYG",
+   "name": "Händedesinfektionsspender",
+   "datentyp": "zahl",
+   "einheit": "Stk"
+  },
+  {
+   "gewerk": "HYG",
+   "name": "Oberflächen desinfektionsbeständig",
+   "datentyp": "janein"
+  },
+  {
+   "gewerk": "AS",
+   "name": "Fluchtweg",
+   "datentyp": "text",
+   "hilfetext": "Führung/Länge"
+  },
+  {
+   "gewerk": "AS",
+   "name": "Notruf/Patientenruf",
+   "datentyp": "janein"
+  },
+  {
+   "gewerk": "AS",
+   "name": "Augenspüleinrichtung",
+   "datentyp": "janein",
+   "hilfetext": "Bei KM-/Chemikalienhandling"
+  }
+ ],
+ "raumtypen": [
+  {
+   "name": "MRT-Untersuchungsraum",
+   "attribute": [
+    {
+     "gewerk": "AR",
+     "name": "Bodenbelastung"
+    },
+    {
+     "gewerk": "AR",
+     "name": "Lichte Raumhöhe"
+    },
+    {
+     "gewerk": "AR",
+     "name": "Türbreite lichte Öffnung"
+    },
+    {
+     "gewerk": "AR",
+     "name": "Bodenbelag"
+    },
+    {
+     "gewerk": "AR",
+     "name": "Schwingungsentkopplung"
+    },
+    {
+     "gewerk": "AR",
+     "name": "Lastverteilplatte"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Anschlussleistung Gerät"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Steckdosen ZSV"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Raumgruppe VDE 0100-710"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Potentialausgleich"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Dimmbare Beleuchtung"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Not-Aus Gerät"
+    },
+    {
+     "gewerk": "MT",
+     "name": "HF-Schirmdämpfung Soll"
+    },
+    {
+     "gewerk": "MT",
+     "name": "Magnetfeld 0,5-mT-Linie"
+    },
+    {
+     "gewerk": "MT",
+     "name": "Patientenüberwachung"
+    },
+    {
+     "gewerk": "MT",
+     "name": "Medizinische Gase am Platz"
+    },
+    {
+     "gewerk": "LÜF",
+     "name": "Luftwechselrate"
+    },
+    {
+     "gewerk": "LÜF",
+     "name": "Raumtemperatur Sollbereich"
+    },
+    {
+     "gewerk": "LÜF",
+     "name": "Relative Feuchte Sollbereich"
+    },
+    {
+     "gewerk": "LÜF",
+     "name": "Quench-Abluftführung"
+    },
+    {
+     "gewerk": "KÄL",
+     "name": "Kühllast Raum (Luft)"
+    },
+    {
+     "gewerk": "SAN",
+     "name": "Medizinische Gase"
+    },
+    {
+     "gewerk": "MSR",
+     "name": "O2-Überwachung"
+    },
+    {
+     "gewerk": "BS",
+     "name": "Löschmittel MR-tauglich"
+    },
+    {
+     "gewerk": "HYG",
+     "name": "Raumklasse Hygiene"
+    },
+    {
+     "gewerk": "AS",
+     "name": "Fluchtweg"
+    },
+    {
+     "gewerk": "AS",
+     "name": "Notruf/Patientenruf"
+    },
+    {
+     "gewerk": "IT",
+     "name": "Datendosen"
+    }
+   ]
+  },
+  {
+   "name": "CT-Untersuchungsraum",
+   "attribute": [
+    {
+     "gewerk": "AR",
+     "name": "Bodenbelastung"
+    },
+    {
+     "gewerk": "AR",
+     "name": "Türbreite lichte Öffnung"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Anschlussleistung Gerät"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Steckdosen ZSV"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Raumgruppe VDE 0100-710"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Not-Aus Gerät"
+    },
+    {
+     "gewerk": "StrS",
+     "name": "Bleigleichwert Wände"
+    },
+    {
+     "gewerk": "StrS",
+     "name": "Bleigleichwert Tür"
+    },
+    {
+     "gewerk": "StrS",
+     "name": "Bleigleichwert Fenster"
+    },
+    {
+     "gewerk": "StrS",
+     "name": "Kontrollbereich"
+    },
+    {
+     "gewerk": "StrS",
+     "name": "Warnleuchte/Türkontakt"
+    },
+    {
+     "gewerk": "MT",
+     "name": "Patientenüberwachung"
+    },
+    {
+     "gewerk": "LÜF",
+     "name": "Luftwechselrate"
+    },
+    {
+     "gewerk": "LÜF",
+     "name": "Raumtemperatur Sollbereich"
+    },
+    {
+     "gewerk": "KÄL",
+     "name": "Kühllast Raum (Luft)"
+    },
+    {
+     "gewerk": "SAN",
+     "name": "Medizinische Gase"
+    },
+    {
+     "gewerk": "HYG",
+     "name": "Raumklasse Hygiene"
+    },
+    {
+     "gewerk": "AS",
+     "name": "Notruf/Patientenruf"
+    },
+    {
+     "gewerk": "IT",
+     "name": "Datendosen"
+    }
+   ]
+  },
+  {
+   "name": "Angiographie-/Hybrid-OP-Raum",
+   "attribute": [
+    {
+     "gewerk": "AR",
+     "name": "Deckenabhängung für Stative"
+    },
+    {
+     "gewerk": "AR",
+     "name": "Lichte Raumhöhe"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Anschlussleistung Gerät"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Steckdosen ZSV"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Raumgruppe VDE 0100-710"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "USV-Versorgung"
+    },
+    {
+     "gewerk": "StrS",
+     "name": "Bleigleichwert Wände"
+    },
+    {
+     "gewerk": "StrS",
+     "name": "Bleigleichwert Tür"
+    },
+    {
+     "gewerk": "StrS",
+     "name": "Kontrollbereich"
+    },
+    {
+     "gewerk": "MT",
+     "name": "Deckenstativ"
+    },
+    {
+     "gewerk": "MT",
+     "name": "Injektor-Standort"
+    },
+    {
+     "gewerk": "MT",
+     "name": "Medizinische Gase am Platz"
+    },
+    {
+     "gewerk": "LÜF",
+     "name": "Luftwechselrate"
+    },
+    {
+     "gewerk": "LÜF",
+     "name": "Druckstufe"
+    },
+    {
+     "gewerk": "LÜF",
+     "name": "Filterklasse Zuluft"
+    },
+    {
+     "gewerk": "SAN",
+     "name": "Medizinische Gase"
+    },
+    {
+     "gewerk": "SAN",
+     "name": "Gase-Entnahmestellen"
+    },
+    {
+     "gewerk": "HYG",
+     "name": "Raumklasse Hygiene"
+    },
+    {
+     "gewerk": "IT",
+     "name": "Datendosen"
+    }
+   ]
+  },
+  {
+   "name": "Technikraum",
+   "attribute": [
+    {
+     "gewerk": "ELT",
+     "name": "Anschlussleistung Gerät"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Steckdosen AV"
+    },
+    {
+     "gewerk": "KÄL",
+     "name": "Kühllast Gerät"
+    },
+    {
+     "gewerk": "KÄL",
+     "name": "Kaltwasseranschluss"
+    },
+    {
+     "gewerk": "KÄL",
+     "name": "Vorlauftemperatur"
+    },
+    {
+     "gewerk": "KÄL",
+     "name": "Redundanz/Notkühlung"
+    },
+    {
+     "gewerk": "LÜF",
+     "name": "Raumtemperatur Sollbereich"
+    },
+    {
+     "gewerk": "MSR",
+     "name": "GLT-Aufschaltung"
+    },
+    {
+     "gewerk": "MSR",
+     "name": "Temperaturüberwachung Technikraum"
+    },
+    {
+     "gewerk": "MSR",
+     "name": "O2-Überwachung"
+    },
+    {
+     "gewerk": "MSR",
+     "name": "Störmeldung an Leitwarte"
+    },
+    {
+     "gewerk": "BS",
+     "name": "Brandmelder Anzahl"
+    },
+    {
+     "gewerk": "IT",
+     "name": "Datendosen"
+    }
+   ]
+  },
+  {
+   "name": "Bedienraum/Schaltraum",
+   "attribute": [
+    {
+     "gewerk": "ELT",
+     "name": "Steckdosen SV"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "USV-Versorgung"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Beleuchtungsstärke"
+    },
+    {
+     "gewerk": "StrS",
+     "name": "Bleigleichwert Fenster"
+    },
+    {
+     "gewerk": "IT",
+     "name": "Datendosen"
+    },
+    {
+     "gewerk": "IT",
+     "name": "Netzwerksegment/VLAN"
+    },
+    {
+     "gewerk": "LÜF",
+     "name": "Raumtemperatur Sollbereich"
+    },
+    {
+     "gewerk": "AS",
+     "name": "Notruf/Patientenruf"
+    },
+    {
+     "gewerk": "HYG",
+     "name": "Händedesinfektionsspender"
+    }
+   ]
+  },
+  {
+   "name": "Vorbereitung/Patientenhaltung",
+   "attribute": [
+    {
+     "gewerk": "SAN",
+     "name": "Waschplatz"
+    },
+    {
+     "gewerk": "SAN",
+     "name": "Medizinische Gase"
+    },
+    {
+     "gewerk": "SAN",
+     "name": "Gase-Entnahmestellen"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Steckdosen SV"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Raumgruppe VDE 0100-710"
+    },
+    {
+     "gewerk": "MT",
+     "name": "Patientenüberwachung"
+    },
+    {
+     "gewerk": "HYG",
+     "name": "Raumklasse Hygiene"
+    },
+    {
+     "gewerk": "HYG",
+     "name": "Händedesinfektionsspender"
+    },
+    {
+     "gewerk": "AS",
+     "name": "Notruf/Patientenruf"
+    },
+    {
+     "gewerk": "IT",
+     "name": "Datendosen"
+    }
+   ]
+  },
+  {
+   "name": "Umkleide Patienten",
+   "attribute": [
+    {
+     "gewerk": "AR",
+     "name": "Türbreite lichte Öffnung"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Steckdosen AV"
+    },
+    {
+     "gewerk": "AS",
+     "name": "Notruf/Patientenruf"
+    },
+    {
+     "gewerk": "HYG",
+     "name": "Händedesinfektionsspender"
+    }
+   ]
+  },
+  {
+   "name": "Wartebereich",
+   "attribute": [
+    {
+     "gewerk": "ELT",
+     "name": "Steckdosen AV"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Beleuchtungsstärke"
+    },
+    {
+     "gewerk": "LÜF",
+     "name": "Luftwechselrate"
+    },
+    {
+     "gewerk": "BS",
+     "name": "Brandmelder Anzahl"
+    },
+    {
+     "gewerk": "IT",
+     "name": "WLAN-Ausleuchtung"
+    }
+   ]
+  },
+  {
+   "name": "Befundraum",
+   "attribute": [
+    {
+     "gewerk": "IT",
+     "name": "Datendosen"
+    },
+    {
+     "gewerk": "IT",
+     "name": "Netzwerksegment/VLAN"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Steckdosen SV"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Beleuchtungsstärke"
+    },
+    {
+     "gewerk": "LÜF",
+     "name": "Raumtemperatur Sollbereich"
+    }
+   ]
+  }
+ ]
 }
