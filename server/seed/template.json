@@ -1,0 +1,16 @@
+{
+  "version": "0.1-platzhalter",
+  "name": "Platzhalter-Vorlage (wird durch Leitfaden-Vorlage 1.0 ersetzt)",
+  "phasen": [
+    { "nr": 0, "name": "Phase 0 – Bedarf und Strategie" },
+    { "nr": 1, "name": "Phase 1 – Planung" }
+  ],
+  "checkpunkte": [
+    { "phase": 0, "nr": "0.01", "text": "Bedarf dokumentieren", "gewerke": "PL", "fuehrend": "PL" }
+  ],
+  "dokumente": [
+    { "bereich": "A", "nr": "A.01", "titel": "Bedarfsanforderung", "gewerk": "PL" }
+  ],
+  "attribute": [],
+  "raumtypen": []
+}

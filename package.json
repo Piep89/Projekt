@@ -1,0 +1,20 @@
+{
+  "name": "ggp",
+  "version": "0.1.0",
+  "description": "GGP – Großgeräte-Projektabwicklung: Raumbuch- und Projektabwicklungs-Software für die Implementierung medizinischer Großgeräte",
+  "private": true,
+  "type": "commonjs",
+  "engines": { "node": ">=22.5" },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning server/index.js",
+    "seed": "node --disable-warning=ExperimentalWarning server/seed/seed.js",
+    "seed:demo": "node --disable-warning=ExperimentalWarning server/seed/seed.js --demo",
+    "test": "node --disable-warning=ExperimentalWarning --test test/"
+  },
+  "dependencies": {
+    "archiver": "^7.0.1",
+    "express": "^4.21.2",
+    "multer": "^2.0.2",
+    "pdfkit": "^0.17.2"
+  }
+}
