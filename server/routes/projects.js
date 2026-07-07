@@ -246,6 +246,7 @@ router.delete('/milestones/:id', requireAuth, requireProject('write', (req) => {
   return m ? m.project_id : 0;
 }), (req, res) => {
   const m = get('SELECT * FROM milestones WHERE id = ?', Number(req.params.id));
+  require('../papierkorb').inPapierkorb(req, m.project_id, 'milestones', `Meilenstein: ${m.name}`, { zeile: m });
   run('DELETE FROM milestones WHERE id = ?', m.id);
   audit(req, m.project_id, 'milestone', m.id, 'geloescht', { name: m.name });
   res.json({ ok: true });

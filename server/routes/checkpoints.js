@@ -418,6 +418,7 @@ router.delete('/checkpoints/:id', requireProject('write', punktProjekt), (req, r
     if (!cp) throw new ApiError(404, 'Punkt nicht gefunden');
     if (!cp.is_custom) throw new ApiError(400, 'Nur Zusatzpunkte können gelöscht werden');
     if (!canWriteGewerk(req.access, cp.gewerke)) throw new ApiError(403, 'Keine Schreibrechte für dieses Gewerk');
+    require('../papierkorb').inPapierkorb(req, cp.project_id, 'checkpoints', `Zusatzpunkt ${cp.nr}: ${cp.text.slice(0, 80)}`, { zeile: cp });
     run('DELETE FROM checkpoints WHERE id = ?', cp.id);
     audit(req, cp.project_id, 'checkpoint', cp.id, 'geloescht', { nr: cp.nr, text: cp.text.slice(0, 120) });
     res.json({ ok: true });

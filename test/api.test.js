@@ -423,6 +423,39 @@ test('Berichtskopf ist konfigurierbar und erscheint im PDF (REP-05)', async () =
   assert.equal(s.mail_konfiguriert, true);
 });
 
+test('Papierkorb: gelöschter Kontakt und Raum sind 30 Tage wiederherstellbar (UX-04)', async () => {
+  // Kontakt löschen und wiederherstellen
+  const kontakt = await api('POST', `/projects/${projektId}/contacts`, { name: 'Peter Papierkorb', firma: 'Testbau' });
+  assert.equal((await api('DELETE', `/contacts/${kontakt.daten.id}`)).status, 200);
+  let pk = (await api('GET', `/projects/${projektId}/papierkorb`)).daten;
+  const eintrag = pk.eintraege.find((e) => e.bezeichnung.includes('Peter Papierkorb'));
+  assert.ok(eintrag, 'Kontakt nicht im Papierkorb');
+  assert.equal(pk.aufbewahrung_tage, 30);
+  const restore = await api('POST', `/papierkorb/${eintrag.id}/wiederherstellen`);
+  assert.equal(restore.status, 200);
+  const kontakte = (await api('GET', `/projects/${projektId}/contacts?q=Papierkorb`)).daten;
+  assert.equal(kontakte.length, 1, 'Kontakt nicht wiederhergestellt');
+
+  // Raum mit Attributen löschen und wiederherstellen
+  const raum = await api('POST', `/projects/${projektId}/rooms`, {
+    nummer: 'PK.001', bezeichnung: 'Papierkorb-Testraum', raumtyp: 'Technikraum',
+  });
+  const vorher = (await api('GET', `/rooms/${raum.daten.id}`)).daten;
+  const attrVorher = Object.values(vorher.attribute).flat().length;
+  assert.ok(attrVorher > 0);
+  assert.equal((await api('DELETE', `/rooms/${raum.daten.id}`)).status, 200);
+  pk = (await api('GET', `/projects/${projektId}/papierkorb`)).daten;
+  const raumEintrag = pk.eintraege.find((e) => e.bezeichnung.includes('PK.001'));
+  assert.ok(raumEintrag, 'Raum nicht im Papierkorb');
+  const raumRestore = await api('POST', `/papierkorb/${raumEintrag.id}/wiederherstellen`);
+  assert.equal(raumRestore.status, 200);
+  const nachher = (await api('GET', `/rooms/${raumRestore.daten.id}`)).daten;
+  assert.equal(Object.values(nachher.attribute).flat().length, attrVorher, 'Attribute nicht wiederhergestellt');
+  // Wiederhergestellter Eintrag ist aus dem Papierkorb verschwunden
+  pk = (await api('GET', `/projects/${projektId}/papierkorb`)).daten;
+  assert.ok(!pk.eintraege.some((e) => e.id === raumEintrag.id));
+});
+
 test('Eigenes Passwort ändern: falsches Alt-Passwort und zu kurze Passwörter werden abgelehnt', async () => {
   assert.equal((await api('POST', '/auth/passwort', { altes_passwort: 'falsch', neues_passwort: 'ganz-neues-passwort-1' }, nutzerBCookie)).status, 400);
   assert.equal((await api('POST', '/auth/passwort', { altes_passwort: 'sicheres-passwort-b1', neues_passwort: 'kurz' }, nutzerBCookie)).status, 400);

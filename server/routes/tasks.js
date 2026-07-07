@@ -290,6 +290,9 @@ router.delete('/tasks/:id', (req, res, next) => {
     if (task.created_by !== req.user.id && !istLeiter) {
       throw new ApiError(403, 'Nur Ersteller oder Projektleiter dürfen Aufgaben löschen');
     }
+    if (task.project_id) {
+      require('../papierkorb').inPapierkorb(req, task.project_id, 'tasks', `Aufgabe: ${task.titel}`, { zeile: task });
+    }
     run('DELETE FROM tasks WHERE id = ?', task.id);
     if (task.project_id) audit(req, task.project_id, 'task', task.id, 'geloescht', { titel: task.titel });
     res.json({ ok: true });

@@ -279,6 +279,10 @@ router.delete('/rooms/:id', requireProject('write', roomProject), (req, res, nex
         `Raum kann nicht gelöscht werden: ${maengel} Mangel/Mängel und ${fotos} Foto(s) sind zugeordnet`);
     }
     tx(() => {
+      require('../papierkorb').inPapierkorb(req, raum.project_id, 'rooms', `Raum ${raum.nummer} – ${raum.bezeichnung}`, {
+        zeile: raum,
+        attribute: all('SELECT * FROM room_attributes WHERE room_id = ?', raum.id),
+      });
       run("DELETE FROM links WHERE (from_typ = 'room' AND from_id = ?) OR (to_typ = 'room' AND to_id = ?)", raum.id, raum.id);
       run('DELETE FROM rooms WHERE id = ?', raum.id); // room_attributes fallen per ON DELETE CASCADE
     });

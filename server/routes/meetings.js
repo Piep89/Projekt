@@ -375,6 +375,10 @@ router.delete('/protocol-items/:id', requireProject('write', punktProjekt), (req
     if (meeting.status === 'festgestellt') throw new ApiError(403, 'Protokoll ist festgestellt – Punkte können nicht mehr gelöscht werden');
     if (get('SELECT id FROM protocol_items WHERE nachtrag_zu = ? LIMIT 1', p.id)) throw new ApiError(400, 'Zu diesem Punkt existiert ein Nachtrag');
     tx(() => {
+      require('../papierkorb').inPapierkorb(req, p.project_id, 'protocol_items', `Protokollpunkt ${p.code}: ${p.text.slice(0, 80)}`, {
+        zeile: p,
+        task: p.task_id ? get('SELECT * FROM tasks WHERE id = ?', p.task_id) : null,
+      });
       if (p.task_id) run('DELETE FROM tasks WHERE id = ?', p.task_id);
       run('DELETE FROM protocol_items WHERE id = ?', p.id);
     });

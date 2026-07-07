@@ -239,6 +239,14 @@ async function renderLogin(el) {
         'Erste Anmeldung? Benutzer „admin" – das Erstpasswort steht in der Datei ADMIN-PASSWORT.txt im Datenverzeichnis (Mac-App: öffnet sich beim ersten Start automatisch).'))));
 }
 
+// Tastaturkürzel: „/" springt in die Suche (außerhalb von Eingabefeldern)
+document.addEventListener('keydown', (e) => {
+  if (e.key === '/' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) {
+    const suche = document.querySelector('.topbar .suchfeld');
+    if (suche) { e.preventDefault(); suche.focus(); }
+  }
+});
+
 // Start
 window.addEventListener('hashchange', renderApp);
 window.addEventListener('ggp-sync-fertig', renderApp);

@@ -61,6 +61,8 @@ npm test
 | Offline (NFA-03) | PWA mit Service Worker: Projekt ohne Netz lesbar (letzter Stand); Journal (inkl. Fotos), Punktstatus und Mängel offline erfassbar über IndexedDB-Ausgangskorb mit automatischer Synchronisation; Konflikte („letzte Änderung gewinnt") werden protokolliert und unter „Mein Tag" angezeigt |
 | PDF | pdfkit (Statusbericht, Protokoll, Raumbuch, Mängelliste, Bautagebuch, Vollständigkeit) |
 | Exporte | CSV (Excel-kompatibel), Word (.doc) fürs Raumbuch, ZIP-Vollexport (archiver), ICS-Kalender |
+| E-Mail (INT-03/PRO-07) | Protokoll-PDF direkt an Teilnehmer über das Klinik-SMTP (Umgebungsvariablen `GGP_SMTP_*`) |
+| Komfort | Hilfe & erste Schritte (#/hilfe), Benutzermenü mit Passwort-Selbstbedienung, Papierkorb mit 30-Tage-Wiederherstellung (UX-04), Tastaturkürzel (Esc, „/") |
 | Sicherheit | scrypt-Passwörter, HttpOnly-Session-Cookies mit Timeout, Rollen + Projektmitgliedschaft, Gewerke-beschränkte Bearbeiter (ROL-03), private Notizen AES-256-GCM-verschlüsselt |
 | Nachweis | Append-only-Audit-Trail, per SQLite-Trigger gegen UPDATE/DELETE geschützt |
 
@@ -118,9 +120,8 @@ als Lessons-Learned-Vorschläge erfasst und in der Administration gesichtet.
 
 ## Bewusste Abgrenzungen (Stufe-1-Stand)
 
-- **PRO-07 E-Mail-Versand** und **INT-03 SMTP**: nicht enthalten (kein Mailserver in Stufe 1);
-  Protokoll-PDFs werden heruntergeladen und über das Mailsystem der Klinik versandt.
-- **ROL-07/INT-05 SSO (Entra ID/LDAP)**: Ausbaustufe 3; lokale Konten mit starken Passwörtern.
+- **ROL-07/INT-05 SSO (Entra ID/LDAP)**: Ausbaustufe 3; lokale Konten mit starken Passwörtern
+  (Selbstbedienung „Passwort ändern" im Benutzermenü).
 - **DOK-06 Virenprüfung**: Dateityp-/Größenbeschränkung ist aktiv; ein Virenscanner-Hook ist
   betreiberseitig vor dem Upload-Verzeichnis vorzusehen.
 - **NOT-06 Sprachnotizen**, **ROL-04 Gastzugriff**: KANN-Anforderungen, nicht enthalten.

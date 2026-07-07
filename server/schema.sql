@@ -480,6 +480,17 @@ CREATE TABLE IF NOT EXISTS settings (
   value TEXT
 );
 
+-- Papierkorb (UX-04): gelöschte Objekte 30 Tage wiederherstellbar
+CREATE TABLE IF NOT EXISTS papierkorb (
+  id           INTEGER PRIMARY KEY AUTOINCREMENT,
+  project_id   INTEGER,
+  tabelle      TEXT NOT NULL,          -- 'rooms','contacts','checkpoints','tasks','protocol_items','milestones'
+  bezeichnung  TEXT NOT NULL,          -- Anzeigetext für die Wiederherstellung
+  objekt       TEXT NOT NULL,          -- JSON: Hauptzeile + abhängige Daten
+  geloescht_von INTEGER,
+  geloescht_am TEXT NOT NULL
+);
+
 -- ============================================================
 -- Audit-Trail (ROL-06): append-only, durch Trigger gegen Änderung geschützt
 -- ============================================================

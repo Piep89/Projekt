@@ -62,6 +62,7 @@ router.delete('/contacts/:id', requireProject('write', kontaktProjekt), (req, re
     if (get('SELECT meeting_id FROM meeting_participants WHERE contact_id = ? LIMIT 1', k.id)) {
       throw new ApiError(400, 'Kontakt ist Besprechungsteilnehmer und kann nicht gelöscht werden');
     }
+    require('../papierkorb').inPapierkorb(req, k.project_id, 'contacts', `Kontakt: ${k.name}`, { zeile: k });
     run('DELETE FROM contacts WHERE id = ?', k.id);
     audit(req, k.project_id, 'contact', k.id, 'geloescht', { name: k.name });
     res.json({ ok: true });

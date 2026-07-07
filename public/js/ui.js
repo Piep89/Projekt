@@ -101,7 +101,16 @@ export function terminZelle(termin, status) {
 export function modal({ title, body, actions = [], wide = false, onClose }) {
   const root = document.getElementById('modal-root');
   const overlay = h('div', { class: 'modal-overlay' });
-  const close = () => { overlay.remove(); if (onClose) onClose(); };
+  const close = () => {
+    document.removeEventListener('keydown', escSchliessen);
+    overlay.remove();
+    if (onClose) onClose();
+  };
+  // Esc schließt den obersten Dialog (UX: Tastaturbedienung)
+  const escSchliessen = (e) => {
+    if (e.key === 'Escape' && root.lastElementChild === overlay) close();
+  };
+  document.addEventListener('keydown', escSchliessen);
   overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
   const dialog = h('div', { class: `modal ${wide ? 'modal-wide' : ''}`, role: 'dialog', 'aria-label': title },
     h('div', { class: 'modal-kopf' },

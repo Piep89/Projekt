@@ -286,6 +286,32 @@ router.put('/settings', requireAdmin, (req, res, next) => {
   } catch (e) { next(e); }
 });
 
+// ---------------- Papierkorb (UX-04): 30 Tage wiederherstellbar ----------------
+router.get('/projects/:projectId/papierkorb', requireProject('read'), (req, res) => {
+  const { AUFBEWAHRUNG_TAGE } = require('../papierkorb');
+  res.json({
+    aufbewahrung_tage: AUFBEWAHRUNG_TAGE,
+    eintraege: all(
+      `SELECT p.id, p.tabelle, p.bezeichnung, p.geloescht_am, u.display_name AS geloescht_von
+       FROM papierkorb p LEFT JOIN users u ON u.id = p.geloescht_von
+       WHERE p.project_id = ? ORDER BY p.geloescht_am DESC`, req.project.id),
+  });
+});
+
+router.post('/papierkorb/:id/wiederherstellen', requireProject('write', (req) =>
+  get('SELECT project_id FROM papierkorb WHERE id = ?', Number(req.params.id))?.project_id ?? 0
+), (req, res, next) => {
+  try {
+    const { wiederherstellen } = require('../papierkorb');
+    const eintrag = get('SELECT * FROM papierkorb WHERE id = ?', Number(req.params.id));
+    if (!eintrag) throw new ApiError(404, 'Papierkorb-Eintrag nicht gefunden');
+    const ergebnis = wiederherstellen(req, eintrag);
+    run('DELETE FROM papierkorb WHERE id = ?', eintrag.id);
+    audit(req, eintrag.project_id, ergebnis.typ, ergebnis.id, 'wiederhergestellt', { aus_papierkorb: eintrag.bezeichnung });
+    res.json(ergebnis);
+  } catch (e) { next(e); }
+});
+
 // ---------------- Audit-Trail (Einsicht) ----------------
 router.get('/audit', (req, res, next) => {
   try {

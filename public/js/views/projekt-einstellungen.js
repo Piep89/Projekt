@@ -190,6 +190,33 @@ export async function renderProjektEinstellungen(el, params) {
     }
   } catch { llKarte.append(h('p', { class: 'muted' }, 'Vorlagen-Vorschläge sind nicht verfügbar.')); }
 
+  // ---------- Papierkorb (UX-04) ----------
+  const pkKarte = h('div', { class: 'karte' }, h('h2', {}, 'Papierkorb'));
+  raster.append(pkKarte);
+  try {
+    const pk = await get(`/projects/${projektId}/papierkorb`);
+    pkKarte.append(h('p', { class: 'muted' },
+      `Gelöschte Objekte bleiben ${pk.aufbewahrung_tage} Tage wiederherstellbar.`));
+    if (!pk.eintraege.length) {
+      pkKarte.append(h('p', { class: 'muted' }, 'Der Papierkorb ist leer.'));
+    } else {
+      for (const e of pk.eintraege) {
+        pkKarte.append(h('div', { class: 'zeile', style: { marginBottom: '.3rem' } },
+          h('span', { style: { flex: 1 } }, e.bezeichnung,
+            h('span', { class: 'muted' }, ` · gelöscht ${formatDate(e.geloescht_am)}${e.geloescht_von ? ' von ' + e.geloescht_von : ''}`)),
+          archiviert ? null : h('button', {
+            class: 'btn', onclick: async () => {
+              try {
+                await post(`/papierkorb/${e.id}/wiederherstellen`);
+                toast('Wiederhergestellt');
+                neuLaden();
+              } catch (err) { fehlerToast(err); }
+            },
+          }, 'Wiederherstellen')));
+      }
+    }
+  } catch { pkKarte.append(h('p', { class: 'muted' }, 'Papierkorb nicht verfügbar.')); }
+
   // ---------- Vorlagen-Aktualisierung (PRJ-05) ----------
   const deltaKarte = h('div', { class: 'karte' }, h('h2', {}, 'Neue Vorlagenpunkte übernehmen'));
   raster.append(deltaKarte);

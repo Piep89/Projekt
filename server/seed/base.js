@@ -25,6 +25,9 @@ const GEWERKE = [
 ];
 
 function ensureBaseData() {
+  // Papierkorb: abgelaufene Einträge entsorgen (UX-04, 30 Tage)
+  require('../papierkorb').aufraeumen();
+
   // Gewerke
   if (!get('SELECT id FROM gewerke LIMIT 1')) {
     GEWERKE.forEach(([kuerzel, name, farbe], i) => {
