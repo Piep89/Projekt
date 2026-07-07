@@ -1,6 +1,6 @@
 // Service Worker (NFA-03): App-Shell aus dem Cache, API-Lesezugriffe network-first
 // mit Cache-Rückfall – so bleibt das Projekt ohne Netz lesbar (letzter bekannter Stand).
-const VERSION = 'ggp-v1';
+const VERSION = 'ggp-v2';
 const SHELL_CACHE = `${VERSION}-shell`;
 const API_CACHE = `${VERSION}-api`;
 
@@ -12,7 +12,7 @@ const SHELL = [
   '/js/views/besprechungen.js', '/js/views/besprechung.js', '/js/views/journal.js',
   '/js/views/maengel.js', '/js/views/kontakte.js', '/js/views/berichte.js',
   '/js/views/meintag.js', '/js/views/notizen.js', '/js/views/suche.js',
-  '/js/views/admin.js', '/js/views/projekt-einstellungen.js',
+  '/js/views/admin.js', '/js/views/projekt-einstellungen.js', '/js/views/hilfe.js',
 ];
 
 self.addEventListener('install', (e) => {

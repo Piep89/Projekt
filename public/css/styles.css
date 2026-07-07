@@ -223,6 +223,24 @@ input[type="checkbox"] { width: auto; }
 .gewerke-mehrfach { display: flex; flex-wrap: wrap; gap: .35rem; }
 .gewerk-check { display: inline-flex; align-items: center; gap: .25rem; cursor: pointer; }
 
+/* ---------- Benutzermenü ---------- */
+.nutzer-knopf {
+  border: 0; background: none; color: #dbe6f1; font: inherit; font-size: .88rem;
+  cursor: pointer; padding: .35rem .5rem; border-radius: 6px; white-space: nowrap;
+}
+.nutzer-knopf:hover { background: rgba(255,255,255,.12); }
+.nutzer-menue {
+  position: absolute; right: 0; top: calc(100% + 6px); z-index: 200;
+  background: var(--flaeche); border: 1px solid var(--rand); border-radius: var(--radius);
+  box-shadow: 0 6px 24px rgba(0,0,0,.18); padding: .4rem; min-width: 200px;
+  display: flex; flex-direction: column; gap: .1rem;
+}
+.nutzer-menue a, .nutzer-menue .btn-link {
+  display: block; padding: .45rem .6rem; border-radius: 6px; color: var(--text);
+  text-align: left; font-size: .92rem; text-decoration: none;
+}
+.nutzer-menue a:hover, .nutzer-menue .btn-link:hover { background: #eef2f7; text-decoration: none; }
+
 /* ---------- Login ---------- */
 .login-seite { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
 .login-karte { width: 100%; max-width: 380px; }

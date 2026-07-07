@@ -1,7 +1,8 @@
 // App-Einstieg: Hash-Router, Rahmenlayout (Topbar + Projekt-Seitenleiste), Anmeldung
 import { api, post, loadBase, state } from './api.js';
-import { h, clear, feld, textInput, fehlerToast } from './ui.js';
+import { h, clear, feld, textInput, fehlerToast, modal, toast } from './ui.js';
 import { offlineStart, zeigeStatus } from './offline.js';
+import { renderHilfe } from './views/hilfe.js';
 
 import { renderPortfolio } from './views/portfolio.js';
 import { renderDashboard } from './views/dashboard.js';
@@ -29,6 +30,7 @@ const ROUTES = [
   { pattern: '/notizen', render: renderNotizen },
   { pattern: '/suche', render: renderSuche },
   { pattern: '/admin', render: renderAdmin },
+  { pattern: '/hilfe', render: renderHilfe },
   { pattern: '/besprechung/:meetingId', render: renderBesprechung, projektAus: 'meeting' },
   { pattern: '/projekt/:projektId', render: renderDashboard },
   { pattern: '/projekt/:projektId/checkliste', render: renderCheckliste },
@@ -145,11 +147,50 @@ function renderTopbar(pfad) {
       title: 'Offline-Status: wartende Einträge werden bei Verbindung automatisch synchronisiert',
     }),
     suchfeld,
-    h('span', { class: 'nutzer' }, state.user ? state.user.display_name : ''),
+    h('a', { href: '#/hilfe', title: 'Hilfe & erste Schritte', style: { color: '#dbe6f1', fontSize: '1.05rem', padding: '0 .2rem' } }, '?'),
+    nutzerMenue());
+}
+
+function nutzerMenue() {
+  const menue = h('div', { class: 'nutzer-menue', style: { display: 'none' } },
+    h('button', { class: 'btn-link', onclick: () => { menue.style.display = 'none'; passwortDialog(); } }, 'Passwort ändern'),
+    h('a', { href: '#/hilfe', onclick: () => { menue.style.display = 'none'; } }, 'Hilfe & erste Schritte'),
     h('button', {
-      class: 'btn-icon', title: 'Abmelden', style: { color: '#dbe6f1' },
+      class: 'btn-link',
       onclick: async () => { await post('/auth/logout'); state.user = null; window.location.hash = '#/login'; },
-    }, '⎋'));
+    }, 'Abmelden'));
+  const knopf = h('button', {
+    class: 'nutzer-knopf', title: 'Benutzermenü', 'aria-haspopup': 'true',
+    onclick: (e) => {
+      e.stopPropagation();
+      menue.style.display = menue.style.display === 'none' ? '' : 'none';
+    },
+  }, `${state.user ? state.user.display_name : ''} ▾`);
+  document.addEventListener('click', () => { menue.style.display = 'none'; });
+  return h('div', { style: { position: 'relative' } }, knopf, menue);
+}
+
+function passwortDialog() {
+  const alt = h('input', { type: 'password', class: 'input', autocomplete: 'current-password' });
+  const neu = h('input', { type: 'password', class: 'input', autocomplete: 'new-password' });
+  const wiederholung = h('input', { type: 'password', class: 'input', autocomplete: 'new-password' });
+  const m = modal({
+    title: 'Passwort ändern',
+    body: h('div', {},
+      feld('Bisheriges Passwort', alt),
+      feld('Neues Passwort (mind. 10 Zeichen)', neu),
+      feld('Neues Passwort wiederholen', wiederholung)),
+    actions: [h('button', {
+      class: 'btn btn-primary', onclick: async () => {
+        if (neu.value !== wiederholung.value) return toast('Die Wiederholung stimmt nicht überein', 'fehler');
+        try {
+          await post('/auth/passwort', { altes_passwort: alt.value, neues_passwort: neu.value });
+          toast('Passwort geändert');
+          m.close();
+        } catch (e) { fehlerToast(e); }
+      },
+    }, 'Ändern')],
+  });
 }
 
 let projektCache = { id: null, name: '', status: '' };
@@ -193,7 +234,9 @@ async function renderLogin(el) {
       feld('Benutzername', nutzer),
       feld('Passwort', passwort),
       fehler,
-      h('button', { class: 'btn btn-primary', type: 'submit', style: { width: '100%', justifyContent: 'center' } }, 'Anmelden'))));
+      h('button', { class: 'btn btn-primary', type: 'submit', style: { width: '100%', justifyContent: 'center' } }, 'Anmelden'),
+      h('p', { class: 'muted', style: { fontSize: '.8rem', marginTop: '.8rem', textAlign: 'center' } },
+        'Erste Anmeldung? Benutzer „admin" – das Erstpasswort steht in der Datei ADMIN-PASSWORT.txt im Datenverzeichnis (Mac-App: öffnet sich beim ersten Start automatisch).'))));
 }
 
 // Start

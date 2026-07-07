@@ -17,6 +17,20 @@ export async function renderPortfolio(el) {
     const aktive = projekte.filter((p) => p.status !== 'archiviert');
     const archivierte = projekte.filter((p) => p.status === 'archiviert');
 
+    // Onboarding: freundlicher Einstieg, solange noch kein Projekt existiert
+    if (!projekte.length) {
+      el.append(h('div', { class: 'karte', style: { maxWidth: '720px', margin: '2rem auto', textAlign: 'center', padding: '2rem' } },
+        h('h2', {}, 'Willkommen bei GGP!'),
+        h('p', { class: 'muted' }, 'In drei Schritten zum arbeitsfähigen Großgeräte-Projekt:'),
+        h('div', { style: { textAlign: 'left', maxWidth: '480px', margin: '1rem auto' } },
+          h('p', {}, h('strong', {}, '1. Projekt anlegen'), ' – Gerätetyp wählen; Checkliste (Phasen 0–14) und Dokumentenregister entstehen automatisch aus der Vorlage.'),
+          h('p', {}, h('strong', {}, '2. Erstbewertung'), ' – im Setup-Modus jeden Punkt einmal bewerten: relevant oder begründet nicht relevant.'),
+          h('p', {}, h('strong', {}, '3. Loslegen'), ' – Kontakte anlegen, Besprechungsserie starten, Raumbuch füllen.')),
+        h('button', { class: 'btn btn-primary', style: { fontSize: '1.05rem' }, onclick: () => assistentOeffnen() }, '+ Erstes Projekt anlegen'),
+        h('p', { style: { marginTop: '.8rem' } }, h('a', { href: '#/hilfe' }, 'Hilfe & erste Schritte lesen'))));
+      return;
+    }
+
     el.append(projektTabelle(aktive, 'Keine aktiven Projekte. Legen Sie über „Neues Projekt“ das erste an.'));
     if (archivierte.length) {
       el.append(h('h2', { style: { marginTop: '1.5rem' } }, 'Archiviert'));

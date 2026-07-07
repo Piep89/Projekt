@@ -124,6 +124,26 @@ router.get('/auth/me', (req, res) => {
   res.json({ user: publicUser(req.user) });
 });
 
+// Eigenes Passwort ändern (Selbstbedienung, ROL-07 „starke Passwörter")
+router.post('/auth/passwort', requireAuth, (req, res, next) => {
+  try {
+    const { altes_passwort, neues_passwort } = req.body || {};
+    const konto = get('SELECT * FROM users WHERE id = ?', req.user.id);
+    if (!verifyPassword(String(altes_passwort || ''), konto.password_hash)) {
+      throw new ApiError(400, 'Das bisherige Passwort ist falsch');
+    }
+    if (String(neues_passwort || '').length < 10) {
+      throw new ApiError(400, 'Das neue Passwort muss mindestens 10 Zeichen haben');
+    }
+    run('UPDATE users SET password_hash = ? WHERE id = ?', hashPassword(String(neues_passwort)), konto.id);
+    // Andere Sitzungen beenden, die aktuelle behalten
+    const token = parseCookies(req).ggp_session;
+    run('DELETE FROM sessions WHERE user_id = ? AND id != ?', konto.id, token || '');
+    audit(req, null, 'user', konto.id, 'passwort_geaendert');
+    res.json({ ok: true });
+  } catch (e) { next(e); }
+});
+
 function publicUser(u) {
   return { id: u.id, username: u.username, display_name: u.display_name, email: u.email, role: u.role };
 }

@@ -423,6 +423,19 @@ test('Berichtskopf ist konfigurierbar und erscheint im PDF (REP-05)', async () =
   assert.equal(s.mail_konfiguriert, true);
 });
 
+test('Eigenes Passwort ändern: falsches Alt-Passwort und zu kurze Passwörter werden abgelehnt', async () => {
+  assert.equal((await api('POST', '/auth/passwort', { altes_passwort: 'falsch', neues_passwort: 'ganz-neues-passwort-1' }, nutzerBCookie)).status, 400);
+  assert.equal((await api('POST', '/auth/passwort', { altes_passwort: 'sicheres-passwort-b1', neues_passwort: 'kurz' }, nutzerBCookie)).status, 400);
+  assert.equal((await api('POST', '/auth/passwort', { altes_passwort: 'sicheres-passwort-b1', neues_passwort: 'ganz-neues-passwort-1' }, nutzerBCookie)).status, 200);
+  // Anmeldung mit neuem Passwort funktioniert, altes nicht mehr
+  nutzerBCookie = await login('nutzerb', 'ganz-neues-passwort-1');
+  const alt = await fetch(`${BASIS}/api/auth/login`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: 'nutzerb', password: 'sicheres-passwort-b1' }),
+  });
+  assert.equal(alt.status, 401);
+});
+
 test('Projekt kopieren übernimmt Struktur und Bewertungen, setzt Bearbeitung zurück (PRJ-04)', async () => {
   const kopie = await api('POST', `/projects/${projektId}/copy`, { name: 'MRT-Ersatz Kopie' });
   assert.equal(kopie.status, 201);

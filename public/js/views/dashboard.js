@@ -20,6 +20,24 @@ export async function renderDashboard(el, params) {
     el.append(h('div', { class: 'muted', style: { marginTop: '-.6rem', marginBottom: '1rem' } },
       `${p.geraetetyp}${p.gebaeude ? ' · Gebäude ' + p.gebaeude : ''}${p.ebene ? ' · Ebene ' + p.ebene : ''}${p.budget ? ' · Budget ' + p.budget : ''}`));
 
+    // Deutlicher Einstieg, solange die Erstbewertung läuft (CHK-08)
+    if (p.punkte.unbewertet > 0 && p.status === 'aktiv') {
+      el.append(h('div', { class: 'karte', style: { background: '#fff9e6', borderColor: '#e8d9a0' } },
+        h('div', { class: 'zeile', style: { justifyContent: 'space-between' } },
+          h('div', {},
+            h('strong', {}, `Erstbewertung: noch ${p.punkte.unbewertet} Punkte unbewertet. `),
+            'Erst nach der Bewertung zeigt das Dashboard den echten Arbeitsvorrat.'),
+          h('a', { class: 'btn btn-primary', href: `${basis}/setup` }, 'Erstbewertung fortsetzen'))));
+    }
+
+    // Schnellaktionen für den Alltag
+    el.append(h('div', { class: 'zeile', style: { marginBottom: '1rem' } },
+      h('a', { class: 'btn', href: `${basis}/journal` }, '+ Journaleintrag'),
+      h('a', { class: 'btn', href: `${basis}/maengel` }, '+ Mangel'),
+      h('a', { class: 'btn', href: `${basis}/besprechungen` }, '+ Besprechung'),
+      h('a', { class: 'btn', href: `${basis}/checkliste?termin=ueberfaellig` }, 'Überfällige Punkte'),
+      h('a', { class: 'btn', href: `${basis}/berichte` }, 'Abnahmereife prüfen')));
+
     // Kennzahlen
     el.append(h('div', { class: 'karten-reihe' },
       kennzahl(`${p.fortschritt} %`, 'Fortschritt (relevante Punkte)'),
