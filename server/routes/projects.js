@@ -261,8 +261,10 @@ router.get('/projects/:projectId/members', requireProject('read'), (req, res) =>
 router.post('/projects/:projectId/members', requireProject('read'), (req, res, next) => {
   try {
     if (req.access.memberRole !== 'projektleiter') throw new ApiError(403, 'Nur Projektleiter dürfen Mitglieder verwalten');
-    const { user_id, role, gewerke } = req.body || {};
-    const user = get('SELECT id FROM users WHERE id = ? AND active = 1', Number(user_id));
+    const { user_id, username, role, gewerke } = req.body || {};
+    const user = username
+      ? get('SELECT id FROM users WHERE username = ? AND active = 1', String(username))
+      : get('SELECT id FROM users WHERE id = ? AND active = 1', Number(user_id));
     if (!user) throw new ApiError(404, 'Nutzer nicht gefunden');
     if (!['projektleiter', 'bearbeiter', 'leser'].includes(role)) throw new ApiError(400, 'Ungültige Rolle');
     run(`INSERT INTO project_members (project_id, user_id, role, gewerke) VALUES (?, ?, ?, ?)
