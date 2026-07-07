@@ -89,6 +89,25 @@ test/             End-to-End-Tests der Abnahmekriterien
 docs/             Anforderungsprofil, Entwicklungskonventionen
 ```
 
+## macOS-Programm (Desktop-App)
+
+GGP lässt sich als eigenständiges Mac-Programm paketieren — ein `.app`-Bundle mit
+eingebettetem Node.js-Server (~45 MB), Daten unter `~/Library/Application Support/GGP/daten`:
+
+```bash
+npm run dist:mac      # erzeugt desktop/dist/GGP-macOS-{AppleSilicon,Intel}-vX.zip
+```
+
+Installation auf dem Mac: Zip entpacken, `GGP.app` nach „Programme" ziehen. Da die App nicht
+signiert ist, beim ersten Start **Rechtsklick → Öffnen** (oder `xattr -dc /Applications/GGP.app`).
+Der erste Start öffnet automatisch die Anmeldedaten (`admin` + generiertes Erstpasswort).
+Beim Doppelklick startet der lokale Server (Port 41780) und die Oberfläche öffnet sich im Browser;
+läuft GGP bereits, wird nur ein neues Fenster geöffnet.
+
+Alternativ liegt unter `desktop/` ein Electron-Wrapper (eigenes App-Fenster statt Browser);
+dieser Bauweg benötigt einen Mac bzw. Zugriff auf GitHub-Releases:
+`cd desktop && npm install && npm run dist:mac`.
+
 ## Vorlagenpflege (PRJ-05/06)
 
 Die Mastervorlage ist versioniert. Pflegezyklus: In der Administration die Vorlage als JSON

@@ -1,0 +1,16 @@
+{
+  "name": "ggp-desktop",
+  "version": "0.1.0",
+  "description": "GGP als Electron-Desktop-App (optionaler Bauweg; Standard ist tools/mac-app/bauen.sh)",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist:mac": "electron-builder --mac zip --config electron-builder.json",
+    "dist:win": "electron-builder --win --config electron-builder.json"
+  },
+  "devDependencies": {
+    "electron": "^37.0.0",
+    "electron-builder": "^26.0.0"
+  }
+}
