@@ -188,7 +188,7 @@ function raumbuchDaten(projectId, planstandId) {
     const ps = get('SELECT * FROM plan_states WHERE id = ? AND project_id = ?', planstandId, projectId);
     if (!ps) return null;
     const snapshot = JSON.parse(ps.snapshot);
-    return { planstand: ps, rooms: snapshot.rooms || [] };
+    return { planstand: ps, rooms: snapshot.raeume || snapshot.rooms || [] };
   }
   const rooms = all('SELECT * FROM rooms WHERE project_id = ? ORDER BY nummer', projectId).map((r) => ({
     ...r, attribute: all('SELECT * FROM room_attributes WHERE room_id = ? ORDER BY gewerk, sort_order', r.id),
