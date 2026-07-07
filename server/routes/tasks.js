@@ -123,6 +123,17 @@ router.get('/my/overview', (req, res, next) => {
          AND pi.termin IS NOT NULL AND pi.termin < ?
        ORDER BY pi.termin, pi.code`, uid, t);
 
+    // Überfällige benötigte Dokumente meiner Projekte (DOK-05 Erinnerung)
+    const ueberfaelligeDokumente = all(
+      `SELECT d.id, d.nr, d.titel, d.gewerk, d.faelligkeit,
+              d.project_id AS projekt_id, p.name AS projekt_name
+       FROM document_entries d
+       JOIN projects p ON p.id = d.project_id
+       JOIN project_members m ON m.project_id = d.project_id AND m.user_id = ?
+       WHERE p.status != 'archiviert' AND d.benoetigt = 'ja' AND d.erhalten_am IS NULL
+         AND d.faelligkeit IS NOT NULL AND d.faelligkeit < ?
+       ORDER BY d.faelligkeit, d.bereich, d.nr`, uid, t);
+
     res.json({
       ueberfaellig,
       heute,
@@ -132,6 +143,7 @@ router.get('/my/overview', (req, res, next) => {
       erledigt,
       ueberfaellige_punkte: ueberfaelligePunkte,
       offene_protokollpunkte: offeneProtokollpunkte,
+      ueberfaellige_dokumente: ueberfaelligeDokumente,
     });
   } catch (e) { next(e); }
 });

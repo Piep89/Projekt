@@ -1,0 +1,13 @@
+{
+  "name": "GGP – Großgeräte-Projektabwicklung",
+  "short_name": "GGP",
+  "description": "Raumbuch- und Projektabwicklungs-Software für die Implementierung medizinischer Großgeräte",
+  "lang": "de",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f6f9",
+  "theme_color": "#1f4e79",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

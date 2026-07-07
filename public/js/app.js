@@ -1,6 +1,7 @@
 // App-Einstieg: Hash-Router, Rahmenlayout (Topbar + Projekt-Seitenleiste), Anmeldung
 import { api, post, loadBase, state } from './api.js';
 import { h, clear, feld, textInput, fehlerToast } from './ui.js';
+import { offlineStart, zeigeStatus } from './offline.js';
 
 import { renderPortfolio } from './views/portfolio.js';
 import { renderDashboard } from './views/dashboard.js';
@@ -139,6 +140,10 @@ function renderTopbar(pfad) {
     h('a', { class: 'logo', href: '#/' }, 'GGP'),
     h('nav', {}, nav.map(([href, text, aktiv]) => h('a', { href, class: aktiv ? 'aktiv' : '' }, text))),
     h('div', { class: 'spacer' }),
+    h('span', {
+      id: 'offline-status', style: { display: 'none', color: '#ffd76a', fontSize: '.85rem', whiteSpace: 'nowrap' },
+      title: 'Offline-Status: wartende Einträge werden bei Verbindung automatisch synchronisiert',
+    }),
     suchfeld,
     h('span', { class: 'nutzer' }, state.user ? state.user.display_name : ''),
     h('button', {
@@ -193,8 +198,11 @@ async function renderLogin(el) {
 
 // Start
 window.addEventListener('hashchange', renderApp);
+window.addEventListener('ggp-sync-fertig', renderApp);
 (async () => {
   try { await loadBase(); } catch (e) { console.error(e); }
   if (!state.user) window.location.hash = '#/login';
   renderApp();
+  offlineStart();
+  setTimeout(zeigeStatus, 300); // nachdem die Topbar steht
 })();

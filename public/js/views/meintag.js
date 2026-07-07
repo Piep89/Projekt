@@ -4,6 +4,7 @@ import {
   h, clear, kopfzeile, modal, toast, fehlerToast, feld, textInput, textArea, dateInput,
   select, badge, formatDate, terminZelle, laden, leerHinweis,
 } from '../ui.js';
+import { syncProtokoll } from '../offline.js';
 
 export async function renderMeinTag(el) {
   el.append(laden());
@@ -69,6 +70,27 @@ export async function renderMeinTag(el) {
         h('a', { href: `#/besprechung/${p.meeting_id}?punkt=${p.id}` }, `${p.code} ${p.text}`),
         h('span', { class: 'ueberfaellig' }, ` ${formatDate(p.termin)}`),
         h('span', { class: 'muted' }, ` · ${p.projekt_name}`))))));
+  }
+  if (daten.ueberfaellige_dokumente?.length) {
+    raster.append(h('div', { class: 'karte' },
+      h('h2', {}, 'Überfällige Dokumente'),
+      h('p', { class: 'muted' }, 'Benötigte, noch nicht erhaltene Dokumente mit überschrittener Fälligkeit (DOK-05).'),
+      h('ul', { style: { paddingLeft: '1.1rem' } }, daten.ueberfaellige_dokumente.map((d) => h('li', {},
+        h('a', { href: `#/projekt/${d.projekt_id}/dokumente?eintrag=${d.id}` }, `${d.nr} ${d.titel}`),
+        h('span', { class: 'ueberfaellig' }, ` ${formatDate(d.faelligkeit)}`),
+        h('span', { class: 'muted' }, ` · ${d.projekt_name}`))))));
+  }
+
+  // Offline-Synchronisation: Konflikte und letzte Übertragungen anzeigen (NFA-03)
+  const protokoll = syncProtokoll();
+  if (protokoll.length) {
+    raster.append(h('div', { class: 'karte' },
+      h('h2', {}, 'Offline-Synchronisation'),
+      h('ul', { style: { paddingLeft: '1.1rem' } }, protokoll.slice(0, 10).map((e) => h('li', {},
+        e.status === 'konflikt'
+          ? h('span', { class: 'ueberfaellig' }, `Konflikt: ${e.beschreibung} – ${e.meldung}`)
+          : h('span', {}, `Übertragen: ${e.beschreibung}`),
+        h('span', { class: 'muted' }, ` · ${formatDate(e.zeit)}`))))));
   }
 
   function neueAufgabe() {

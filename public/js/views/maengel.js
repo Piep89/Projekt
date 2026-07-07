@@ -5,6 +5,7 @@ import {
   select, gewerkSelect, gewerkBadge, statusBadge, label, terminZelle, laden,
 } from '../ui.js';
 import { objektZusatz } from '../objekt.js';
+import { istOffline, merken } from '../offline.js';
 
 const STATUS_FOLGE = ['offen', 'in_behebung', 'behoben', 'abgenommen'];
 
@@ -136,11 +137,18 @@ export async function renderMaengel(el, params, query) {
       actions: [h('button', {
         class: 'btn btn-primary', onclick: async (ev) => {
           ev.target.disabled = true;
+          const daten = {
+            beschreibung: beschreibung.value, gewerk: gewerk.value || null, firma: firma.value || null,
+            frist: frist.value || null, room_id: raum.value ? Number(raum.value) : null,
+          };
+          // NFA-03: Mangel auch ohne Netz erfassbar (Fotos bitte nach Synchronisation ergänzen)
+          const offlineMerken = () => merken({
+            typ: 'json', methode: 'POST', pfad: `/projects/${projektId}/maengel`, body: daten,
+            beschreibung: `Mangel: ${String(daten.beschreibung).slice(0, 60)}`,
+          }).then(() => { m.close(); });
+          if (istOffline()) { await offlineMerken(); return; }
           try {
-            const r = await post(`/projects/${projektId}/maengel`, {
-              beschreibung: beschreibung.value, gewerk: gewerk.value || null, firma: firma.value || null,
-              frist: frist.value || null, room_id: raum.value ? Number(raum.value) : null,
-            });
+            const r = await post(`/projects/${projektId}/maengel`, daten);
             if (fotos.files.length) {
               const fd = new FormData();
               for (const f of fotos.files) fd.append('fotos', f);
@@ -149,7 +157,11 @@ export async function renderMaengel(el, params, query) {
             }
             toast(`Mangel ${r.code} erfasst`);
             m.close(); ladeListe();
-          } catch (e) { ev.target.disabled = false; fehlerToast(e); }
+          } catch (e) {
+            ev.target.disabled = false;
+            if (e instanceof TypeError) { await offlineMerken(); return; }
+            fehlerToast(e);
+          }
         },
       }, 'Erfassen')],
     });

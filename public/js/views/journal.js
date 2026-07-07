@@ -4,6 +4,7 @@ import {
   h, clear, kopfzeile, modal, toast, fehlerToast, feld, textInput, textArea, dateInput,
   select, label, formatDate, formatDateTime, laden, leerHinweis,
 } from '../ui.js';
+import { istOffline, merken } from '../offline.js';
 
 const KATEGORIEN = ['baustelle', 'planung', 'telefonat', 'begehung', 'sonstig'];
 
@@ -86,11 +87,22 @@ export async function renderJournal(el, params, query) {
       h('button', {
         class: 'btn btn-primary', onclick: async (ev) => {
           ev.target.disabled = true;
+          const eintrag = {
+            datum: datum.value, kategorie: kategorie.value, text: text.value,
+            wetter: wetter.value || null, anwesende: anwesende.value || null,
+          };
+          // NFA-03: ohne Netz in den Ausgangskorb (inkl. Fotos), Synchronisation später
+          const offlineMerken = async () => merken({
+            typ: 'journal', projektId, eintrag,
+            beschreibung: `Journaleintrag ${eintrag.datum}`,
+            fotos: await Promise.all([...fotos.files].map(async (f) => ({
+              name: f.name, type: f.type, blob: new Blob([await f.arrayBuffer()], { type: f.type }),
+            }))),
+          });
           try {
-            const r = await post(`/projects/${projektId}/journal`, {
-              datum: datum.value, kategorie: kategorie.value, text: text.value,
-              wetter: wetter.value || null, anwesende: anwesende.value || null,
-            });
+            if (!text.value.trim()) throw new Error('Text ist Pflicht');
+            if (istOffline()) { await offlineMerken(); ev.target.disabled = false; return; }
+            const r = await post(`/projects/${projektId}/journal`, eintrag);
             if (fotos.files.length) {
               const fd = new FormData();
               for (const f of fotos.files) fd.append('fotos', f);
@@ -99,7 +111,11 @@ export async function renderJournal(el, params, query) {
             }
             toast('Journaleintrag angelegt');
             zeigeJournal();
-          } catch (e) { ev.target.disabled = false; fehlerToast(e); }
+          } catch (e) {
+            ev.target.disabled = false;
+            if (e instanceof TypeError) { await offlineMerken(); return; } // Netzausfall während des Sendens
+            fehlerToast(e);
+          }
         },
       }, 'Eintrag speichern'));
   }

@@ -58,6 +58,7 @@ npm test
 |---|---|
 | Backend | Node.js + Express, SQLite über eingebautes `node:sqlite` (WAL) |
 | Frontend | No-Build-SPA (ES-Module, Vanilla JS), deutschsprachig, responsiv |
+| Offline (NFA-03) | PWA mit Service Worker: Projekt ohne Netz lesbar (letzter Stand); Journal (inkl. Fotos), Punktstatus und Mängel offline erfassbar über IndexedDB-Ausgangskorb mit automatischer Synchronisation; Konflikte („letzte Änderung gewinnt") werden protokolliert und unter „Mein Tag" angezeigt |
 | PDF | pdfkit (Statusbericht, Protokoll, Raumbuch, Mängelliste, Bautagebuch, Vollständigkeit) |
 | Exporte | CSV (Excel-kompatibel), Word (.doc) fürs Raumbuch, ZIP-Vollexport (archiver), ICS-Kalender |
 | Sicherheit | scrypt-Passwörter, HttpOnly-Session-Cookies mit Timeout, Rollen + Projektmitgliedschaft, Gewerke-beschränkte Bearbeiter (ROL-03), private Notizen AES-256-GCM-verschlüsselt |
@@ -100,7 +101,6 @@ als Lessons-Learned-Vorschläge erfasst und in der Administration gesichtet.
 
 - **PRO-07 E-Mail-Versand** und **INT-03 SMTP**: nicht enthalten (kein Mailserver in Stufe 1);
   Protokoll-PDFs werden heruntergeladen und über das Mailsystem der Klinik versandt.
-- **NFA-03 Offline/PWA**: noch nicht umgesetzt (Stufe 2); die Oberfläche ist tablettauglich.
 - **ROL-07/INT-05 SSO (Entra ID/LDAP)**: Ausbaustufe 3; lokale Konten mit starken Passwörtern.
 - **DOK-06 Virenprüfung**: Dateityp-/Größenbeschränkung ist aktiv; ein Virenscanner-Hook ist
   betreiberseitig vor dem Upload-Verzeichnis vorzusehen.

@@ -6,6 +6,7 @@ import {
   terminZelle, laden, leerHinweis,
 } from '../ui.js';
 import { objektZusatz } from '../objekt.js';
+import { istOffline, merken } from '../offline.js';
 
 export async function renderCheckliste(el, params, query) {
   const projektId = Number(params.projektId);
@@ -143,8 +144,17 @@ export async function renderCheckliste(el, params, query) {
     const prio = select(['hoch', 'normal', 'niedrig'].map((x) => ({ value: x, label: label(x), selected: p.prio === x })));
 
     const speichern = async (daten, meldung = 'Gespeichert') => {
+      // NFA-03: Punktstatus auch ohne Netz erfassbar
+      const offlineMerken = () => merken({
+        typ: 'json', methode: 'PATCH', pfad: `/checkpoints/${p.id}`, body: daten,
+        beschreibung: `Checkpunkt ${p.nr}: ${daten.status ? 'Status ' + daten.status : 'Änderung'}`,
+      }).then(() => m.close());
+      if (istOffline()) return offlineMerken();
       try { await patch(`/checkpoints/${p.id}`, daten); toast(meldung); m.close(); ladeListe(); }
-      catch (e) { fehlerToast(e); }
+      catch (e) {
+        if (e instanceof TypeError) return offlineMerken();
+        fehlerToast(e);
+      }
     };
 
     const statusAktionen = [];
