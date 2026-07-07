@@ -383,6 +383,34 @@ router.delete('/protocol-items/:id', requireProject('write', punktProjekt), (req
   } catch (e) { next(e); }
 });
 
+// ---------------- Protokoll per E-Mail versenden (PRO-07) ----------------
+router.post('/meetings/:id/versenden', requireProject('write', meetingProjekt), async (req, res, next) => {
+  try {
+    const m = ladeMeeting(req.params.id);
+    const { sendeMail } = require('../mail');
+    const { pdfBuffer } = require('../pdf/helpers');
+    const builders = require('../pdf/builders');
+
+    const empfaenger = all(
+      `SELECT k.email FROM meeting_participants mp JOIN contacts k ON k.id = mp.contact_id
+       WHERE mp.meeting_id = ? AND k.email IS NOT NULL AND k.email != ''`, m.id).map((r) => r.email);
+    const pdf = await pdfBuffer((doc) => builders.protokoll(doc, m.id));
+    const ergebnis = await sendeMail({
+      an: empfaenger,
+      betreff: `Protokoll: ${m.titel} vom ${m.datum} – ${req.project.name}`,
+      text: `Guten Tag,\n\nanbei das Protokoll „${m.titel}" vom ${m.datum} aus dem Projekt „${req.project.name}".\n\nOffene Punkte laufen automatisch in die Folgebesprechung.\n\nDiese Nachricht wurde von GGP – Großgeräte-Projektabwicklung versandt.`,
+      anhaenge: [{ filename: `Protokoll_${m.datum}.pdf`, content: pdf }],
+    });
+    // Versand hebt den Protokollstatus auf „versandt" (sofern noch früher)
+    if (['geplant', 'entwurf'].includes(m.status)) {
+      run("UPDATE meetings SET status = 'versandt' WHERE id = ?", m.id);
+      audit(req, m.project_id, 'meeting', m.id, 'status', { status: { von: m.status, nach: 'versandt' } });
+    }
+    audit(req, m.project_id, 'meeting', m.id, 'versandt', { empfaenger: ergebnis.versandt });
+    res.json(ergebnis);
+  } catch (e) { next(e); }
+});
+
 // ---------------- Kalender (INT-04): Besprechungen + Meilensteine als ICS ----------------
 router.get('/projects/:projectId/termine.ics', requireProject('read'), (req, res) => {
   const esc = (s) => String(s || '').replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');

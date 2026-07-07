@@ -474,6 +474,12 @@ CREATE TABLE IF NOT EXISTS saved_views (
   created_at TEXT NOT NULL
 );
 
+-- Systemweite Einstellungen (REP-05: Berichtskopf/Absender)
+CREATE TABLE IF NOT EXISTS settings (
+  key   TEXT PRIMARY KEY,
+  value TEXT
+);
+
 -- ============================================================
 -- Audit-Trail (ROL-06): append-only, durch Trigger gegen Änderung geschützt
 -- ============================================================

@@ -23,7 +23,12 @@ function neuesDokument() {
 }
 
 function kopf(doc, { titel, projekt, untertitel }) {
-  doc.font('Helvetica-Bold').fontSize(9).fillColor(GRAU).text('GGP – Großgeräte-Projektabwicklung', RAND, RAND - 20);
+  // REP-05: konfigurierbarer Berichtskopf (Kliniklogo-Zeile/Absender)
+  const einstellungen = Object.fromEntries(all('SELECT key, value FROM settings').map((s) => [s.key, s.value]));
+  const zeile1 = einstellungen.berichtskopf_zeile1 || 'GGP – Großgeräte-Projektabwicklung';
+  doc.font('Helvetica-Bold').fontSize(9).fillColor(GRAU).text(zeile1, RAND, RAND - 20, { continued: Boolean(einstellungen.berichtskopf_zeile2), lineBreak: false });
+  if (einstellungen.berichtskopf_zeile2) doc.font('Helvetica').text(`  ·  ${einstellungen.berichtskopf_zeile2}`, { lineBreak: false });
+  doc.text('', RAND, RAND - 20 + 10); // Zeilenhöhe abschließen
   doc.font('Helvetica-Bold').fontSize(16).fillColor('#1f4e79').text(titel, RAND, doc.y + 6);
   if (projekt) doc.font('Helvetica').fontSize(11).fillColor('#222222').text(projekt, { width: INHALT_BREITE });
   const datum = new Date().toLocaleString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });

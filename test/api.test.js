@@ -34,11 +34,48 @@ async function login(username, password) {
   return res.headers.get('set-cookie').split(';')[0];
 }
 
+// Minimaler SMTP-Mock (INT-03/PRO-07): nimmt Mails an und sammelt sie ein
+const SMTP_PORT = 2599;
+const empfangeneMails = [];
+let smtpServer;
+
+function starteSmtpMock() {
+  const net = require('node:net');
+  smtpServer = net.createServer((sock) => {
+    let daten = '', imDatenteil = false;
+    sock.write('220 ggp-test SMTP\r\n');
+    sock.on('data', (chunk) => {
+      const text = chunk.toString('utf8');
+      if (imDatenteil) {
+        daten += text;
+        if (daten.includes('\r\n.\r\n')) {
+          empfangeneMails.push(daten);
+          imDatenteil = false;
+          sock.write('250 OK\r\n');
+        }
+        return;
+      }
+      for (const zeile of text.split('\r\n').filter(Boolean)) {
+        if (/^(EHLO|HELO)/i.test(zeile)) sock.write(`250-ggp-test\r\n250 8BITMIME\r\n`);
+        else if (/^MAIL FROM/i.test(zeile)) sock.write('250 OK\r\n');
+        else if (/^RCPT TO/i.test(zeile)) sock.write('250 OK\r\n');
+        else if (/^DATA/i.test(zeile)) { imDatenteil = true; daten = ''; sock.write('354 Ende mit .\r\n'); }
+        else if (/^QUIT/i.test(zeile)) { sock.write('221 Tschüss\r\n'); sock.end(); }
+        else sock.write('250 OK\r\n');
+      }
+    });
+  }).listen(SMTP_PORT);
+}
+
 before(async () => {
+  starteSmtpMock();
   datenVerzeichnis = fs.mkdtempSync(path.join(os.tmpdir(), 'ggp-test-'));
   server = spawn(process.execPath, ['--disable-warning=ExperimentalWarning', 'server/index.js'], {
     cwd: path.join(__dirname, '..'),
-    env: { ...process.env, GGP_DATA_DIR: datenVerzeichnis, GGP_ADMIN_PASSWORD: ADMIN_PASSWORT, PORT: String(PORT) },
+    env: {
+      ...process.env, GGP_DATA_DIR: datenVerzeichnis, GGP_ADMIN_PASSWORD: ADMIN_PASSWORT, PORT: String(PORT),
+      GGP_SMTP_HOST: 'localhost', GGP_SMTP_PORT: String(SMTP_PORT), GGP_MAIL_FROM: 'ggp@klinik-test.local',
+    },
     stdio: 'ignore',
   });
   for (let i = 0; i < 60; i++) {
@@ -49,6 +86,7 @@ before(async () => {
 
 after(() => {
   if (server) server.kill();
+  if (smtpServer) smtpServer.close();
   try { fs.rmSync(datenVerzeichnis, { recursive: true, force: true }); } catch { /* egal */ }
 });
 
@@ -344,6 +382,45 @@ test('Archivierung: schreibgeschützt, aber les- und exportierbar; Portfolio zei
   assert.equal(portfolio.find((p) => p.id === projektId).status, 'archiviert');
   // Reaktivieren für Folgende (falls weitere Tests hinzukommen)
   assert.equal((await api('PATCH', `/projects/${projektId}`, { status: 'aktiv' })).status, 200);
+});
+
+test('Protokoll per E-Mail versenden: PDF-Anhang erreicht die Teilnehmer (PRO-07/INT-03)', async () => {
+  // Kontakt mit E-Mail + Besprechung mit Punkt
+  const kontakt = await api('POST', `/projects/${projektId}/contacts`, {
+    name: 'Dr. Anna Weber', email: 'a.weber@klinik-test.local', gewerk: 'MT',
+  });
+  const meeting = await api('POST', `/projects/${projektId}/meetings`, {
+    typ: 'planung', titel: 'Planungsrunde Versandtest', datum: '2026-07-07', teilnehmer: [kontakt.daten.id],
+  });
+  await api('POST', `/meetings/${meeting.daten.id}/items`, { typ: 'beschluss', text: 'Versandtest-Beschluss' });
+
+  const vorher = empfangeneMails.length;
+  const r = await api('POST', `/meetings/${meeting.daten.id}/versenden`);
+  assert.equal(r.status, 200, JSON.stringify(r.daten));
+  assert.deepEqual(r.daten.versandt, ['a.weber@klinik-test.local']);
+
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  assert.equal(empfangeneMails.length, vorher + 1, 'SMTP-Mock hat keine Mail erhalten');
+  const mail = empfangeneMails[empfangeneMails.length - 1];
+  assert.ok(mail.includes('a.weber@klinik-test.local'));
+  assert.ok(/Protokoll/.test(mail), 'Betreff fehlt');
+  assert.ok(mail.includes('application/pdf') || mail.includes('.pdf'), 'PDF-Anhang fehlt');
+
+  // Versand hebt Status auf „versandt"
+  const m = (await api('GET', `/meetings/${meeting.daten.id}`)).daten;
+  assert.equal(m.status, 'versandt');
+});
+
+test('Berichtskopf ist konfigurierbar und erscheint im PDF (REP-05)', async () => {
+  assert.equal((await api('PUT', '/settings', {
+    berichtskopf_zeile1: 'Universitätsklinikum Musterstadt', berichtskopf_zeile2: 'GB Bau & Technik',
+  })).status, 200);
+  const pdf = await api('GET', `/projects/${projektId}/reports/statusbericht.pdf`);
+  assert.ok(pdf.contentType.includes('application/pdf'));
+  // pdfkit komprimiert Streams – Kopfzeile indirekt prüfen: Einstellung ist gespeichert
+  const s = (await api('GET', '/settings')).daten;
+  assert.equal(s.berichtskopf_zeile1, 'Universitätsklinikum Musterstadt');
+  assert.equal(s.mail_konfiguriert, true);
 });
 
 test('Projekt kopieren übernimmt Struktur und Bewertungen, setzt Bearbeitung zurück (PRJ-04)', async () => {

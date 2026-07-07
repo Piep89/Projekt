@@ -1,5 +1,5 @@
 // Administration: Nutzer (ROL-01), Gewerke-Katalog, Vorlagen (PRJ-05), Lessons Learned (PRJ-06)
-import { get, post, patch, state, loadBase } from '../api.js';
+import { api, get, post, patch, state, loadBase } from '../api.js';
 import {
   h, clear, kopfzeile, table, modal, toast, fehlerToast, feld, textInput, textArea, select,
   gewerkBadge, statusBadge, label, formatDateTime, laden, leerHinweis,
@@ -12,7 +12,7 @@ export async function renderAdmin(el) {
   }
   let aktiverTab = 'nutzer';
   const inhalt = h('div');
-  const tabs = [['nutzer', 'Nutzer'], ['gewerke', 'Gewerke'], ['vorlagen', 'Vorlagen'], ['lessons', 'Lessons Learned']];
+  const tabs = [['nutzer', 'Nutzer'], ['gewerke', 'Gewerke'], ['vorlagen', 'Vorlagen'], ['lessons', 'Lessons Learned'], ['einstellungen', 'Einstellungen']];
   const tabLeiste = h('div', { class: 'tab-leiste' }, tabs.map(([key, text]) => h('button', {
     class: `tab ${key === aktiverTab ? 'tab-aktiv' : ''}`,
     onclick: (e) => {
@@ -30,7 +30,38 @@ export async function renderAdmin(el) {
     if (aktiverTab === 'nutzer') zeigeNutzer();
     else if (aktiverTab === 'gewerke') zeigeGewerke();
     else if (aktiverTab === 'vorlagen') zeigeVorlagen();
+    else if (aktiverTab === 'einstellungen') zeigeEinstellungen();
     else zeigeLessons();
+  }
+
+  // ---------------- Einstellungen (REP-05, INT-03) ----------------
+  async function zeigeEinstellungen() {
+    clear(inhalt).append(laden());
+    try {
+      const s = await get('/settings');
+      const zeile1 = textInput({ value: s.berichtskopf_zeile1 || '', placeholder: 'z. B. Universitätsklinikum Musterstadt' });
+      const zeile2 = textInput({ value: s.berichtskopf_zeile2 || '', placeholder: 'z. B. Geschäftsbereich Bau & Technik – Medizintechnik' });
+      const absender = textInput({ value: s.absender_email || '', placeholder: 'z. B. medizintechnik@klinik.de', type: 'email' });
+      clear(inhalt).append(h('div', { class: 'karte', style: { maxWidth: '640px' } },
+        h('h2', {}, 'Berichtskopf (REP-05)'),
+        h('p', { class: 'muted' }, 'Erscheint in der Kopfzeile aller PDF-Berichte anstelle des Standardtexts.'),
+        feld('Zeile 1 (Klinik/Organisation)', zeile1),
+        feld('Zeile 2 (Abteilung/Absender)', zeile2),
+        h('h2', { style: { marginTop: '1rem' } }, 'E-Mail-Versand (INT-03)'),
+        h('p', { class: 'muted' },
+          s.mail_konfiguriert
+            ? '✓ SMTP ist über Umgebungsvariablen konfiguriert (GGP_SMTP_HOST).'
+            : 'SMTP ist nicht konfiguriert. Für den Protokollversand die Umgebungsvariablen GGP_SMTP_HOST, GGP_SMTP_PORT, ggf. GGP_SMTP_USER/GGP_SMTP_PASS und GGP_MAIL_FROM setzen.'),
+        feld('Absenderadresse (falls nicht per GGP_MAIL_FROM gesetzt)', absender),
+        h('button', {
+          class: 'btn btn-primary', onclick: async () => {
+            try {
+              await api('/settings', { method: 'PUT', body: { berichtskopf_zeile1: zeile1.value, berichtskopf_zeile2: zeile2.value, absender_email: absender.value } });
+              toast('Einstellungen gespeichert');
+            } catch (e) { fehlerToast(e); }
+          },
+        }, 'Speichern')));
+    } catch (e) { fehlerToast(e); }
   }
 
   // ---------------- Nutzer ----------------

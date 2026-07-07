@@ -263,6 +263,29 @@ router.delete('/views/:id', (req, res, next) => {
   res.json({ ok: true });
 });
 
+// ---------------- Einstellungen (REP-05: Berichtskopf, Absender) ----------------
+const SETTING_KEYS = ['berichtskopf_zeile1', 'berichtskopf_zeile2', 'absender_email'];
+
+router.get('/settings', (req, res) => {
+  const werte = Object.fromEntries(all('SELECT key, value FROM settings').map((s) => [s.key, s.value]));
+  res.json({
+    ...Object.fromEntries(SETTING_KEYS.map((k) => [k, werte[k] || ''])),
+    mail_konfiguriert: require('../mail').konfiguriert(),
+  });
+});
+
+router.put('/settings', requireAdmin, (req, res, next) => {
+  try {
+    for (const key of SETTING_KEYS) {
+      if (req.body[key] === undefined) continue;
+      run('INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value',
+        key, String(req.body[key]).trim() || null);
+    }
+    audit(req, null, 'settings', 0, 'geaendert', { schluessel: Object.keys(req.body || {}) });
+    res.json({ ok: true });
+  } catch (e) { next(e); }
+});
+
 // ---------------- Audit-Trail (Einsicht) ----------------
 router.get('/audit', (req, res, next) => {
   try {

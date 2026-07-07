@@ -50,6 +50,18 @@ export async function renderBesprechung(el, params, query) {
     ...statusAktionen,
     h('a', { class: 'btn', href: `/api/meetings/${m.id}/protokoll.pdf`, target: '_blank' }, 'Protokoll-PDF'),
     readonly ? null : h('button', {
+      class: 'btn', title: 'Protokoll-PDF an alle Teilnehmer mit E-Mail-Adresse senden (PRO-07)',
+      onclick: async (ev) => {
+        if (!(await confirmModal('Protokoll-PDF jetzt an alle Teilnehmer mit E-Mail-Adresse versenden?', { okLabel: 'Versenden' }))) return;
+        ev.target.disabled = true;
+        try {
+          const r = await post(`/meetings/${m.id}/versenden`);
+          toast(`Versandt an: ${r.versandt.join(', ')}`);
+          neuLaden();
+        } catch (e) { ev.target.disabled = false; fehlerToast(e); }
+      },
+    }, '✉ Versenden'),
+    readonly ? null : h('button', {
       class: 'btn', onclick: () => {
         const datum = dateInput();
         const dlg = modal({
