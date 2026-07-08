@@ -178,6 +178,41 @@ mit Zusammenfassung und Testnachweis. **Nur auf ausdrücklichen Nutzerwunsch mer
 wöchentlich automatisch an einen Verteiler (nutzt `server/mail.js`; Zeitsteuerung z. B. beim
 Serverstart geplanter Intervall-Timer + `settings`-Eintrag je Projekt mit Empfängerliste).
 
+## AP-16 · Raumbuch 2.0: Merkmalskatalog und Datenmodell (M)
+
+**Ziel:** Vollständige, gerätetyp-spezifische Merkmalskataloge je Raumtyp als Grundlage der
+geführten Abfrage. Konzept: [docs/raumbuch-konzept.md](raumbuch-konzept.md), Kap. 3 + 7.
+**Umfang:** `template_room_types.attribut_namen`-JSON je Eintrag erweitern
+(`datentyp, einheit, soll_vorschlag, optionen, hilfetext, pflicht, geraetetypen`; alte Einträge
+bleiben gültig), `room_attributes` per ALTER-Guard um `relevanz, relevanz_begruendung, pflicht,
+hilfetext, optionen` ergänzen, Übernahme bei Raumanlage (inkl. Gerätetyp-Filter wie Checkliste),
+Vorlagen-Generator (`tools/vorlage/`) erweitern, Kataloginhalte für alle 9 Raumtypen
+(MRT/CT/Angio/Hybrid-OP-Räume ~70–90 Punkte, Nebenräume 15–30).
+**Abnahme:** Neuer Raum vom Typ „MRT-Untersuchungsraum" erhält den vollen Katalog mit
+Datentypen/Hilfetexten; Bestandsdatenbank läuft unverändert; E2E-Test für Katalog-Übernahme.
+
+## AP-17 · Raumbuch 2.0: Erfassungsassistent (M — baut auf AP-16 auf)
+
+**Ziel:** Geführte Punkt-für-Punkt-Abfrage je Raum („Abfrage starten"), Konzept Kap. 4.
+**Umfang:** `GET /rooms/:id/abfrage` (offene Punkte + Fortschritt), Assistent-Dialog
+(Gruppierung nach Gewerk, Eingabefeld je Datentyp, Hilfetext, Fortschrittsanzeige,
+Enter = speichern & weiter), Aktionen Speichern/Nicht relevant (Pflicht-Begründung,
+serverseitig erzwungen wie CHK-02)/Später, Filter „nur offene"/„nur Gewerk X"
+(Gewerke-Schreibrecht beachten), Offline-Ausgangskorb wie Journal.
+**Abnahme:** Kompletter Durchlauf eines Raums im UI-Rundgang; Begründungspflicht getestet;
+Fortschritt korrekt; Rundgang fehlerfrei.
+
+## AP-18 · Raumbuch 2.0: Prüfmodus, Abweichungen, Raumdatenblatt (M — baut auf AP-17 auf)
+
+**Ziel:** Ist-Prüfung gegen Soll mit Direktaktion und Auswertung, Konzept Kap. 5 + 6.
+**Umfang:** Prüf-Modus im Assistenten (Soll anzeigen, Ist erfassen → bestätigt/abweichend),
+bei Abweichung „Mangel anlegen"/„Aufgabe anlegen" (vorbefüllt, verknüpft),
+`GET /rooms/:id/datenblatt.pdf` (Raumdatenblatt mit Unterschriftenzeile),
+Vollständigkeits-Kennzahl je Raum/Gewerk (Ampel in Raumliste, Dashboard-Kachel,
+Aufnahme in Status- und Zeitraumbericht).
+**Abnahme:** Abweichung erzeugt verknüpften Mangel; Datenblatt-PDF öffnet fehlerfrei;
+Kennzahlen stimmen mit Testdaten überein; Testsuite grün.
+
 ---
 
 ## Hinweise für parallele Bearbeitung
@@ -186,5 +221,6 @@ Serverstart geplanter Intervall-Timer + `settings`-Eintrag je Projekt mit Empfä
   jedem Paket mit Frontend-Änderungen sinnvoll.
 - Dateibesitz beachten: Nie gleichzeitig zwei Pakete anfassen, die dieselben Dateien ändern
   (`ui.js` wird von AP-03 und AP-04 berührt → nacheinander).
-- Schema-Änderungen (AP-06, AP-08) nur additiv (`CREATE TABLE IF NOT EXISTS` / neue Spalten über
-  `ALTER TABLE`-Guard im Code), damit Bestandsdatenbanken weiterlaufen.
+- Schema-Änderungen (AP-06, AP-08, AP-16) nur additiv (`CREATE TABLE IF NOT EXISTS` / neue Spalten
+  über `ALTER TABLE`-Guard im Code), damit Bestandsdatenbanken weiterlaufen.
+- Raumbuch 2.0 strikt in der Reihenfolge AP-16 → AP-17 → AP-18.
