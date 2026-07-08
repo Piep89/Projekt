@@ -49,12 +49,18 @@ function ensureBaseData() {
     }
   }
 
-  // Master-Vorlage 1.0 aus mitgelieferter Datei
-  if (!get('SELECT id FROM templates LIMIT 1')) {
-    const file = path.join(__dirname, 'template.json');
-    if (fs.existsSync(file)) {
-      const t = loadTemplateFromFile(file);
-      console.log(`Master-Vorlage '${t.name}' (Version ${t.version}) geladen.`);
+  // Mitgelieferte Master-Vorlage laden, sobald ihre Version in der Datenbank fehlt.
+  // Additiv: Bestandsprojekte behalten ihre Vorlagenversion, neue Projekte nutzen die neueste.
+  const file = path.join(__dirname, 'template.json');
+  if (fs.existsSync(file)) {
+    try {
+      const version = String(JSON.parse(fs.readFileSync(file, 'utf8')).version || '');
+      if (version && !get('SELECT id FROM templates WHERE version = ?', version)) {
+        const t = loadTemplateFromFile(file);
+        console.log(`Master-Vorlage '${t.name}' (Version ${t.version}) geladen.`);
+      }
+    } catch (e) {
+      console.error('Master-Vorlage konnte nicht geladen werden:', e.message);
     }
   }
 }

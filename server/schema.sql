@@ -213,7 +213,14 @@ CREATE TABLE IF NOT EXISTS room_attributes (
   ist        TEXT,
   status     TEXT NOT NULL DEFAULT 'offen' CHECK (status IN ('offen','festgelegt','bestaetigt','abweichend')),
   quelle     TEXT,                      -- Quelle/Kommentar (RB-04)
-  sort_order INTEGER NOT NULL DEFAULT 0
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  -- Raumbuch 2.0 (AP-16): geführte Vollabfrage
+  relevanz   TEXT NOT NULL DEFAULT 'relevant',  -- relevant | nicht_relevant (Begründungspflicht)
+  relevanz_begruendung TEXT,
+  pflicht    INTEGER NOT NULL DEFAULT 0,        -- Pflichtpunkt für Vollständigkeit
+  hilfetext  TEXT,
+  optionen   TEXT,                              -- Auswahloptionen (CSV) bei datentyp 'auswahl'
+  soll_vorschlag TEXT                           -- Vorschlagswert aus der Vorlage (nicht automatisch Soll)
 );
 CREATE INDEX IF NOT EXISTS idx_room_attr ON room_attributes(room_id, gewerk);
 

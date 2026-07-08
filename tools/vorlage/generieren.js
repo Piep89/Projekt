@@ -11,9 +11,10 @@ const GERAETE = new Set(['MRT', 'CT', 'Angiographie', 'Hybrid-OP', 'PET-CT', 'Li
 
 const allePhasen = { ...phasen1, ...phasen2, ...phasen3 };
 const vorlage = {
-  version: '1.0',
+  version: '1.1',
   name: 'Leitfaden Beschaffung und Implementierung medizinischer Großgeräte (07/2026)',
-  notes: 'Initiale Mastervorlage gemäß Anforderungsprofil GGP. Inhalte projektspezifisch anpassbar; Pflege über Vorlagenversionen.',
+  notes: 'Mastervorlage gemäß Anforderungsprofil GGP. Version 1.1: Raumbuch 2.0 – vollständige '
+    + 'Merkmalskataloge je Raumtyp mit Pflichtpunkten, Soll-Vorschlägen und Gerätetyp-Filtern.',
   phasen: [], checkpunkte: [], dokumente: [], attribute: [], raumtypen: [],
 };
 
@@ -50,10 +51,20 @@ for (const [gewerk, name, datentyp, einheit, auswahl, hilfetext] of attribute) {
 }
 
 for (const [name, refs] of raumtypen) {
-  const attrs = refs.map((ref) => {
+  const attrs = refs.map((eintrag) => {
+    // Kurzform 'GEWERK:Name' oder Langform ['GEWERK:Name', {pflicht, soll, geraete}]
+    const [ref, opts] = typeof eintrag === 'string' ? [eintrag, {}] : eintrag;
     if (!attrSet.has(ref)) fehler.push(`Raumtyp ${name}: Attribut '${ref}' existiert nicht`);
+    if (opts.geraete) for (const t of opts.geraete.split(',')) {
+      if (!GERAETE.has(t.trim())) fehler.push(`Raumtyp ${name}: unbekannter Gerätetyp '${t}' bei '${ref}'`);
+    }
     const [gewerk, ...rest] = ref.split(':');
-    return { gewerk, name: rest.join(':') };
+    return {
+      gewerk, name: rest.join(':'),
+      ...(opts.pflicht ? { pflicht: 1 } : {}),
+      ...(opts.soll ? { soll_vorschlag: opts.soll } : {}),
+      ...(opts.geraete ? { geraetetypen: opts.geraete } : {}),
+    };
   });
   vorlage.raumtypen.push({ name, attribute: attrs });
 }

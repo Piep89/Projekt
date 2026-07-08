@@ -1,7 +1,7 @@
 {
- "version": "1.0",
+ "version": "1.1",
  "name": "Leitfaden Beschaffung und Implementierung medizinischer Großgeräte (07/2026)",
- "notes": "Initiale Mastervorlage gemäß Anforderungsprofil GGP. Inhalte projektspezifisch anpassbar; Pflege über Vorlagenversionen.",
+ "notes": "Mastervorlage gemäß Anforderungsprofil GGP. Version 1.1: Raumbuch 2.0 – vollständige Merkmalskataloge je Raumtyp mit Pflichtpunkten, Soll-Vorschlägen und Gerätetyp-Filtern.",
  "phasen": [
   {
    "nr": 0,
@@ -3262,6 +3262,188 @@
    "name": "Augenspüleinrichtung",
    "datentyp": "janein",
    "hilfetext": "Bei KM-/Chemikalienhandling"
+  },
+  {
+   "gewerk": "AR",
+   "name": "Einbringöffnung B×H",
+   "datentyp": "text",
+   "einheit": "m",
+   "hilfetext": "Größte Komponente (Magnet/Gantry) inkl. Transportmaß prüfen"
+  },
+  {
+   "gewerk": "AR",
+   "name": "Einbringweg geprüft",
+   "datentyp": "janein",
+   "hilfetext": "Route inkl. Zwischentüren, Aufzügen und Bodenlasten entlang des Wegs"
+  },
+  {
+   "gewerk": "AR",
+   "name": "Fußbodenaufbau",
+   "datentyp": "text",
+   "hilfetext": "Aufbauhöhe, Kanal-/Trassenführung, ggf. Doppelboden"
+  },
+  {
+   "gewerk": "AR",
+   "name": "Schallschutz Anforderung",
+   "datentyp": "text",
+   "einheit": "dB",
+   "hilfetext": "Gradientenlärm MRT: Anforderung an Wände, Türen, Decke"
+  },
+  {
+   "gewerk": "AR",
+   "name": "Fenster/Tageslicht",
+   "datentyp": "janein",
+   "hilfetext": "ASR A3.4 beachten, ggf. Kompensationsmaßnahmen"
+  },
+  {
+   "gewerk": "AR",
+   "name": "Sichtfenster zum Bedienraum",
+   "datentyp": "janein",
+   "hilfetext": "Direkte Sicht auf den Patienten"
+  },
+  {
+   "gewerk": "ELT",
+   "name": "Netzform",
+   "datentyp": "auswahl",
+   "auswahl_optionen": "TN-S,IT-System (Gruppe 2),Sonstige",
+   "hilfetext": "Nach Raumgruppe VDE 0100-710"
+  },
+  {
+   "gewerk": "ELT",
+   "name": "Filterdurchführungen HF-Kabine",
+   "datentyp": "zahl",
+   "einheit": "Stk",
+   "hilfetext": "Alle Leitungen in den Magnetraum nur über die Filterplatte"
+  },
+  {
+   "gewerk": "ELT",
+   "name": "Beleuchtung MR-tauglich",
+   "datentyp": "janein",
+   "hilfetext": "Im Magnetraum DC-gespeist bzw. herstellerfreigegeben"
+  },
+  {
+   "gewerk": "ELT",
+   "name": "Magnet-Stop (ERDU) Position",
+   "datentyp": "text",
+   "hilfetext": "Not-Abschaltung des Magneten: Position mit Nutzer und Hersteller abstimmen"
+  },
+  {
+   "gewerk": "ELT",
+   "name": "Kabelweg Gerät–Technikraum",
+   "datentyp": "zahl",
+   "einheit": "m",
+   "hilfetext": "Maximale Kabellängen laut Hersteller einhalten"
+  },
+  {
+   "gewerk": "MT",
+   "name": "Quenchrohr",
+   "datentyp": "text",
+   "hilfetext": "Querschnitt, Führung, Ausblasort im Freien (Personenschutz!), Schnee-/Vogelschutz"
+  },
+  {
+   "gewerk": "MT",
+   "name": "5-Gauss-Linie Zutrittskonzept",
+   "datentyp": "text",
+   "hilfetext": "Kennzeichnung und Zutrittsregelung, auch angrenzende Räume und Geschosse"
+  },
+  {
+   "gewerk": "MT",
+   "name": "Magnetische Störquellen Umfeld",
+   "datentyp": "text",
+   "hilfetext": "Aufzüge, Fahrwege, Stahlbau, bewegte Massen – Grenzwerte laut Hersteller"
+  },
+  {
+   "gewerk": "MT",
+   "name": "HF-Kabine Abnahmemessung",
+   "datentyp": "janein",
+   "hilfetext": "Messprotokoll der Schirmdämpfung vor Gerätelieferung"
+  },
+  {
+   "gewerk": "MT",
+   "name": "Heliumbefüllung Zugang",
+   "datentyp": "text",
+   "hilfetext": "Weg für Heliumgebinde und Servicegeräte bis zum Magneten"
+  },
+  {
+   "gewerk": "MT",
+   "name": "Spulen-/Zubehörlagerung",
+   "datentyp": "text",
+   "hilfetext": "Schrank/Stauraum im oder nahe dem Untersuchungsraum"
+  },
+  {
+   "gewerk": "MT",
+   "name": "Anästhesie-Arbeitsplatz MR-tauglich",
+   "datentyp": "janein",
+   "hilfetext": "Falls Sedierung/Anästhesie vorgesehen"
+  },
+  {
+   "gewerk": "IT",
+   "name": "PACS/RIS-Anbindung",
+   "datentyp": "janein",
+   "hilfetext": "DICOM-Knoten, Worklist, Netzfreigaben geklärt"
+  },
+  {
+   "gewerk": "IT",
+   "name": "Telefon/Sprechstelle",
+   "datentyp": "zahl",
+   "einheit": "Stk"
+  },
+  {
+   "gewerk": "KÄL",
+   "name": "Rücklauftemperatur",
+   "datentyp": "zahl",
+   "einheit": "°C"
+  },
+  {
+   "gewerk": "KÄL",
+   "name": "Volumenstrom Kaltwasser",
+   "datentyp": "zahl",
+   "einheit": "m³/h"
+  },
+  {
+   "gewerk": "KÄL",
+   "name": "Glykolanteil",
+   "datentyp": "zahl",
+   "einheit": "%",
+   "hilfetext": "Wasserqualität und Frostschutz laut Hersteller"
+  },
+  {
+   "gewerk": "KÄL",
+   "name": "Kaltwasser bei Netzausfall",
+   "datentyp": "janein",
+   "hilfetext": "MRT: Versorgung Heliumkompressor über SV prüfen (Magnetschutz)"
+  },
+  {
+   "gewerk": "StrS",
+   "name": "Strahlenschutzberechnung liegt vor",
+   "datentyp": "janein",
+   "hilfetext": "Durch Strahlenschutzbeauftragten/Sachverständigen"
+  },
+  {
+   "gewerk": "StrS",
+   "name": "Verfahren StrlSchG",
+   "datentyp": "auswahl",
+   "auswahl_optionen": "Genehmigung,Anzeige,offen",
+   "hilfetext": "Betriebsbeginn erst nach Genehmigung bzw. Anzeige"
+  },
+  {
+   "gewerk": "MSR",
+   "name": "O2-Alarmierungsweg",
+   "datentyp": "text",
+   "hilfetext": "Meldeziel und Quittierung des Sauerstoffwächters festlegen"
+  },
+  {
+   "gewerk": "BS",
+   "name": "Feuerwehr-Einsatzplan Magnetfeld-Hinweis",
+   "datentyp": "janein",
+   "hilfetext": "Gefahr durch das Magnetfeld im Einsatzplan vermerkt"
+  },
+  {
+   "gewerk": "AS",
+   "name": "Lärmschutz Personal",
+   "datentyp": "text",
+   "einheit": "dB(A)",
+   "hilfetext": "Gradientenlärm: Bewertung und Gehörschutzkonzept"
   }
  ],
  "raumtypen": [
@@ -3270,11 +3452,18 @@
    "attribute": [
     {
      "gewerk": "AR",
-     "name": "Bodenbelastung"
+     "name": "Bodenbelastung",
+     "pflicht": 1
     },
     {
      "gewerk": "AR",
-     "name": "Lichte Raumhöhe"
+     "name": "Punktlast Gerät",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "AR",
+     "name": "Lichte Raumhöhe",
+     "pflicht": 1
     },
     {
      "gewerk": "AR",
@@ -3282,19 +3471,68 @@
     },
     {
      "gewerk": "AR",
+     "name": "Einbringöffnung B×H",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "AR",
+     "name": "Einbringweg geprüft",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "AR",
+     "name": "Fußbodenaufbau"
+    },
+    {
+     "gewerk": "AR",
      "name": "Bodenbelag"
     },
     {
      "gewerk": "AR",
-     "name": "Schwingungsentkopplung"
+     "name": "Schwingungsentkopplung",
+     "pflicht": 1
     },
     {
      "gewerk": "AR",
      "name": "Lastverteilplatte"
     },
     {
+     "gewerk": "AR",
+     "name": "Schallschutz Anforderung"
+    },
+    {
+     "gewerk": "AR",
+     "name": "Fenster/Tageslicht"
+    },
+    {
+     "gewerk": "AR",
+     "name": "Sichtfenster zum Bedienraum"
+    },
+    {
      "gewerk": "ELT",
-     "name": "Anschlussleistung Gerät"
+     "name": "Anschlussleistung Gerät",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Netzform"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Einspeisung Querschnitt"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Raumgruppe VDE 0100-710",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Steckdosen AV"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Steckdosen SV"
     },
     {
      "gewerk": "ELT",
@@ -3302,11 +3540,18 @@
     },
     {
      "gewerk": "ELT",
-     "name": "Raumgruppe VDE 0100-710"
+     "name": "Potentialausgleich",
+     "pflicht": 1
     },
     {
      "gewerk": "ELT",
-     "name": "Potentialausgleich"
+     "name": "Filterdurchführungen HF-Kabine",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Beleuchtung MR-tauglich",
+     "pflicht": 1
     },
     {
      "gewerk": "ELT",
@@ -3317,12 +3562,51 @@
      "name": "Not-Aus Gerät"
     },
     {
-     "gewerk": "MT",
-     "name": "HF-Schirmdämpfung Soll"
+     "gewerk": "ELT",
+     "name": "Magnet-Stop (ERDU) Position",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Kabelweg Gerät–Technikraum"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "USV-Versorgung"
     },
     {
      "gewerk": "MT",
-     "name": "Magnetfeld 0,5-mT-Linie"
+     "name": "HF-Schirmdämpfung Soll",
+     "pflicht": 1,
+     "soll_vorschlag": "≥ 90 dB (lt. Hersteller)"
+    },
+    {
+     "gewerk": "MT",
+     "name": "HF-Kabine Abnahmemessung",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "MT",
+     "name": "Magnetfeld 0,5-mT-Linie",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "MT",
+     "name": "5-Gauss-Linie Zutrittskonzept",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "MT",
+     "name": "Magnetische Störquellen Umfeld"
+    },
+    {
+     "gewerk": "MT",
+     "name": "Quenchrohr",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "MT",
+     "name": "Heliumbefüllung Zugang"
     },
     {
      "gewerk": "MT",
@@ -3333,20 +3617,35 @@
      "name": "Medizinische Gase am Platz"
     },
     {
+     "gewerk": "MT",
+     "name": "Spulen-/Zubehörlagerung"
+    },
+    {
+     "gewerk": "MT",
+     "name": "Anästhesie-Arbeitsplatz MR-tauglich"
+    },
+    {
      "gewerk": "LÜF",
      "name": "Luftwechselrate"
     },
     {
      "gewerk": "LÜF",
-     "name": "Raumtemperatur Sollbereich"
+     "name": "Raumtemperatur Sollbereich",
+     "soll_vorschlag": "20–24 °C"
     },
     {
      "gewerk": "LÜF",
-     "name": "Relative Feuchte Sollbereich"
+     "name": "Relative Feuchte Sollbereich",
+     "soll_vorschlag": "40–60 %"
     },
     {
      "gewerk": "LÜF",
-     "name": "Quench-Abluftführung"
+     "name": "Druckstufe"
+    },
+    {
+     "gewerk": "LÜF",
+     "name": "Quench-Abluftführung",
+     "pflicht": 1
     },
     {
      "gewerk": "KÄL",
@@ -3357,16 +3656,542 @@
      "name": "Medizinische Gase"
     },
     {
+     "gewerk": "SAN",
+     "name": "Gase-Entnahmestellen"
+    },
+    {
+     "gewerk": "SAN",
+     "name": "Bodenablauf"
+    },
+    {
      "gewerk": "MSR",
-     "name": "O2-Überwachung"
+     "name": "O2-Überwachung",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "MSR",
+     "name": "O2-Alarmierungsweg"
+    },
+    {
+     "gewerk": "MSR",
+     "name": "GLT-Aufschaltung"
     },
     {
      "gewerk": "BS",
-     "name": "Löschmittel MR-tauglich"
+     "name": "Brandabschnitt"
+    },
+    {
+     "gewerk": "BS",
+     "name": "Brandmelder Anzahl"
+    },
+    {
+     "gewerk": "BS",
+     "name": "Löschmittel MR-tauglich",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "BS",
+     "name": "Feuerwehr-Einsatzplan Magnetfeld-Hinweis",
+     "pflicht": 1
     },
     {
      "gewerk": "HYG",
      "name": "Raumklasse Hygiene"
+    },
+    {
+     "gewerk": "HYG",
+     "name": "Händedesinfektionsspender"
+    },
+    {
+     "gewerk": "HYG",
+     "name": "Oberflächen desinfektionsbeständig"
+    },
+    {
+     "gewerk": "AS",
+     "name": "Fluchtweg"
+    },
+    {
+     "gewerk": "AS",
+     "name": "Notruf/Patientenruf"
+    },
+    {
+     "gewerk": "AS",
+     "name": "Lärmschutz Personal"
+    },
+    {
+     "gewerk": "AS",
+     "name": "Augenspüleinrichtung"
+    },
+    {
+     "gewerk": "IT",
+     "name": "Datendosen"
+    },
+    {
+     "gewerk": "IT",
+     "name": "LWL-Anbindung"
+    },
+    {
+     "gewerk": "IT",
+     "name": "Netzwerksegment/VLAN"
+    },
+    {
+     "gewerk": "IT",
+     "name": "PACS/RIS-Anbindung"
+    },
+    {
+     "gewerk": "IT",
+     "name": "Telefon/Sprechstelle"
+    },
+    {
+     "gewerk": "IT",
+     "name": "WLAN-Ausleuchtung"
+    }
+   ]
+  },
+  {
+   "name": "CT-Untersuchungsraum",
+   "attribute": [
+    {
+     "gewerk": "AR",
+     "name": "Bodenbelastung",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "AR",
+     "name": "Punktlast Gerät"
+    },
+    {
+     "gewerk": "AR",
+     "name": "Türbreite lichte Öffnung",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "AR",
+     "name": "Einbringöffnung B×H",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "AR",
+     "name": "Einbringweg geprüft"
+    },
+    {
+     "gewerk": "AR",
+     "name": "Fußbodenaufbau"
+    },
+    {
+     "gewerk": "AR",
+     "name": "Bodenbelag"
+    },
+    {
+     "gewerk": "AR",
+     "name": "Sichtfenster zum Bedienraum"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Anschlussleistung Gerät",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Netzform"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Einspeisung Querschnitt"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Raumgruppe VDE 0100-710",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Steckdosen AV"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Steckdosen SV"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Steckdosen ZSV"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Potentialausgleich"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Not-Aus Gerät"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Kabelweg Gerät–Technikraum"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Beleuchtungsstärke"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Dimmbare Beleuchtung"
+    },
+    {
+     "gewerk": "StrS",
+     "name": "Strahlenschutzberechnung liegt vor",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "StrS",
+     "name": "Verfahren StrlSchG",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "StrS",
+     "name": "Bleigleichwert Wände",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "StrS",
+     "name": "Bleigleichwert Tür",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "StrS",
+     "name": "Bleigleichwert Fenster",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "StrS",
+     "name": "Bleigleichwert Decke/Boden",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "StrS",
+     "name": "Kontrollbereich",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "StrS",
+     "name": "Warnleuchte/Türkontakt",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "MT",
+     "name": "Geräteliste Raum"
+    },
+    {
+     "gewerk": "MT",
+     "name": "Patientenüberwachung"
+    },
+    {
+     "gewerk": "MT",
+     "name": "Injektor-Standort"
+    },
+    {
+     "gewerk": "LÜF",
+     "name": "Luftwechselrate"
+    },
+    {
+     "gewerk": "LÜF",
+     "name": "Raumtemperatur Sollbereich",
+     "soll_vorschlag": "20–26 °C"
+    },
+    {
+     "gewerk": "LÜF",
+     "name": "Relative Feuchte Sollbereich"
+    },
+    {
+     "gewerk": "KÄL",
+     "name": "Kühllast Raum (Luft)",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "SAN",
+     "name": "Medizinische Gase"
+    },
+    {
+     "gewerk": "SAN",
+     "name": "Gase-Entnahmestellen"
+    },
+    {
+     "gewerk": "SAN",
+     "name": "Waschplatz"
+    },
+    {
+     "gewerk": "MSR",
+     "name": "GLT-Aufschaltung"
+    },
+    {
+     "gewerk": "BS",
+     "name": "Brandabschnitt"
+    },
+    {
+     "gewerk": "BS",
+     "name": "Brandmelder Anzahl"
+    },
+    {
+     "gewerk": "HYG",
+     "name": "Raumklasse Hygiene"
+    },
+    {
+     "gewerk": "HYG",
+     "name": "Händedesinfektionsspender"
+    },
+    {
+     "gewerk": "HYG",
+     "name": "Oberflächen desinfektionsbeständig"
+    },
+    {
+     "gewerk": "AS",
+     "name": "Fluchtweg"
+    },
+    {
+     "gewerk": "AS",
+     "name": "Notruf/Patientenruf"
+    },
+    {
+     "gewerk": "AS",
+     "name": "Augenspüleinrichtung"
+    },
+    {
+     "gewerk": "IT",
+     "name": "Datendosen"
+    },
+    {
+     "gewerk": "IT",
+     "name": "Netzwerksegment/VLAN"
+    },
+    {
+     "gewerk": "IT",
+     "name": "PACS/RIS-Anbindung"
+    },
+    {
+     "gewerk": "IT",
+     "name": "Telefon/Sprechstelle"
+    }
+   ]
+  },
+  {
+   "name": "Angiographie-/Hybrid-OP-Raum",
+   "attribute": [
+    {
+     "gewerk": "AR",
+     "name": "Deckenabhängung für Stative",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "AR",
+     "name": "Lichte Raumhöhe",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "AR",
+     "name": "Bodenbelastung",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "AR",
+     "name": "Türbreite lichte Öffnung",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "AR",
+     "name": "Einbringöffnung B×H",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "AR",
+     "name": "Einbringweg geprüft"
+    },
+    {
+     "gewerk": "AR",
+     "name": "Fußbodenaufbau"
+    },
+    {
+     "gewerk": "AR",
+     "name": "Bodenbelag"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Anschlussleistung Gerät",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Netzform",
+     "pflicht": 1,
+     "soll_vorschlag": "IT-System (Gruppe 2)"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Raumgruppe VDE 0100-710",
+     "pflicht": 1,
+     "soll_vorschlag": "2"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Steckdosen SV"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Steckdosen ZSV",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Potentialausgleich",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "ELT",
+     "name": "USV-Versorgung",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Not-Aus Gerät"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Kabelweg Gerät–Technikraum"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Beleuchtungsstärke"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Dimmbare Beleuchtung"
+    },
+    {
+     "gewerk": "StrS",
+     "name": "Strahlenschutzberechnung liegt vor",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "StrS",
+     "name": "Verfahren StrlSchG",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "StrS",
+     "name": "Bleigleichwert Wände",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "StrS",
+     "name": "Bleigleichwert Tür",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "StrS",
+     "name": "Kontrollbereich",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "StrS",
+     "name": "Warnleuchte/Türkontakt",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "MT",
+     "name": "Deckenstativ",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "MT",
+     "name": "Injektor-Standort"
+    },
+    {
+     "gewerk": "MT",
+     "name": "Geräteliste Raum"
+    },
+    {
+     "gewerk": "MT",
+     "name": "Medizinische Gase am Platz",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "MT",
+     "name": "Patientenüberwachung"
+    },
+    {
+     "gewerk": "MT",
+     "name": "Anästhesie-Arbeitsplatz MR-tauglich",
+     "geraetetypen": "Hybrid-OP"
+    },
+    {
+     "gewerk": "LÜF",
+     "name": "Luftwechselrate",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "LÜF",
+     "name": "Druckstufe",
+     "pflicht": 1,
+     "soll_vorschlag": "Überdruck"
+    },
+    {
+     "gewerk": "LÜF",
+     "name": "Filterklasse Zuluft",
+     "pflicht": 1,
+     "geraetetypen": "Hybrid-OP"
+    },
+    {
+     "gewerk": "LÜF",
+     "name": "Raumtemperatur Sollbereich"
+    },
+    {
+     "gewerk": "LÜF",
+     "name": "Relative Feuchte Sollbereich"
+    },
+    {
+     "gewerk": "KÄL",
+     "name": "Kühllast Raum (Luft)"
+    },
+    {
+     "gewerk": "SAN",
+     "name": "Medizinische Gase",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "SAN",
+     "name": "Gase-Entnahmestellen",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "MSR",
+     "name": "GLT-Aufschaltung"
+    },
+    {
+     "gewerk": "BS",
+     "name": "Brandabschnitt"
+    },
+    {
+     "gewerk": "BS",
+     "name": "Brandmelder Anzahl"
+    },
+    {
+     "gewerk": "HYG",
+     "name": "Raumklasse Hygiene",
+     "pflicht": 1,
+     "soll_vorschlag": "Ia (Hybrid-OP)",
+     "geraetetypen": "Hybrid-OP"
+    },
+    {
+     "gewerk": "HYG",
+     "name": "Raumklasse Hygiene",
+     "pflicht": 1,
+     "geraetetypen": "Angiographie"
+    },
+    {
+     "gewerk": "HYG",
+     "name": "Händedesinfektionsspender"
+    },
+    {
+     "gewerk": "HYG",
+     "name": "Oberflächen desinfektionsbeständig"
     },
     {
      "gewerk": "AS",
@@ -3379,11 +4204,27 @@
     {
      "gewerk": "IT",
      "name": "Datendosen"
+    },
+    {
+     "gewerk": "IT",
+     "name": "LWL-Anbindung"
+    },
+    {
+     "gewerk": "IT",
+     "name": "Netzwerksegment/VLAN"
+    },
+    {
+     "gewerk": "IT",
+     "name": "PACS/RIS-Anbindung"
+    },
+    {
+     "gewerk": "IT",
+     "name": "Telefon/Sprechstelle"
     }
    ]
   },
   {
-   "name": "CT-Untersuchungsraum",
+   "name": "Technikraum",
    "attribute": [
     {
      "gewerk": "AR",
@@ -3394,202 +4235,105 @@
      "name": "Türbreite lichte Öffnung"
     },
     {
-     "gewerk": "ELT",
-     "name": "Anschlussleistung Gerät"
-    },
-    {
-     "gewerk": "ELT",
-     "name": "Steckdosen ZSV"
-    },
-    {
-     "gewerk": "ELT",
-     "name": "Raumgruppe VDE 0100-710"
-    },
-    {
-     "gewerk": "ELT",
-     "name": "Not-Aus Gerät"
-    },
-    {
-     "gewerk": "StrS",
-     "name": "Bleigleichwert Wände"
-    },
-    {
-     "gewerk": "StrS",
-     "name": "Bleigleichwert Tür"
-    },
-    {
-     "gewerk": "StrS",
-     "name": "Bleigleichwert Fenster"
-    },
-    {
-     "gewerk": "StrS",
-     "name": "Kontrollbereich"
-    },
-    {
-     "gewerk": "StrS",
-     "name": "Warnleuchte/Türkontakt"
-    },
-    {
-     "gewerk": "MT",
-     "name": "Patientenüberwachung"
-    },
-    {
-     "gewerk": "LÜF",
-     "name": "Luftwechselrate"
-    },
-    {
-     "gewerk": "LÜF",
-     "name": "Raumtemperatur Sollbereich"
-    },
-    {
-     "gewerk": "KÄL",
-     "name": "Kühllast Raum (Luft)"
-    },
-    {
-     "gewerk": "SAN",
-     "name": "Medizinische Gase"
-    },
-    {
-     "gewerk": "HYG",
-     "name": "Raumklasse Hygiene"
-    },
-    {
-     "gewerk": "AS",
-     "name": "Notruf/Patientenruf"
-    },
-    {
-     "gewerk": "IT",
-     "name": "Datendosen"
-    }
-   ]
-  },
-  {
-   "name": "Angiographie-/Hybrid-OP-Raum",
-   "attribute": [
-    {
      "gewerk": "AR",
-     "name": "Deckenabhängung für Stative"
-    },
-    {
-     "gewerk": "AR",
-     "name": "Lichte Raumhöhe"
+     "name": "Fußbodenaufbau"
     },
     {
      "gewerk": "ELT",
-     "name": "Anschlussleistung Gerät"
+     "name": "Anschlussleistung Gerät",
+     "pflicht": 1
     },
     {
      "gewerk": "ELT",
-     "name": "Steckdosen ZSV"
+     "name": "Netzform"
     },
     {
      "gewerk": "ELT",
-     "name": "Raumgruppe VDE 0100-710"
-    },
-    {
-     "gewerk": "ELT",
-     "name": "USV-Versorgung"
-    },
-    {
-     "gewerk": "StrS",
-     "name": "Bleigleichwert Wände"
-    },
-    {
-     "gewerk": "StrS",
-     "name": "Bleigleichwert Tür"
-    },
-    {
-     "gewerk": "StrS",
-     "name": "Kontrollbereich"
-    },
-    {
-     "gewerk": "MT",
-     "name": "Deckenstativ"
-    },
-    {
-     "gewerk": "MT",
-     "name": "Injektor-Standort"
-    },
-    {
-     "gewerk": "MT",
-     "name": "Medizinische Gase am Platz"
-    },
-    {
-     "gewerk": "LÜF",
-     "name": "Luftwechselrate"
-    },
-    {
-     "gewerk": "LÜF",
-     "name": "Druckstufe"
-    },
-    {
-     "gewerk": "LÜF",
-     "name": "Filterklasse Zuluft"
-    },
-    {
-     "gewerk": "SAN",
-     "name": "Medizinische Gase"
-    },
-    {
-     "gewerk": "SAN",
-     "name": "Gase-Entnahmestellen"
-    },
-    {
-     "gewerk": "HYG",
-     "name": "Raumklasse Hygiene"
-    },
-    {
-     "gewerk": "IT",
-     "name": "Datendosen"
-    }
-   ]
-  },
-  {
-   "name": "Technikraum",
-   "attribute": [
-    {
-     "gewerk": "ELT",
-     "name": "Anschlussleistung Gerät"
+     "name": "Einspeisung Querschnitt"
     },
     {
      "gewerk": "ELT",
      "name": "Steckdosen AV"
     },
     {
-     "gewerk": "KÄL",
-     "name": "Kühllast Gerät"
+     "gewerk": "ELT",
+     "name": "USV-Versorgung"
     },
     {
      "gewerk": "KÄL",
-     "name": "Kaltwasseranschluss"
+     "name": "Kühllast Gerät",
+     "pflicht": 1
     },
     {
      "gewerk": "KÄL",
-     "name": "Vorlauftemperatur"
+     "name": "Kaltwasseranschluss",
+     "pflicht": 1
     },
     {
      "gewerk": "KÄL",
-     "name": "Redundanz/Notkühlung"
+     "name": "Vorlauftemperatur",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "KÄL",
+     "name": "Rücklauftemperatur"
+    },
+    {
+     "gewerk": "KÄL",
+     "name": "Volumenstrom Kaltwasser"
+    },
+    {
+     "gewerk": "KÄL",
+     "name": "Glykolanteil"
+    },
+    {
+     "gewerk": "KÄL",
+     "name": "Redundanz/Notkühlung",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "KÄL",
+     "name": "Kaltwasser bei Netzausfall",
+     "geraetetypen": "MRT,PET-CT"
     },
     {
      "gewerk": "LÜF",
-     "name": "Raumtemperatur Sollbereich"
+     "name": "Raumtemperatur Sollbereich",
+     "soll_vorschlag": "lt. Hersteller (typ. 15–24 °C)"
+    },
+    {
+     "gewerk": "LÜF",
+     "name": "Luftwechselrate"
     },
     {
      "gewerk": "MSR",
-     "name": "GLT-Aufschaltung"
+     "name": "GLT-Aufschaltung",
+     "pflicht": 1
     },
     {
      "gewerk": "MSR",
-     "name": "Temperaturüberwachung Technikraum"
+     "name": "Temperaturüberwachung Technikraum",
+     "pflicht": 1
     },
     {
      "gewerk": "MSR",
-     "name": "O2-Überwachung"
+     "name": "Störmeldung an Leitwarte",
+     "pflicht": 1
     },
     {
      "gewerk": "MSR",
-     "name": "Störmeldung an Leitwarte"
+     "name": "O2-Überwachung",
+     "pflicht": 1,
+     "geraetetypen": "MRT,PET-CT"
+    },
+    {
+     "gewerk": "MSR",
+     "name": "O2-Alarmierungsweg",
+     "geraetetypen": "MRT,PET-CT"
+    },
+    {
+     "gewerk": "BS",
+     "name": "Brandabschnitt"
     },
     {
      "gewerk": "BS",
@@ -3598,12 +4342,29 @@
     {
      "gewerk": "IT",
      "name": "Datendosen"
+    },
+    {
+     "gewerk": "IT",
+     "name": "LWL-Anbindung",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "IT",
+     "name": "Netzwerksegment/VLAN"
     }
    ]
   },
   {
    "name": "Bedienraum/Schaltraum",
    "attribute": [
+    {
+     "gewerk": "AR",
+     "name": "Sichtfenster zum Bedienraum"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "Steckdosen AV"
+    },
     {
      "gewerk": "ELT",
      "name": "Steckdosen SV"
@@ -3617,28 +4378,55 @@
      "name": "Beleuchtungsstärke"
     },
     {
+     "gewerk": "ELT",
+     "name": "Dimmbare Beleuchtung"
+    },
+    {
      "gewerk": "StrS",
-     "name": "Bleigleichwert Fenster"
+     "name": "Bleigleichwert Wände",
+     "geraetetypen": "CT,Angiographie,Hybrid-OP,PET-CT,Linearbeschleuniger"
     },
     {
-     "gewerk": "IT",
-     "name": "Datendosen"
+     "gewerk": "StrS",
+     "name": "Bleigleichwert Fenster",
+     "geraetetypen": "CT,Angiographie,Hybrid-OP,PET-CT,Linearbeschleuniger"
     },
     {
-     "gewerk": "IT",
-     "name": "Netzwerksegment/VLAN"
+     "gewerk": "MT",
+     "name": "Patientenüberwachung"
     },
     {
      "gewerk": "LÜF",
      "name": "Raumtemperatur Sollbereich"
     },
     {
-     "gewerk": "AS",
-     "name": "Notruf/Patientenruf"
+     "gewerk": "IT",
+     "name": "Datendosen",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "IT",
+     "name": "Netzwerksegment/VLAN"
+    },
+    {
+     "gewerk": "IT",
+     "name": "PACS/RIS-Anbindung"
+    },
+    {
+     "gewerk": "IT",
+     "name": "Telefon/Sprechstelle"
     },
     {
      "gewerk": "HYG",
      "name": "Händedesinfektionsspender"
+    },
+    {
+     "gewerk": "AS",
+     "name": "Notruf/Patientenruf"
+    },
+    {
+     "gewerk": "BS",
+     "name": "Brandmelder Anzahl"
     }
    ]
   },
@@ -3670,6 +4458,10 @@
      "name": "Patientenüberwachung"
     },
     {
+     "gewerk": "LÜF",
+     "name": "Luftwechselrate"
+    },
+    {
      "gewerk": "HYG",
      "name": "Raumklasse Hygiene"
     },
@@ -3684,6 +4476,14 @@
     {
      "gewerk": "IT",
      "name": "Datendosen"
+    },
+    {
+     "gewerk": "IT",
+     "name": "Telefon/Sprechstelle"
+    },
+    {
+     "gewerk": "BS",
+     "name": "Brandmelder Anzahl"
     }
    ]
   },
@@ -3699,12 +4499,20 @@
      "name": "Steckdosen AV"
     },
     {
+     "gewerk": "LÜF",
+     "name": "Luftwechselrate"
+    },
+    {
      "gewerk": "AS",
      "name": "Notruf/Patientenruf"
     },
     {
      "gewerk": "HYG",
      "name": "Händedesinfektionsspender"
+    },
+    {
+     "gewerk": "BS",
+     "name": "Brandmelder Anzahl"
     }
    ]
   },
@@ -3724,12 +4532,28 @@
      "name": "Luftwechselrate"
     },
     {
+     "gewerk": "LÜF",
+     "name": "Raumtemperatur Sollbereich"
+    },
+    {
+     "gewerk": "BS",
+     "name": "Brandabschnitt"
+    },
+    {
      "gewerk": "BS",
      "name": "Brandmelder Anzahl"
     },
     {
      "gewerk": "IT",
      "name": "WLAN-Ausleuchtung"
+    },
+    {
+     "gewerk": "AS",
+     "name": "Fluchtweg"
+    },
+    {
+     "gewerk": "HYG",
+     "name": "Händedesinfektionsspender"
     }
    ]
   },
@@ -3738,15 +4562,29 @@
    "attribute": [
     {
      "gewerk": "IT",
-     "name": "Datendosen"
+     "name": "Datendosen",
+     "pflicht": 1
     },
     {
      "gewerk": "IT",
      "name": "Netzwerksegment/VLAN"
     },
     {
+     "gewerk": "IT",
+     "name": "PACS/RIS-Anbindung",
+     "pflicht": 1
+    },
+    {
+     "gewerk": "IT",
+     "name": "Telefon/Sprechstelle"
+    },
+    {
      "gewerk": "ELT",
      "name": "Steckdosen SV"
+    },
+    {
+     "gewerk": "ELT",
+     "name": "USV-Versorgung"
     },
     {
      "gewerk": "ELT",
@@ -3755,6 +4593,10 @@
     {
      "gewerk": "LÜF",
      "name": "Raumtemperatur Sollbereich"
+    },
+    {
+     "gewerk": "BS",
+     "name": "Brandmelder Anzahl"
     }
    ]
   }

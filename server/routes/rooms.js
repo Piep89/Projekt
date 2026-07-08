@@ -47,9 +47,10 @@ function parseZahl(value, feldName) {
   return n;
 }
 
-// Attribute eines Raumtyps aus der Projektvorlage vorbelegen (RB-02);
+// Attribute eines Raumtyps aus der Projektvorlage vorbelegen (RB-02, AP-16);
 // vorhandene Attribute (Raum+Gewerk+Name) werden übersprungen. Liefert Anzahl.
-function raumtypVorbelegen(templateId, raumtyp, roomId) {
+// Gerätetyp-Filter wie bei der Checkliste: Eintrag ohne geraetetypen gilt immer.
+function raumtypVorbelegen(templateId, raumtyp, roomId, geraetetyp) {
   if (!templateId || !raumtyp) return 0;
   const rt = get('SELECT * FROM template_room_types WHERE template_id = ? AND name = ?', templateId, raumtyp);
   if (!rt) return 0;
@@ -58,12 +59,17 @@ function raumtypVorbelegen(templateId, raumtyp, roomId) {
   let n = 0;
   liste.forEach((w, i) => {
     if (!w || !w.gewerk || !w.name) return;
+    if (w.geraetetypen && geraetetyp
+        && !String(w.geraetetypen).split(',').map((s) => s.trim()).includes(geraetetyp)) return;
     const ka = get('SELECT * FROM template_attributes WHERE template_id = ? AND gewerk = ? AND name = ?',
       templateId, w.gewerk, w.name);
     if (!ka) return;
     if (get('SELECT id FROM room_attributes WHERE room_id = ? AND gewerk = ? AND name = ?', roomId, ka.gewerk, ka.name)) return;
-    run('INSERT INTO room_attributes (room_id, gewerk, name, datentyp, einheit, sort_order) VALUES (?, ?, ?, ?, ?, ?)',
-      roomId, ka.gewerk, ka.name, ka.datentyp, ka.einheit, i);
+    run(`INSERT INTO room_attributes (room_id, gewerk, name, datentyp, einheit, sort_order,
+           pflicht, hilfetext, optionen, soll_vorschlag)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      roomId, ka.gewerk, ka.name, ka.datentyp, ka.einheit, i,
+      w.pflicht ? 1 : 0, ka.hilfetext, ka.auswahl_optionen, w.soll_vorschlag || null);
     n++;
   });
   return n;
@@ -73,7 +79,8 @@ function raumtypVorbelegen(templateId, raumtyp, roomId) {
 function aktuellerStand(projectId) {
   return all('SELECT * FROM rooms WHERE project_id = ? ORDER BY nummer', projectId).map((r) => ({
     ...r,
-    attribute: all(`SELECT id, gewerk, name, datentyp, einheit, soll, ist, status, quelle, sort_order
+    attribute: all(`SELECT id, gewerk, name, datentyp, einheit, soll, ist, status, quelle, sort_order,
+                           relevanz, relevanz_begruendung, pflicht, soll_vorschlag
                     FROM room_attributes WHERE room_id = ? ORDER BY gewerk, sort_order, name`, r.id),
   }));
 }
@@ -96,7 +103,7 @@ router.get('/projects/:projectId/rooms', requireProject('read'), (req, res) => {
   res.json(all(
     `SELECT r.*,
        (SELECT COUNT(*) FROM room_attributes a WHERE a.room_id = r.id) AS attribut_anzahl,
-       (SELECT COUNT(*) FROM room_attributes a WHERE a.room_id = r.id
+       (SELECT COUNT(*) FROM room_attributes a WHERE a.room_id = r.id AND a.relevanz != 'nicht_relevant'
           AND (a.status = 'abweichend'
                OR (COALESCE(a.soll,'') != '' AND COALESCE(a.ist,'') != '' AND a.ist != a.soll))) AS abweichungen,
        (SELECT COUNT(*) FROM checkpoints c
@@ -132,7 +139,7 @@ router.post('/projects/:projectId/rooms', requireProject('write'), (req, res, ne
         req.project.id, nummer, bezeichnung, text(b.funktion), flaeche, hoehe,
         text(b.raumgruppe), text(b.strahlenschutz), text(b.hf_anforderung), text(b.raumtyp), text(b.bemerkung), now());
       const roomId = Number(r.lastInsertRowid);
-      const attribute = raumtypVorbelegen(req.project.template_id, text(b.raumtyp), roomId);
+      const attribute = raumtypVorbelegen(req.project.template_id, text(b.raumtyp), roomId, req.project.geraetetyp);
       return { id: roomId, attribute };
     });
     audit(req, req.project.id, 'room', ergebnis.id, 'erstellt',
@@ -198,7 +205,7 @@ router.post('/projects/:projectId/rooms/import', requireProject('write'), (req, 
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         req.project.id, z.nummer, z.bezeichnung, z.funktion, z.flaeche_m2, z.hoehe_m, z.raumgruppe, z.raumtyp, z.bemerkung, now());
       const roomId = Number(r.lastInsertRowid);
-      const attribute = raumtypVorbelegen(req.project.template_id, z.raumtyp, roomId);
+      const attribute = raumtypVorbelegen(req.project.template_id, z.raumtyp, roomId, req.project.geraetetyp);
       return { id: roomId, nummer: z.nummer, bezeichnung: z.bezeichnung, attribute };
     }));
     for (const a of angelegt) {
@@ -337,8 +344,9 @@ router.post('/rooms/:id/attributes', requireProject('write', roomProject), (req,
             uebersprungen.push(`${ka.gewerk}: ${ka.name}`);
             continue;
           }
-          run('INSERT INTO room_attributes (room_id, gewerk, name, datentyp, einheit, sort_order) VALUES (?, ?, ?, ?, ?, ?)',
-            raum.id, ka.gewerk, ka.name, ka.datentyp, ka.einheit, ++sort);
+          run(`INSERT INTO room_attributes (room_id, gewerk, name, datentyp, einheit, sort_order, hilfetext, optionen)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            raum.id, ka.gewerk, ka.name, ka.datentyp, ka.einheit, ++sort, ka.hilfetext, ka.auswahl_optionen);
           angelegt.push(`${ka.gewerk}: ${ka.name}`);
         }
       });
@@ -379,13 +387,26 @@ router.patch('/room-attributes/:id', requireProject('write', attrProject), (req,
     if (!canWriteGewerk(req.access, attr.gewerk)) throw new ApiError(403, 'Keine Schreibrechte für dieses Gewerk');
 
     const b = req.body || {};
-    const neu = { soll: attr.soll, ist: attr.ist, status: attr.status, quelle: attr.quelle };
-    for (const f of ['soll', 'ist', 'quelle']) {
+    const neu = {
+      soll: attr.soll, ist: attr.ist, status: attr.status, quelle: attr.quelle,
+      relevanz: attr.relevanz, relevanz_begruendung: attr.relevanz_begruendung,
+    };
+    for (const f of ['soll', 'ist', 'quelle', 'relevanz_begruendung']) {
       if (b[f] !== undefined) neu[f] = (b[f] === null || String(b[f]).trim() === '') ? null : String(b[f]).trim();
     }
     if (b.status !== undefined) {
       if (!ATTRIBUT_STATI.includes(b.status)) throw new ApiError(400, `Status muss einer von: ${ATTRIBUT_STATI.join(', ')} sein`);
       neu.status = b.status;
+    }
+    // Relevanz (AP-16): 'nicht relevant' nur mit Begründung – analog CHK-02
+    if (b.relevanz !== undefined) {
+      if (!['relevant', 'nicht_relevant'].includes(b.relevanz)) {
+        throw new ApiError(400, "Relevanz muss 'relevant' oder 'nicht_relevant' sein");
+      }
+      neu.relevanz = b.relevanz;
+    }
+    if (neu.relevanz === 'nicht_relevant' && !(neu.relevanz_begruendung || '').trim()) {
+      throw new ApiError(400, "Für 'nicht relevant' ist eine Begründung Pflicht");
     }
     // Datentyp-Validierung der Werte
     if (attr.datentyp === 'zahl') {
@@ -403,11 +424,11 @@ router.patch('/room-attributes/:id', requireProject('write', attrProject), (req,
       }
     }
 
-    run('UPDATE room_attributes SET soll=?, ist=?, status=?, quelle=? WHERE id=?',
-      neu.soll, neu.ist, neu.status, neu.quelle, attr.id);
+    run('UPDATE room_attributes SET soll=?, ist=?, status=?, quelle=?, relevanz=?, relevanz_begruendung=? WHERE id=?',
+      neu.soll, neu.ist, neu.status, neu.quelle, neu.relevanz, neu.relevanz_begruendung, attr.id);
     const details = { attribut: attr.name, gewerk: attr.gewerk };
     let geaendert = false;
-    for (const f of ['soll', 'ist', 'status', 'quelle']) {
+    for (const f of ['soll', 'ist', 'status', 'quelle', 'relevanz', 'relevanz_begruendung']) {
       if (String(attr[f] ?? '') !== String(neu[f] ?? '')) {
         details[f] = { von: attr[f] ?? null, nach: neu[f] };
         geaendert = true;
@@ -464,7 +485,7 @@ router.get('/projects/:projectId/abweichungen', requireProject('read'), (req, re
     `SELECT a.id, a.gewerk, a.name, a.datentyp, a.einheit, a.soll, a.ist, a.status, a.quelle,
             r.id AS room_id, r.nummer, r.bezeichnung
      FROM room_attributes a JOIN rooms r ON r.id = a.room_id
-     WHERE r.project_id = ?
+     WHERE r.project_id = ? AND a.relevanz != 'nicht_relevant'
        AND (a.status = 'abweichend'
             OR (COALESCE(a.soll,'') != '' AND COALESCE(a.ist,'') != '' AND a.ist != a.soll))
      ORDER BY r.nummer, a.gewerk, a.sort_order, a.name`, req.project.id));
@@ -567,6 +588,11 @@ router.get('/projects/:projectId/planstaende/delta', requireProject('read'), (re
             aenderungen.push({ gewerk: a.gewerk, attribut: a.name, feld: f, von: vorher[f] ?? null, nach: a[f] ?? null });
           }
         }
+        // Relevanz (AP-16): Snapshots vor Raumbuch 2.0 kennen das Feld nicht -> 'relevant'
+        if (!gleich(vorher.relevanz || 'relevant', a.relevanz || 'relevant')) {
+          aenderungen.push({ gewerk: a.gewerk, attribut: a.name, feld: 'relevanz',
+            von: vorher.relevanz || 'relevant', nach: a.relevanz || 'relevant' });
+        }
       }
       for (const [key, a] of altAttr) {
         if (!neuAttr.has(key)) aenderungen.push({ gewerk: a.gewerk, attribut: a.name, feld: 'attribut', von: 'vorhanden', nach: 'entfernt' });
@@ -607,3 +633,4 @@ router.get('/planstaende/:id', requireProject('read', planstandProject), (req, r
 });
 
 module.exports = router;
+module.exports.raumtypVorbelegen = raumtypVorbelegen; // für Seed/Skripte

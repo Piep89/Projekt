@@ -178,7 +178,7 @@ mit Zusammenfassung und Testnachweis. **Nur auf ausdrücklichen Nutzerwunsch mer
 wöchentlich automatisch an einen Verteiler (nutzt `server/mail.js`; Zeitsteuerung z. B. beim
 Serverstart geplanter Intervall-Timer + `settings`-Eintrag je Projekt mit Empfängerliste).
 
-## AP-16 · Raumbuch 2.0: Merkmalskatalog und Datenmodell (M)
+## AP-16 · Raumbuch 2.0: Merkmalskatalog und Datenmodell (M) — ✅ erledigt
 
 **Ziel:** Vollständige, gerätetyp-spezifische Merkmalskataloge je Raumtyp als Grundlage der
 geführten Abfrage. Konzept: [docs/raumbuch-konzept.md](raumbuch-konzept.md), Kap. 3 + 7.

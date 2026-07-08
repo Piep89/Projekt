@@ -61,14 +61,14 @@ Statuswerte: `offen · in_bearbeitung · erledigt · blockiert`; Relevanz: `unbe
 | Methode & Pfad | Zweck |
 |---|---|
 | `GET /projects/:id/rooms` | Räume mit Attribut-/Abweichungs-/Mängel-/Fotozählern |
-| `POST /projects/:id/rooms` | Raum anlegen; `raumtyp` belegt Attribute aus dem Vorlagenkatalog vor |
+| `POST /projects/:id/rooms` | Raum anlegen; `raumtyp` belegt Attribute aus dem Vorlagenkatalog vor (gerätetyp-gefiltert, inkl. `pflicht`, `hilfetext`, `optionen`, `soll_vorschlag`) |
 | `POST /projects/:id/rooms/import` `{csv, commit}` | CSV-Import mit Vorschau/Fehlerbericht |
 | `GET /rooms/:id` · `PATCH /rooms/:id` · `DELETE /rooms/:id` | Raumdetail (inkl. verknüpfter Punkte/Mängel/Fotos); Löschen → Papierkorb |
 | `GET /projects/:id/attribut-katalog` | Attributkatalog + Raumtypen der Projektvorlage |
 | `POST /rooms/:id/attributes` | Attribute ergänzen: `{katalog_ids:[…]}` oder frei `{gewerk, name, datentyp, einheit}` |
-| `PATCH /room-attributes/:id` `{soll, ist, status, quelle}` | Status: `offen · festgelegt · bestaetigt · abweichend` |
+| `PATCH /room-attributes/:id` `{soll, ist, status, quelle, relevanz, relevanz_begruendung}` | Status: `offen · festgelegt · bestaetigt · abweichend`; `relevanz: nicht_relevant` erfordert Begründung (AP-16) |
 | `GET /projects/:id/room-matrix?gewerk=ELT` | Gewerke-Sicht: Räume × Attribute |
-| `GET /projects/:id/abweichungen` | Alle Soll/Ist-Abweichungen |
+| `GET /projects/:id/abweichungen` | Alle Soll/Ist-Abweichungen (ohne nicht relevante Punkte) |
 | `GET/POST /projects/:id/planstaende` | Planstände einfrieren (`typ`: vorplanung/entwurf/ausfuehrung/as_built/sonstig) |
 | `GET /planstaende/:id` | Planstand mit Snapshot |
 | `GET /projects/:id/planstaende/delta?von=<id>&bis=<id\|aktuell>` | Delta-Ansicht |

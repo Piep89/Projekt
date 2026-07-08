@@ -182,6 +182,49 @@ test('Raumbuch: Attribut ändern, Planstand einfrieren, Delta zeigt genau die Ä
   assert.ok(pdf.contentType.includes('application/pdf'));
 });
 
+test('Raumbuch 2.0: Katalog-Vorbelegung mit Pflicht/Hilfe, Gerätetyp-Filter, Relevanz-Begründungspflicht (AP-16)', async () => {
+  // MRT-Projekt: voller MRT-Katalog inkl. Pflichtpunkten, Hilfetexten und Soll-Vorschlägen
+  const raum = await api('POST', `/projects/${projektId}/rooms`, {
+    nummer: 'EG.013', bezeichnung: 'Katalog-Testraum', raumtyp: 'MRT-Untersuchungsraum',
+  });
+  assert.equal(raum.status, 201);
+  const attribute = Object.values((await api('GET', `/rooms/${raum.daten.id}`)).daten.attribute).flat();
+  assert.ok(attribute.length >= 50, `MRT-Katalog erwartet >= 50 Merkmale, erhalten: ${attribute.length}`);
+  assert.ok(attribute.some((a) => a.pflicht === 1), 'Pflichtpunkte fehlen');
+  assert.ok(attribute.some((a) => a.hilfetext), 'Hilfetexte fehlen');
+  const daempfung = attribute.find((a) => a.name === 'HF-Schirmdämpfung Soll');
+  assert.ok(daempfung?.soll_vorschlag, 'Soll-Vorschlag für HF-Schirmdämpfung fehlt');
+  const quench = attribute.find((a) => a.name === 'Quenchrohr');
+  assert.equal(quench?.pflicht, 1, 'Quenchrohr muss Pflichtpunkt sein');
+
+  // Gerätetyp-Filter: Technikraum im MRT-Projekt enthält O2-Überwachung …
+  const technikMrt = await api('POST', `/projects/${projektId}/rooms`, {
+    nummer: 'EG.014', bezeichnung: 'Technik MRT', raumtyp: 'Technikraum',
+  });
+  const attrMrt = Object.values((await api('GET', `/rooms/${technikMrt.daten.id}`)).daten.attribute).flat();
+  assert.ok(attrMrt.some((a) => a.name === 'O2-Überwachung'), 'O2-Überwachung fehlt im MRT-Technikraum');
+
+  // … im CT-Projekt dagegen nicht (geraetetypen: 'MRT,PET-CT')
+  const ctProjekt = (await api('POST', '/projects', { name: 'CT-Filtertest', geraetetyp: 'CT' })).daten;
+  const technikCt = await api('POST', `/projects/${ctProjekt.id}/rooms`, {
+    nummer: 'UG.001', bezeichnung: 'Technik CT', raumtyp: 'Technikraum',
+  });
+  const attrCt = Object.values((await api('GET', `/rooms/${technikCt.daten.id}`)).daten.attribute).flat();
+  assert.ok(attrCt.length > 0, 'CT-Technikraum ohne Vorbelegung');
+  assert.ok(!attrCt.some((a) => a.name === 'O2-Überwachung'), 'O2-Überwachung darf im CT-Technikraum nicht vorbelegt sein');
+
+  // Relevanz: 'nicht relevant' nur mit Begründung; Abweichungszählung ignoriert nicht relevante Punkte
+  const punkt = attribute.find((a) => a.datentyp === 'janein' && a.pflicht !== 1);
+  assert.ok(punkt, 'Kein ja/nein-Punkt ohne Pflicht gefunden');
+  assert.equal((await api('PATCH', `/room-attributes/${punkt.id}`, { relevanz: 'nicht_relevant' })).status, 400,
+    'Nicht relevant ohne Begründung muss scheitern');
+  assert.equal((await api('PATCH', `/room-attributes/${punkt.id}`,
+    { relevanz: 'nicht_relevant', relevanz_begruendung: 'Bestandsgebäude – bereits vorhanden' })).status, 200);
+  assert.equal((await api('PATCH', `/room-attributes/${punkt.id}`, { soll: 'ja', ist: 'nein' })).status, 200);
+  const abweichungen = (await api('GET', `/projects/${projektId}/abweichungen`)).daten;
+  assert.ok(!abweichungen.some((a) => a.id === punkt.id), 'Nicht relevanter Punkt darf nicht als Abweichung zählen');
+});
+
 test('Besprechungsserie: Carry-over offener Punkte, Aufgaben-Sync in beide Richtungen (PRO-04/06)', async () => {
   kontaktId = (await api('POST', `/projects/${projektId}/contacts`, { name: 'Jens Maurer', firma: 'Bau GmbH', gewerk: 'AR' })).daten.id;
   const sitzung1 = await api('POST', `/projects/${projektId}/meetings`, {

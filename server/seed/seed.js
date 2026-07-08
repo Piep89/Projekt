@@ -72,15 +72,7 @@ function createDemo() {
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       projectId, nummer, bezeichnung, funktion, flaeche, hoehe, gruppe, strs, hf, raumtyp, now());
     const roomId = Number(rr.lastInsertRowid);
-    const rt = get('SELECT * FROM template_room_types WHERE template_id = ? AND name = ?', template.id, raumtyp);
-    if (rt) {
-      const wanted = JSON.parse(rt.attribut_namen);
-      wanted.forEach((w, i) => {
-        const a = get('SELECT * FROM template_attributes WHERE template_id = ? AND gewerk = ? AND name = ?', template.id, w.gewerk, w.name);
-        if (a) run(`INSERT INTO room_attributes (room_id, gewerk, name, datentyp, einheit, sort_order) VALUES (?, ?, ?, ?, ?, ?)`,
-          roomId, a.gewerk, a.name, a.datentyp, a.einheit, i);
-      });
-    }
+    require('../routes/rooms').raumtypVorbelegen(template.id, raumtyp, roomId, 'MRT');
   }
 
   console.log(`Demo-Projekt angelegt (#${projectId}): ${punkte} Checkpunkte, ${dokumente} Dokumenteinträge, ${rooms.length} Räume.`);
