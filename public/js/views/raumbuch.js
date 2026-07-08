@@ -2,10 +2,11 @@
 import { get, post, patch, del, state } from '../api.js';
 import {
   h, clear, kopfzeile, table, modal, confirmModal, toast, fehlerToast, feld, textInput,
-  textArea, dateInput, select, gewerkSelect, statusBadge, label, formatDate, laden, leerHinweis, badge,
+  textArea, dateInput, select, gewerkSelect, gewerkBadge, statusBadge, label, formatDate, laden, leerHinweis, badge,
 } from '../ui.js';
 import { hilfeKnopf } from './hilfe.js';
 import { objektZusatz } from '../objekt.js';
+import { istOffline, merken } from '../offline.js';
 
 export async function renderRaumbuch(el, params, query) {
   const projektId = Number(params.projektId);
@@ -56,6 +57,13 @@ export async function renderRaumbuch(el, params, query) {
         { label: 'Abweichungen', render: (r) => r.abweichungen ? h('span', { class: 'ueberfaellig' }, String(r.abweichungen)) : '0', class: 'schmal' },
         { label: 'Punkte/Mängel', render: (r) => `${r.offene_punkte} / ${r.offene_maengel}`, class: 'schmal' },
         { label: 'Fotos', render: (r) => String(r.fotos), class: 'schmal' },
+        ...(readonly ? [] : [{
+          label: '', class: 'schmal',
+          render: (r) => r.attribut_anzahl ? h('button', {
+            class: 'btn', title: 'Geführte Abfrage aller Merkmale starten',
+            onclick: (e) => { e.stopPropagation(); abfrageAssistent(r.id, zeigeRaeume); },
+          }, '▶ Abfrage') : null,
+        }]),
       ], rooms, {
         empty: 'Noch keine Räume. Legen Sie Räume an oder nutzen Sie den CSV-Import.',
         onRowClick: (r) => oeffneRaum(r.id),
@@ -66,9 +74,10 @@ export async function renderRaumbuch(el, params, query) {
   async function oeffneRaum(id) {
     let raum;
     try { raum = await get(`/rooms/${id}`); } catch (e) { return fehlerToast(e); }
-    const attribute = raum.attribute || [];
-    const jeGewerk = {};
-    for (const a of attribute) (jeGewerk[a.gewerk] = jeGewerk[a.gewerk] || []).push(a);
+    // Server liefert die Attribute bereits nach Gewerk gruppiert (Objekt), ältere Stände als Liste
+    const jeGewerk = Array.isArray(raum.attribute)
+      ? raum.attribute.reduce((acc, a) => (((acc[a.gewerk] = acc[a.gewerk] || []).push(a)), acc), {})
+      : (raum.attribute || {});
 
     const attributTabellen = Object.entries(jeGewerk).map(([gewerk, attrs]) =>
       h('div', { style: { marginBottom: '.8rem' } },
@@ -107,6 +116,10 @@ export async function renderRaumbuch(el, params, query) {
       wide: true,
       body: h('div', {},
         h('div', { class: 'zeile', style: { marginBottom: '.6rem' } },
+          readonly ? null : h('button', {
+            class: 'btn btn-primary',
+            onclick: () => { m.close(); abfrageAssistent(id, () => oeffneRaum(id)); },
+          }, '▶ Abfrage starten'),
           readonly ? null : h('button', { class: 'btn', onclick: () => raumDialog(raum, () => { m.close(); oeffneRaum(id); }) }, 'Stammdaten bearbeiten'),
           readonly ? null : h('button', { class: 'btn', onclick: () => katalogDialog(raum, () => { m.close(); oeffneRaum(id); }) }, '+ Attribute aus Katalog'),
           readonly ? null : h('button', { class: 'btn', onclick: () => freiesAttributDialog(raum, () => { m.close(); oeffneRaum(id); }) }, '+ Freies Attribut'),
@@ -118,9 +131,9 @@ export async function renderRaumbuch(el, params, query) {
         ].filter(Boolean).join(' · ') || 'Keine weiteren Stammdaten.'),
         attributTabellen.length ? attributTabellen : leerHinweis('Noch keine Attribute – aus dem Katalog übernehmen oder frei anlegen.'),
         // RB-07: zugehörige Punkte, Mängel, Fotos
-        (raum.offene_checkpunkte || []).length ? h('div', {},
+        (raum.offene_punkte || []).length ? h('div', {},
           h('h3', {}, 'Offene verknüpfte Checkpunkte'),
-          h('ul', {}, raum.offene_checkpunkte.map((c) => h('li', {},
+          h('ul', {}, raum.offene_punkte.map((c) => h('li', {},
             h('a', { href: `#/projekt/${projektId}/checkliste?punkt=${c.id}` }, `${c.nr} ${c.text}`))))) : null,
         (raum.maengel || []).length ? h('div', {},
           h('h3', {}, 'Mängel in diesem Raum'),
@@ -133,6 +146,163 @@ export async function renderRaumbuch(el, params, query) {
             h('div', { class: 'foto-info' }, f.beschreibung || f.filename))))) : null,
         objektZusatz('room', raum.id, { projectId: projektId, readonly })),
     });
+  }
+
+  // ============ Geführte Abfrage (AP-17): Punkt für Punkt durch den Merkmalskatalog ============
+  async function abfrageAssistent(raumId, nachher = null) {
+    let daten;
+    try { daten = await get(`/rooms/${raumId}/abfrage`); } catch (e) { return fehlerToast(e); }
+    const alle = daten.punkte.filter((p) => p.schreibbar !== false);
+    const gesperrt = daten.punkte.length - alle.length;
+    const istOffen = (p) => p.relevanz !== 'nicht_relevant' && !(p.soll ?? '').toString().trim() && p.status === 'offen';
+    const fortschritt = daten.fortschritt;
+    let gewerkFilter = '';
+    let warteschlange = [];
+    let aktuell = null;
+
+    const inhaltBereich = h('div');
+    const kopfBereich = h('div');
+    const gewerkSel = select([{ value: '', label: 'Alle Gewerke' },
+      ...[...new Set(alle.map((p) => p.gewerk))].map((g) => ({ value: g, label: `${g} – ${state.gewerkeMap[g]?.name || ''}` }))]);
+    gewerkSel.addEventListener('change', () => { gewerkFilter = gewerkSel.value; neuAufbauen(); });
+
+    const m = modal({
+      title: `Abfrage: Raum ${daten.raum.nummer} – ${daten.raum.bezeichnung}`,
+      wide: true,
+      body: h('div', {},
+        h('div', { class: 'zeile', style: { justifyContent: 'space-between', alignItems: 'flex-end' } },
+          feld('Gewerk', gewerkSel), kopfBereich),
+        gesperrt ? h('p', { class: 'muted' }, `${gesperrt} Punkt(e) anderer Gewerke sind für Sie nicht schreibbar und werden übersprungen.`) : null,
+        inhaltBereich),
+    });
+
+    function neuAufbauen() {
+      warteschlange = alle.filter((p) => istOffen(p) && (!gewerkFilter || p.gewerk === gewerkFilter));
+      naechster();
+    }
+
+    function kopfAktualisieren() {
+      const prozent = fortschritt.gesamt ? Math.round((fortschritt.beantwortet / fortschritt.gesamt) * 100) : 100;
+      clear(kopfBereich).append(h('div', { class: 'fortschritt-zeile', style: { minWidth: '260px' } },
+        h('div', { class: 'fortschritt', style: { flex: '1' } }, h('div', { style: { width: `${prozent}%` } })),
+        h('span', { class: 'prozent' }, `${fortschritt.beantwortet}/${fortschritt.gesamt}`)));
+    }
+
+    function beantwortet(p) {
+      fortschritt.beantwortet++;
+      fortschritt.offen = Math.max(0, fortschritt.offen - 1);
+      if (p.relevanz === 'nicht_relevant') fortschritt.nicht_relevant++;
+      warteschlange = warteschlange.filter((x) => x.id !== p.id);
+    }
+
+    function naechster() {
+      aktuell = warteschlange[0] || null;
+      kopfAktualisieren();
+      if (!aktuell) return fertigAnzeigen();
+      zeigePunkt(aktuell);
+    }
+
+    function fertigAnzeigen() {
+      clear(inhaltBereich).append(h('div', { style: { textAlign: 'center', padding: '1.5rem 0' } },
+        h('h2', {}, gewerkFilter ? `Alle offenen ${gewerkFilter}-Punkte beantwortet` : 'Alle offenen Punkte beantwortet ✓'),
+        h('p', { class: 'muted' },
+          `${fortschritt.beantwortet} von ${fortschritt.gesamt} Merkmalen erfasst`
+          + (fortschritt.nicht_relevant ? ` (davon ${fortschritt.nicht_relevant} als nicht relevant begründet)` : '')
+          + (fortschritt.pflicht_offen ? ` – noch ${fortschritt.pflicht_offen} offene Pflichtpunkte!` : '.')),
+        h('button', { class: 'btn btn-primary', onclick: () => { m.close(); if (nachher) nachher(); } }, 'Schließen')));
+    }
+
+    function zeigePunkt(p) {
+      const offenGesamt = warteschlange.length;
+      let eingabe;
+      if (p.datentyp === 'janein') {
+        eingabe = select([{ value: '', label: '— bitte wählen —' }, { value: 'ja', label: 'Ja' }, { value: 'nein', label: 'Nein' }]);
+      } else if (p.datentyp === 'auswahl' && (p.optionen || '').trim()) {
+        eingabe = select([{ value: '', label: '— bitte wählen —' },
+          ...p.optionen.split(',').map((o) => ({ value: o.trim(), label: o.trim() }))]);
+      } else {
+        eingabe = textInput({
+          inputmode: p.datentyp === 'zahl' ? 'decimal' : undefined,
+          placeholder: p.datentyp === 'zahl' ? 'Zahlenwert' : 'Wert / Beschreibung',
+        });
+      }
+      const quelle = textInput({ placeholder: 'z. B. Herstellerdatenblatt, Planungsbesprechung' });
+      const fehlerZeile = h('div', { style: { color: 'var(--rot)', minHeight: '1.1rem', fontSize: '.85rem' } });
+
+      const speichern = async () => {
+        const wert = eingabe.value.trim();
+        if (!wert) { fehlerZeile.textContent = 'Bitte einen Wert erfassen – oder „Später" bzw. „Nicht relevant" wählen.'; return; }
+        const body = { soll: wert, status: 'festgelegt', quelle: quelle.value.trim() || null };
+        try {
+          if (istOffline()) {
+            await merken({ typ: 'json', methode: 'PATCH', pfad: `/room-attributes/${p.id}`, body,
+              beschreibung: `Raumabfrage ${daten.raum.nummer}: ${p.gewerk} ${p.name}` });
+          } else {
+            await patch(`/room-attributes/${p.id}`, body);
+          }
+          p.soll = wert; p.status = 'festgelegt';
+          beantwortet(p); naechster();
+        } catch (e) {
+          if (e instanceof TypeError) { // Netzausfall während des Sendens -> Ausgangskorb
+            await merken({ typ: 'json', methode: 'PATCH', pfad: `/room-attributes/${p.id}`, body,
+              beschreibung: `Raumabfrage ${daten.raum.nummer}: ${p.gewerk} ${p.name}` });
+            p.soll = wert; p.status = 'festgelegt';
+            beantwortet(p); naechster();
+            return;
+          }
+          fehlerZeile.textContent = e.message || 'Speichern fehlgeschlagen';
+        }
+      };
+      eingabe.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); speichern(); } });
+
+      const nichtRelevantBereich = h('div', { style: { display: 'none', marginTop: '.5rem' } });
+      const nichtRelevantToggle = () => {
+        const begruendung = textArea({ rows: 2, placeholder: 'Warum ist dieser Punkt hier nicht relevant? (Pflicht)' });
+        clear(nichtRelevantBereich).append(feld('Begründung *', begruendung),
+          h('button', {
+            class: 'btn', onclick: async () => {
+              if (!begruendung.value.trim()) { fehlerZeile.textContent = 'Begründung ist Pflicht.'; return; }
+              const body = { relevanz: 'nicht_relevant', relevanz_begruendung: begruendung.value.trim() };
+              try {
+                if (istOffline()) {
+                  await merken({ typ: 'json', methode: 'PATCH', pfad: `/room-attributes/${p.id}`, body,
+                    beschreibung: `Raumabfrage ${daten.raum.nummer}: ${p.name} nicht relevant` });
+                } else {
+                  await patch(`/room-attributes/${p.id}`, body);
+                }
+                p.relevanz = 'nicht_relevant';
+                beantwortet(p); naechster();
+              } catch (e) { fehlerZeile.textContent = e.message || 'Speichern fehlgeschlagen'; }
+            },
+          }, 'Als nicht relevant speichern'));
+        nichtRelevantBereich.style.display = '';
+      };
+
+      clear(inhaltBereich).append(h('div', { class: 'karte', style: { marginTop: '.4rem' } },
+        h('div', { class: 'zeile', style: { justifyContent: 'space-between' } },
+          h('span', { class: 'muted' }, `Noch ${offenGesamt} offene(r) Punkt(e)${gewerkFilter ? ` in ${gewerkFilter}` : ''}`),
+          h('span', {}, gewerkBadge(p.gewerk), p.pflicht ? h('span', { class: 'muted', title: 'Pflichtpunkt für die Vollständigkeit' }, ' • Pflicht') : null)),
+        h('h2', { style: { margin: '.3rem 0' } }, p.name, p.einheit ? h('span', { class: 'muted' }, ` [${p.einheit}]`) : null),
+        p.hilfetext ? h('p', { class: 'muted' }, '💡 ', p.hilfetext) : null,
+        feld(`Soll-Wert *${p.datentyp === 'zahl' ? ' (Zahl)' : ''}`, eingabe),
+        p.soll_vorschlag ? h('button', {
+          class: 'btn', style: { marginBottom: '.5rem' },
+          onclick: () => { eingabe.value = p.soll_vorschlag; eingabe.dispatchEvent(new Event('change')); },
+        }, `Vorschlag übernehmen: ${p.soll_vorschlag}`) : null,
+        feld('Quelle (optional)', quelle),
+        fehlerZeile,
+        h('div', { class: 'zeile', style: { marginTop: '.4rem' } },
+          h('button', { class: 'btn btn-primary', onclick: speichern }, 'Speichern & weiter'),
+          h('button', { class: 'btn', onclick: nichtRelevantToggle }, 'Nicht relevant …'),
+          h('button', {
+            class: 'btn', title: 'Punkt bleibt offen, ans Ende der Liste',
+            onclick: () => { warteschlange.push(warteschlange.shift()); naechster(); },
+          }, 'Später ▸')),
+        nichtRelevantBereich));
+      eingabe.focus();
+    }
+
+    neuAufbauen();
   }
 
   function raumDialog(raum = null, nachher = null) {
@@ -192,7 +362,8 @@ export async function renderRaumbuch(el, params, query) {
   async function katalogDialog(raum, nachher) {
     let katalog;
     try { katalog = await get(`/projects/${projektId}/attribut-katalog`); } catch (e) { return fehlerToast(e); }
-    const vorhandene = new Set((raum.attribute || []).map((a) => `${a.gewerk}|${a.name}`));
+    const alleAttribute = Array.isArray(raum.attribute) ? raum.attribute : Object.values(raum.attribute || {}).flat();
+    const vorhandene = new Set(alleAttribute.map((a) => `${a.gewerk}|${a.name}`));
     const boxen = [];
     const jeGewerk = {};
     for (const a of katalog.attribute || []) (jeGewerk[a.gewerk] = jeGewerk[a.gewerk] || []).push(a);

@@ -28,7 +28,8 @@ const ABSCHNITTE = [
     titel: '🏗 Raumbuch',
     punkte: [
       ['Zwei Sichten', '„Räume" zeigt alle Gewerke eines Raums; die „Gewerke-Sicht" ein Gewerk über alle Räume als Tabelle — ideal für die Massenpflege mit dem Fachplaner.'],
-      ['Raumtyp nutzen', 'Beim Anlegen einen Raumtyp (z. B. „MRT-Untersuchungsraum") wählen — die passenden Attribute aller Gewerke werden automatisch vorbelegt.'],
+      ['Raumtyp nutzen', 'Beim Anlegen einen Raumtyp (z. B. „MRT-Untersuchungsraum") wählen — der vollständige Merkmalskatalog aller Gewerke wird automatisch vorbelegt, passend zum Gerätetyp des Projekts.'],
+      ['Geführte Abfrage', '„▶ Abfrage" führt Punkt für Punkt durch alle offenen Merkmale eines Raums — mit Hilfetext, Soll-Vorschlag und Fortschrittsanzeige. Jeder Punkt wird beantwortet, auf „Später" gelegt oder mit Begründung als nicht relevant markiert. Funktioniert auch offline bei Begehungen.'],
       ['Planstände einfrieren', 'Zu jedem Meilenstein (Entwurf, Ausführung, As built) den Stand einfrieren. Die Delta-Ansicht zeigt später jede Änderung zwischen zwei Ständen.'],
     ],
   },

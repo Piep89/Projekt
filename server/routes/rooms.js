@@ -246,6 +246,31 @@ router.get('/rooms/:id', requireProject('read', roomProject), (req, res, next) =
   } catch (e) { next(e); }
 });
 
+// Geführte Abfrage (AP-17): alle Punkte des Raums + Fortschritt.
+// 'offen' = relevant, ohne Soll, Status offen; nicht relevante Punkte zählen als beantwortet.
+// 'schreibbar' berücksichtigt die Gewerke-Bindung der Bearbeiter-Rolle (ROL-03).
+router.get('/rooms/:id/abfrage', requireProject('read', roomProject), (req, res, next) => {
+  try {
+    const raum = get('SELECT * FROM rooms WHERE id = ?', num(req.params.id));
+    if (!raum) throw new ApiError(404, 'Raum nicht gefunden');
+    const punkte = all(
+      'SELECT * FROM room_attributes WHERE room_id = ? ORDER BY gewerk, sort_order, name', raum.id)
+      .map((a) => ({ ...a, schreibbar: canWriteGewerk(req.access, a.gewerk) }));
+    const fortschritt = { gesamt: punkte.length, beantwortet: 0, nicht_relevant: 0, offen: 0, pflicht_offen: 0, je_gewerk: {} };
+    for (const a of punkte) {
+      const g = fortschritt.je_gewerk[a.gewerk] = fortschritt.je_gewerk[a.gewerk] || { gesamt: 0, beantwortet: 0 };
+      g.gesamt++;
+      if (a.relevanz === 'nicht_relevant') { fortschritt.nicht_relevant++; fortschritt.beantwortet++; g.beantwortet++; }
+      else if ((a.soll ?? '') !== '' || a.status !== 'offen') { fortschritt.beantwortet++; g.beantwortet++; }
+      else { fortschritt.offen++; if (a.pflicht) fortschritt.pflicht_offen++; }
+    }
+    res.json({
+      raum: { id: raum.id, nummer: raum.nummer, bezeichnung: raum.bezeichnung, raumtyp: raum.raumtyp },
+      punkte, fortschritt,
+    });
+  } catch (e) { next(e); }
+});
+
 // Stammdaten ändern (Audit mit Diff)
 router.patch('/rooms/:id', requireProject('write', roomProject), (req, res, next) => {
   try {

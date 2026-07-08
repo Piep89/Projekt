@@ -191,7 +191,7 @@ Vorlagen-Generator (`tools/vorlage/`) erweitern, Kataloginhalte für alle 9 Raum
 **Abnahme:** Neuer Raum vom Typ „MRT-Untersuchungsraum" erhält den vollen Katalog mit
 Datentypen/Hilfetexten; Bestandsdatenbank läuft unverändert; E2E-Test für Katalog-Übernahme.
 
-## AP-17 · Raumbuch 2.0: Erfassungsassistent (M — baut auf AP-16 auf)
+## AP-17 · Raumbuch 2.0: Erfassungsassistent (M — baut auf AP-16 auf) — ✅ erledigt
 
 **Ziel:** Geführte Punkt-für-Punkt-Abfrage je Raum („Abfrage starten"), Konzept Kap. 4.
 **Umfang:** `GET /rooms/:id/abfrage` (offene Punkte + Fortschritt), Assistent-Dialog

@@ -225,6 +225,32 @@ test('Raumbuch 2.0: Katalog-Vorbelegung mit Pflicht/Hilfe, Gerätetyp-Filter, Re
   assert.ok(!abweichungen.some((a) => a.id === punkt.id), 'Nicht relevanter Punkt darf nicht als Abweichung zählen');
 });
 
+test('Raumbuch 2.0: Abfrage-Endpunkt liefert Fortschritt, Antworten reduzieren offene Punkte (AP-17)', async () => {
+  const raum = await api('POST', `/projects/${projektId}/rooms`, {
+    nummer: 'EG.015', bezeichnung: 'Abfrage-Testraum', raumtyp: 'CT-Untersuchungsraum',
+  });
+  assert.equal(raum.status, 201);
+  const vorher = (await api('GET', `/rooms/${raum.daten.id}/abfrage`)).daten;
+  assert.ok(vorher.fortschritt.gesamt >= 30, `CT-Katalog erwartet >= 30 Punkte, erhalten: ${vorher.fortschritt.gesamt}`);
+  assert.equal(vorher.fortschritt.beantwortet, 0);
+  assert.equal(vorher.fortschritt.offen, vorher.fortschritt.gesamt);
+  assert.ok(vorher.fortschritt.pflicht_offen > 0, 'Offene Pflichtpunkte erwartet');
+  assert.ok(vorher.punkte.every((p) => p.schreibbar === true), 'Admin muss alle Punkte schreiben dürfen');
+
+  // Einen Punkt beantworten (wie der Assistent: Soll + Status festgelegt)
+  const offenerPunkt = vorher.punkte.find((p) => p.pflicht === 1 && p.datentyp === 'zahl');
+  assert.ok(offenerPunkt, 'Kein offener Pflicht-Zahlenpunkt gefunden');
+  assert.equal((await api('PATCH', `/room-attributes/${offenerPunkt.id}`,
+    { soll: '2,5', status: 'festgelegt', quelle: 'Herstellerdatenblatt' })).status, 200);
+
+  const nachher = (await api('GET', `/rooms/${raum.daten.id}/abfrage`)).daten;
+  assert.equal(nachher.fortschritt.beantwortet, 1);
+  assert.equal(nachher.fortschritt.offen, vorher.fortschritt.offen - 1);
+  assert.equal(nachher.fortschritt.pflicht_offen, vorher.fortschritt.pflicht_offen - 1);
+  const jeGewerk = nachher.fortschritt.je_gewerk[offenerPunkt.gewerk];
+  assert.equal(jeGewerk.beantwortet, 1, 'Gewerk-Fortschritt muss mitzählen');
+});
+
 test('Besprechungsserie: Carry-over offener Punkte, Aufgaben-Sync in beide Richtungen (PRO-04/06)', async () => {
   kontaktId = (await api('POST', `/projects/${projektId}/contacts`, { name: 'Jens Maurer', firma: 'Bau GmbH', gewerk: 'AR' })).daten.id;
   const sitzung1 = await api('POST', `/projects/${projektId}/meetings`, {
