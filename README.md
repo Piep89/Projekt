@@ -88,7 +88,7 @@ server/           Express-Server
 public/           Frontend (index.html, js/views/* je Modul)
 tools/vorlage/    Generator/Quelldaten der Mastervorlage (für neue Versionen)
 test/             End-to-End-Tests der Abnahmekriterien
-docs/             Anforderungsprofil, Entwicklungskonventionen
+docs/             Anforderungsprofil, Entwicklungskonventionen, REST-API-Dokumentation (api.md)
 ```
 
 ## macOS-Programm (Desktop-App)
