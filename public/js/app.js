@@ -46,17 +46,17 @@ const ROUTES = [
 ];
 
 const PROJEKT_MENUE = [
-  ['', 'Dashboard'],
-  ['/checkliste', 'Checkliste'],
-  ['/setup', 'Setup-Modus'],
-  ['/raumbuch', 'Raumbuch'],
-  ['/dokumente', 'Dokumente'],
-  ['/besprechungen', 'Besprechungen'],
-  ['/journal', 'Journal & Fotos'],
-  ['/maengel', 'Mängel'],
-  ['/kontakte', 'Kontakte'],
-  ['/berichte', 'Berichte & Export'],
-  ['/einstellungen', 'Einstellungen'],
+  ['', 'Dashboard', '📊'],
+  ['/checkliste', 'Checkliste', '✅'],
+  ['/setup', 'Setup-Modus', '🧭'],
+  ['/raumbuch', 'Raumbuch', '🏗'],
+  ['/dokumente', 'Dokumente', '📄'],
+  ['/besprechungen', 'Besprechungen', '🤝'],
+  ['/journal', 'Journal & Fotos', '📷'],
+  ['/maengel', 'Mängel', '⚠️'],
+  ['/kontakte', 'Kontakte', '👥'],
+  ['/berichte', 'Berichte & Export', '📈'],
+  ['/einstellungen', 'Einstellungen', '⚙️'],
 ];
 
 function matchRoute(path) {
@@ -139,7 +139,7 @@ function renderTopbar(pfad) {
   ];
   if (state.user && state.user.role === 'admin') nav.push(['#/admin', 'Administration', pfad === '/admin']);
   return h('header', { class: 'topbar' },
-    h('a', { class: 'logo', href: '#/' }, 'GGP'),
+    h('a', { class: 'logo', href: '#/' }, h('span', { class: 'logo-zeichen', 'aria-hidden': 'true' }, 'G'), 'GGP'),
     h('nav', {}, nav.map(([href, text, aktiv]) => h('a', { href, class: aktiv ? 'aktiv' : '' }, text))),
     h('div', { class: 'spacer' }),
     h('span', {
@@ -230,10 +230,10 @@ async function renderSeitenleiste(projektId, pfad) {
   return h('aside', { class: 'seitenleiste' },
     h('div', { class: 'projekt-name' }, projektCache.name,
       projektCache.status === 'archiviert' ? h('span', { class: 'status-badge status-archiviert', style: { marginLeft: '.4rem' } }, 'Archiviert') : null),
-    PROJEKT_MENUE.map(([suffix, text]) => h('a', {
+    PROJEKT_MENUE.map(([suffix, text, icon]) => h('a', {
       href: `#${basis}${suffix}`,
       class: pfad === `${basis}${suffix}` ? 'aktiv' : '',
-    }, text)),
+    }, h('span', { class: 'nav-icon', 'aria-hidden': 'true' }, icon), text)),
     h('div', { class: 'trenner' }),
     h('a', { href: '#/' }, '← Alle Projekte'));
 }
@@ -254,6 +254,7 @@ async function renderLogin(el) {
   };
   el.append(h('div', { class: 'login-seite' },
     h('form', { class: 'karte login-karte', onsubmit: anmelden },
+      h('div', { class: 'logo-icon', 'aria-hidden': 'true' }, 'G'),
       h('div', { class: 'logo-gross' }, 'GGP'),
       h('div', { class: 'untertitel' }, 'Großgeräte-Projektabwicklung'),
       feld('Benutzername', nutzer),
