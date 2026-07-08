@@ -369,3 +369,9 @@ input[type="checkbox"] { width: auto; }
 *::-webkit-scrollbar-track { background: transparent; }
 .karte h2 { letter-spacing: .01em; }
 .filter-leiste, .tabelle-umbruch { box-shadow: var(--schatten); }
+.hilfe-knopf {
+  width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid var(--rand);
+  font-weight: 700; font-size: .85rem; line-height: 1; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.hilfe-knopf:hover { border-color: var(--akzent); color: var(--akzent); }

@@ -5,6 +5,7 @@ import {
   dateInput, select, gewerkSelect, gewerkeMehrfach, gewerkeBadges, statusBadge, badge, label,
   terminZelle, laden, leerHinweis,
 } from '../ui.js';
+import { hilfeKnopf } from './hilfe.js';
 import { objektZusatz } from '../objekt.js';
 import { istOffline, merken } from '../offline.js';
 
@@ -361,7 +362,7 @@ export async function renderCheckliste(el, params, query) {
   }
 
   clear(el);
-  el.append(kopfzeile('Checkliste',
+  el.append(kopfzeile('Checkliste', hilfeKnopf('checkliste'),
     h('a', { class: 'btn', href: `#/projekt/${projektId}/setup` }, 'Setup-Modus'),
     readonly ? null : h('button', { class: 'btn', onclick: importDialog }, 'CSV-Import'),
     readonly ? null : h('button', { class: 'btn btn-primary', onclick: zusatzpunktDialog }, '+ Zusatzpunkt')));

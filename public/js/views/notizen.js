@@ -4,6 +4,7 @@ import {
   h, clear, kopfzeile, modal, confirmModal, toast, fehlerToast, feld, textInput, textArea,
   select, formatDateTime, laden, leerHinweis,
 } from '../ui.js';
+import { hilfeKnopf } from './hilfe.js';
 
 export async function renderNotizen(el) {
   el.append(laden());
@@ -84,7 +85,7 @@ export async function renderNotizen(el) {
   projektFilter.addEventListener('change', () => { filter.projekt = projektFilter.value; laden_(); });
 
   clear(el);
-  el.append(kopfzeile('Private Notizen', h('button', { class: 'btn btn-primary', onclick: () => editor() }, '+ Notiz')));
+  el.append(kopfzeile('Private Notizen', hilfeKnopf('notizen'), h('button', { class: 'btn btn-primary', onclick: () => editor() }, '+ Notiz')));
   el.append(h('div', { class: 'karte hinweis-karte' },
     '🔒 Private Notizen sind ausschließlich für Sie sichtbar – sie erscheinen in keiner Suche, keinem Bericht und keinem Export anderer Nutzer. Auch Administratoren haben keinen Zugriff (ROL-05). Über „Veröffentlichen" können Sie eine Notiz bewusst in die offizielle Projektdokumentation überführen.'));
   el.append(h('div', { class: 'filter-leiste' }, feld('Suche', suche), feld('Projekt', projektFilter)));

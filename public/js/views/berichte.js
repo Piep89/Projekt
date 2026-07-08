@@ -4,6 +4,7 @@ import { get, state } from '../api.js';
 import {
   h, clear, kopfzeile, feld, dateInput, select, gewerkSelect, formatDate, laden, fehlerToast,
 } from '../ui.js';
+import { hilfeKnopf } from './hilfe.js';
 
 export async function renderBerichte(el, params) {
   const projektId = Number(params.projektId);
@@ -11,7 +12,7 @@ export async function renderBerichte(el, params) {
   let planstaende = [];
   try { planstaende = await get(`/projects/${projektId}/planstaende`); } catch { planstaende = []; }
   clear(el);
-  el.append(kopfzeile('Berichte & Export'));
+  el.append(kopfzeile('Berichte & Export', hilfeKnopf('dokumente')));
 
   // ---------- Abnahmereife (Workflow Schritt 6) ----------
   const ergebnis = h('div');

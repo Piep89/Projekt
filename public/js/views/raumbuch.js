@@ -4,6 +4,7 @@ import {
   h, clear, kopfzeile, table, modal, confirmModal, toast, fehlerToast, feld, textInput,
   textArea, dateInput, select, gewerkSelect, statusBadge, label, formatDate, laden, leerHinweis, badge,
 } from '../ui.js';
+import { hilfeKnopf } from './hilfe.js';
 import { objektZusatz } from '../objekt.js';
 
 export async function renderRaumbuch(el, params, query) {
@@ -27,7 +28,7 @@ export async function renderRaumbuch(el, params, query) {
   }, text)));
 
   clear(el);
-  el.append(kopfzeile('Raumbuch',
+  el.append(kopfzeile('Raumbuch', hilfeKnopf('raumbuch'),
     h('a', { class: 'btn', href: `/api/projects/${projektId}/raumbuch.pdf`, target: '_blank' }, 'PDF'),
     h('a', { class: 'btn', href: `/api/projects/${projektId}/raumbuch.csv` }, 'Excel/CSV'),
     h('a', { class: 'btn', href: `/api/projects/${projektId}/raumbuch.doc` }, 'Word'),

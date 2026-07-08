@@ -4,6 +4,7 @@ import {
   h, clear, kopfzeile, table, modal, toast, fehlerToast, feld, textInput, textArea, dateInput,
   select, gewerkSelect, gewerkBadge, statusBadge, label, terminZelle, laden,
 } from '../ui.js';
+import { hilfeKnopf } from './hilfe.js';
 import { objektZusatz } from '../objekt.js';
 import { istOffline, merken } from '../offline.js';
 
@@ -179,7 +180,7 @@ export async function renderMaengel(el, params, query) {
   for (const s of [gewerkSel, firmaSel, statusSel, raumSel]) s.addEventListener('change', anwenden);
 
   clear(el);
-  el.append(kopfzeile('Mängel',
+  el.append(kopfzeile('Mängel', hilfeKnopf('journal'),
     h('button', {
       class: 'btn', onclick: () => {
         const qs = Object.entries(filter).filter(([, v]) => v).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&');

@@ -4,6 +4,7 @@ import { get } from '../api.js';
 import {
   h, clear, kopfzeile, gewerkBadge, statusBadge, formatDate, laden, fehlerToast, label,
 } from '../ui.js';
+import { hilfeKnopf } from './hilfe.js';
 import { state } from '../api.js';
 
 export async function renderDashboard(el, params) {
@@ -13,7 +14,7 @@ export async function renderDashboard(el, params) {
     clear(el);
     const basis = `#/projekt/${p.id}`;
 
-    el.append(kopfzeile(p.name,
+    el.append(kopfzeile(p.name, hilfeKnopf('start'),
       statusBadge(p.status),
       h('a', { class: 'btn', href: `${basis}/berichte` }, 'Statusbericht')));
 

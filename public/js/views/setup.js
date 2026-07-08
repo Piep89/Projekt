@@ -4,6 +4,7 @@ import { get, patch } from '../api.js';
 import {
   h, clear, kopfzeile, feld, textArea, dateInput, select, gewerkeBadges, toast, fehlerToast, laden,
 } from '../ui.js';
+import { hilfeKnopf } from './hilfe.js';
 
 export async function renderSetup(el, params) {
   const projektId = Number(params.projektId);
@@ -20,7 +21,7 @@ export async function renderSetup(el, params) {
   let index = 0;
   const inhalt = h('div');
   clear(el);
-  el.append(kopfzeile('Setup-Modus: Erstbewertung',
+  el.append(kopfzeile('Setup-Modus: Erstbewertung', hilfeKnopf('checkliste'),
     h('a', { class: 'btn', href: `#/projekt/${projektId}/checkliste` }, 'Zur Checkliste')));
   el.append(h('p', { class: 'muted' },
     'Bewerten Sie jeden Punkt: Ist er für dieses Projekt relevant? Bei „Nicht relevant" ist eine Begründung Pflicht – sie dokumentiert für Behörden, Revision und Nachfolger, warum der Punkt entfiel.'));

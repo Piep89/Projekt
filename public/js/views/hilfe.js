@@ -1,8 +1,10 @@
-// Hilfe & erste Schritte (UX-02): Kernabläufe ohne Schulung nutzbar machen
-import { h, clear, kopfzeile } from '../ui.js';
+// Hilfe & erste Schritte (UX-02): Kernabläufe ohne Schulung nutzbar machen.
+// Exportiert zusätzlich hilfeKnopf(schluessel) für die Kontext-Hilfe in den Modul-Kopfzeilen.
+import { h, clear, kopfzeile, modal } from '../ui.js';
 
 const ABSCHNITTE = [
   {
+    schluessel: 'start',
     titel: '🚀 Erste Schritte',
     punkte: [
       ['Projekt anlegen', 'Startseite → „+ Neues Projekt": Gerätetyp und Vorlage wählen. GGP erzeugt automatisch alle Phasen (0–14), die komplette Checkliste und das Dokumentenregister A–F.'],
@@ -12,6 +14,7 @@ const ABSCHNITTE = [
     ],
   },
   {
+    schluessel: 'checkliste',
     titel: '📋 Checkliste',
     punkte: [
       ['Bewerten statt abhaken', 'Jeder Punkt hat eine Relevanz (bewertet im Setup) und einen Status: Offen → In Bearbeitung → Erledigt. „Blockiert" braucht einen Blocker-Verweis, das Wiedereröffnen einen Pflichtkommentar — so bleibt der Verlauf lückenlos nachvollziehbar.'],
@@ -21,6 +24,7 @@ const ABSCHNITTE = [
     ],
   },
   {
+    schluessel: 'raumbuch',
     titel: '🏗 Raumbuch',
     punkte: [
       ['Zwei Sichten', '„Räume" zeigt alle Gewerke eines Raums; die „Gewerke-Sicht" ein Gewerk über alle Räume als Tabelle — ideal für die Massenpflege mit dem Fachplaner.'],
@@ -29,6 +33,7 @@ const ABSCHNITTE = [
     ],
   },
   {
+    schluessel: 'besprechungen',
     titel: '🤝 Besprechungen',
     punkte: [
       ['Serie anlegen', 'Baubesprechungen als Serie führen: Offene Punkte laufen automatisch in jede Folgebesprechung („alte Punkte zuerst"), bis sie erledigt sind.'],
@@ -37,6 +42,7 @@ const ABSCHNITTE = [
     ],
   },
   {
+    schluessel: 'journal',
     titel: '📔 Journal & Baustelle',
     punkte: [
       ['Bautagebuch', 'Einträge mit Fotos direkt vom Tablet (Kamera-Knopf). Einträge sind nach Ablauf des Folgetages unveränderlich — Korrekturen als Nachtrag.'],
@@ -45,6 +51,7 @@ const ABSCHNITTE = [
     ],
   },
   {
+    schluessel: 'dokumente',
     titel: '📄 Dokumente & Berichte',
     punkte: [
       ['Dokumentenregister', 'Je Eintrag: Benötigt? (Entfällt nur mit Begründung) → Erhalten (Datei hochladen oder Verweis aufs DMS/Netzlaufwerk). Der Vollständigkeitsbericht zeigt jederzeit alle Lücken.'],
@@ -54,6 +61,7 @@ const ABSCHNITTE = [
     ],
   },
   {
+    schluessel: 'notizen',
     titel: '🔒 Private Notizen',
     punkte: [
       ['Nur für Sie', 'Private Notizen sind verschlüsselt und ausschließlich für Sie sichtbar — in keiner Suche, keinem Bericht, keinem Export anderer Nutzer, auch nicht für Administratoren.'],
@@ -75,4 +83,21 @@ export async function renderHilfe(el) {
       abschnitt.punkte.map(([begriff, text]) => h('p', { style: { margin: '0 0 .6rem' } },
         h('strong', {}, begriff + ': '), text))));
   }
+}
+
+// Kontext-Hilfe: kleines „?" für Modul-Kopfzeilen; öffnet den passenden Hilfe-Abschnitt
+export function hilfeKnopf(schluessel) {
+  const abschnitt = ABSCHNITTE.find((a) => a.schluessel === schluessel);
+  if (!abschnitt) return null;
+  return h('button', {
+    class: 'btn-icon hilfe-knopf', title: 'Hilfe zu diesem Modul', 'aria-label': 'Hilfe zu diesem Modul',
+    onclick: () => modal({
+      title: abschnitt.titel,
+      wide: true,
+      body: h('div', {},
+        abschnitt.punkte.map(([begriff, text]) => h('p', { style: { margin: '0 0 .6rem' } },
+          h('strong', {}, begriff + ': '), text)),
+        h('p', { style: { marginTop: '.8rem' } }, h('a', { href: '#/hilfe' }, 'Alle Hilfe-Themen ansehen'))),
+    }),
+  }, '?');
 }

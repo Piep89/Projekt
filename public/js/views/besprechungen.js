@@ -4,6 +4,7 @@ import {
   h, clear, kopfzeile, table, modal, toast, fehlerToast, feld, textInput, dateInput,
   select, statusBadge, label, formatDate, laden, leerHinweis,
 } from '../ui.js';
+import { hilfeKnopf } from './hilfe.js';
 
 export async function renderBesprechungen(el, params, query) {
   const projektId = Number(params.projektId);
@@ -33,7 +34,7 @@ export async function renderBesprechungen(el, params, query) {
   }
 
   clear(el);
-  el.append(kopfzeile('Besprechungen',
+  el.append(kopfzeile('Besprechungen', hilfeKnopf('besprechungen'),
     h('a', { class: 'btn', href: `/api/projects/${projektId}/termine.ics`, title: 'Termine für Outlook (ICS)' }, 'Kalender (ICS)'),
     readonly ? null : h('button', { class: 'btn btn-primary', onclick: neuDialog }, '+ Besprechung')));
 

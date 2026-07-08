@@ -4,6 +4,7 @@ import {
   h, clear, kopfzeile, modal, toast, fehlerToast, feld, textInput, textArea, dateInput,
   select, label, formatDate, formatDateTime, laden, leerHinweis,
 } from '../ui.js';
+import { hilfeKnopf } from './hilfe.js';
 import { istOffline, merken } from '../offline.js';
 
 const KATEGORIEN = ['baustelle', 'planung', 'telefonat', 'begehung', 'sonstig'];
@@ -35,7 +36,7 @@ export async function renderJournal(el, params, query) {
   clear(el);
   const exportVon = dateInput({ 'aria-label': 'Export von' });
   const exportBis = dateInput({ 'aria-label': 'Export bis' });
-  el.append(kopfzeile('Journal & Fotos',
+  el.append(kopfzeile('Journal & Fotos', hilfeKnopf('journal'),
     exportVon, exportBis,
     h('button', {
       class: 'btn', onclick: () => {
