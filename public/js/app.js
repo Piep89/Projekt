@@ -151,9 +151,34 @@ function renderTopbar(pfad) {
     nutzerMenue());
 }
 
+const DESIGNS = [['', 'System'], ['hell', 'Hell'], ['dunkel', 'Dunkel']];
+
+function setzeDesign(wert) {
+  if (wert) {
+    document.documentElement.dataset.theme = wert;
+    localStorage.setItem('ggp-design', wert);
+  } else {
+    delete document.documentElement.dataset.theme;
+    localStorage.removeItem('ggp-design');
+  }
+}
+
 function nutzerMenue() {
+  const aktuellesDesign = () => localStorage.getItem('ggp-design') || '';
+  const designKnopf = h('button', {
+    class: 'btn-link',
+    onclick: (e) => {
+      e.stopPropagation();
+      const index = DESIGNS.findIndex(([wert]) => wert === aktuellesDesign());
+      const [wert, name] = DESIGNS[(index + 1) % DESIGNS.length];
+      setzeDesign(wert);
+      e.target.textContent = `Design: ${name}`;
+    },
+  }, `Design: ${DESIGNS.find(([wert]) => wert === aktuellesDesign())?.[1] || 'System'}`);
+
   const menue = h('div', { class: 'nutzer-menue', style: { display: 'none' } },
     h('button', { class: 'btn-link', onclick: () => { menue.style.display = 'none'; passwortDialog(); } }, 'Passwort ändern'),
+    designKnopf,
     h('a', { href: '#/hilfe', onclick: () => { menue.style.display = 'none'; } }, 'Hilfe & erste Schritte'),
     h('button', {
       class: 'btn-link',
@@ -248,6 +273,8 @@ document.addEventListener('keydown', (e) => {
 });
 
 // Start
+const gespeichertesDesign = localStorage.getItem('ggp-design');
+if (gespeichertesDesign) document.documentElement.dataset.theme = gespeichertesDesign;
 window.addEventListener('hashchange', renderApp);
 window.addEventListener('ggp-sync-fertig', renderApp);
 (async () => {

@@ -22,7 +22,7 @@ export async function renderDashboard(el, params) {
 
     // Deutlicher Einstieg, solange die Erstbewertung läuft (CHK-08)
     if (p.punkte.unbewertet > 0 && p.status === 'aktiv') {
-      el.append(h('div', { class: 'karte', style: { background: '#fff9e6', borderColor: '#e8d9a0' } },
+      el.append(h('div', { class: 'karte hinweis-karte' },
         h('div', { class: 'zeile', style: { justifyContent: 'space-between' } },
           h('div', {},
             h('strong', {}, `Erstbewertung: noch ${p.punkte.unbewertet} Punkte unbewertet. `),

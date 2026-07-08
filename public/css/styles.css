@@ -2,16 +2,59 @@
 :root {
   --primaer: #1f4e79;
   --primaer-hell: #2e75b6;
+  --akzent: #1f4e79;
   --hintergrund: #f4f6f9;
   --flaeche: #ffffff;
+  --flaeche-2: #eef2f7;
+  --hover: #f4f8fc;
   --rand: #d9dee5;
   --text: #22292f;
   --text-schwach: #6b7683;
   --rot: #c0392b;
   --gruen: #1e8a4c;
   --gelb: #b58900;
+  --hinweis-bg: #fff9e6;
+  --hinweis-rand: #e8d9a0;
   --radius: 8px;
   --schatten: 0 1px 3px rgba(0,0,0,.08);
+}
+
+/* Dunkles Design: manuell (data-theme="dunkel") oder per Systemeinstellung */
+:root[data-theme="dunkel"] {
+  --primaer: #1f4e79;
+  --primaer-hell: #6aa5dc;
+  --akzent: #6aa5dc;
+  --hintergrund: #14181d;
+  --flaeche: #1d232b;
+  --flaeche-2: #262e38;
+  --hover: #262e38;
+  --rand: #37414d;
+  --text: #dde4eb;
+  --text-schwach: #94a1af;
+  --rot: #e0604f;
+  --gruen: #3fae6e;
+  --hinweis-bg: #332e1c;
+  --hinweis-rand: #575030;
+  --schatten: 0 1px 3px rgba(0,0,0,.4);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="hell"]):not([data-theme="dunkel"]) {
+    --primaer: #1f4e79;
+    --primaer-hell: #6aa5dc;
+    --akzent: #6aa5dc;
+    --hintergrund: #14181d;
+    --flaeche: #1d232b;
+    --flaeche-2: #262e38;
+    --hover: #262e38;
+    --rand: #37414d;
+    --text: #dde4eb;
+    --text-schwach: #94a1af;
+    --rot: #e0604f;
+    --gruen: #3fae6e;
+    --hinweis-bg: #332e1c;
+    --hinweis-rand: #575030;
+    --schatten: 0 1px 3px rgba(0,0,0,.4);
+  }
 }
 
 * { box-sizing: border-box; }
@@ -52,7 +95,7 @@ h3 { font-size: 1rem; margin: .8rem 0 .3rem; }
 .seitenleiste a {
   display: block; padding: .42rem .6rem; border-radius: 6px; color: var(--text); font-size: .95rem;
 }
-.seitenleiste a:hover { background: #eef2f7; text-decoration: none; }
+.seitenleiste a:hover { background: var(--flaeche-2); text-decoration: none; }
 .seitenleiste a.aktiv { background: var(--primaer); color: #fff; }
 .seitenleiste .trenner { border-top: 1px solid var(--rand); margin: .6rem .4rem; }
 
@@ -77,7 +120,7 @@ h3 { font-size: 1rem; margin: .8rem 0 .3rem; }
 }
 .karten-reihe { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-bottom: 1rem; }
 .kennzahl { text-align: center; padding: .6rem; }
-.kennzahl .wert { font-size: 1.9rem; font-weight: 700; color: var(--primaer); }
+.kennzahl .wert { font-size: 1.9rem; font-weight: 700; color: var(--akzent); }
 .kennzahl .beschriftung { color: var(--text-schwach); font-size: .85rem; }
 .kennzahl .wert.rot { color: var(--rot); }
 .kennzahl .wert.gruen { color: var(--gruen); }
@@ -87,7 +130,7 @@ h3 { font-size: 1rem; margin: .8rem 0 .3rem; }
   border: 1px solid var(--rand); border-radius: 6px; background: var(--flaeche);
   color: var(--text); font-size: .92rem; cursor: pointer;
 }
-.btn:hover { background: #eef2f7; }
+.btn:hover { background: var(--flaeche-2); }
 .btn-primary { background: var(--primaer); border-color: var(--primaer); color: #fff; }
 .btn-primary:hover { background: var(--primaer-hell); }
 .btn-gefahr { color: var(--rot); border-color: var(--rot); }
@@ -100,7 +143,7 @@ h3 { font-size: 1rem; margin: .8rem 0 .3rem; }
 
 .input {
   width: 100%; padding: .45rem .6rem; border: 1px solid var(--rand); border-radius: 6px;
-  font: inherit; background: #fff; color: var(--text);
+  font: inherit; background: var(--flaeche); color: var(--text);
 }
 .input:focus { outline: 2px solid var(--primaer-hell); outline-offset: 0; border-color: var(--primaer-hell); }
 input[type="checkbox"] { width: auto; }
@@ -120,14 +163,14 @@ input[type="checkbox"] { width: auto; }
 .gewerk-badges { display: inline-flex; gap: .25rem; flex-wrap: wrap; }
 .badge {
   display: inline-block; padding: .12rem .5rem; border-radius: 999px;
-  font-size: .78rem; background: #e8edf3; color: var(--text);
+  font-size: .78rem; background: var(--flaeche-2); color: var(--text);
 }
 .status-badge {
   display: inline-block; padding: .12rem .55rem; border-radius: 999px;
   font-size: .78rem; font-weight: 600; white-space: nowrap;
-  background: #e8edf3; color: #444;
+  background: var(--flaeche-2); color: var(--text);
 }
-.status-offen { background: #e8edf3; color: #35424f; }
+.status-offen { background: var(--flaeche-2); color: var(--text); }
 .status-in_bearbeitung { background: #dbeafe; color: #1e478a; }
 .status-erledigt, .status-behoben, .status-abgenommen, .status-bestaetigt, .status-festgestellt { background: #d8f0e0; color: #14602f; }
 .status-nicht_relevant { background: #f0f0f0; color: #888; text-decoration: line-through; }
@@ -139,7 +182,7 @@ input[type="checkbox"] { width: auto; }
 .status-entwurf { background: #fff3cd; color: #7a5c00; }
 .status-versandt { background: #dbeafe; color: #1e478a; }
 .status-in_behebung { background: #fde8cd; color: #8a5200; }
-.status-geplant { background: #e8edf3; color: #35424f; }
+.status-geplant { background: var(--flaeche-2); color: #35424f; }
 .status-aktiv { background: #d8f0e0; color: #14602f; }
 .status-pausiert { background: #fff3cd; color: #7a5c00; }
 .status-archiviert { background: #f0f0f0; color: #777; }
@@ -147,17 +190,19 @@ input[type="checkbox"] { width: auto; }
 .ueberfaellig { color: var(--rot); font-weight: 700; }
 .muted { color: var(--text-schwach); font-size: .88rem; }
 
+.hinweis-karte { background: var(--hinweis-bg); border-color: var(--hinweis-rand); }
+
 /* ---------- Tabellen ---------- */
 .tabelle-umbruch { overflow-x: auto; background: var(--flaeche); border: 1px solid var(--rand); border-radius: var(--radius); }
 .tabelle { width: 100%; border-collapse: collapse; font-size: .92rem; }
 .tabelle th {
-  text-align: left; padding: .55rem .7rem; background: #eef2f7; color: var(--text-schwach);
+  text-align: left; padding: .55rem .7rem; background: var(--flaeche-2); color: var(--text-schwach);
   font-size: .8rem; text-transform: uppercase; letter-spacing: .03em; white-space: nowrap;
   position: sticky; top: 0;
 }
 .tabelle td { padding: .5rem .7rem; border-top: 1px solid var(--rand); vertical-align: top; }
 .zeile-klickbar { cursor: pointer; }
-.zeile-klickbar:hover { background: #f4f8fc; }
+.zeile-klickbar:hover { background: var(--hover); }
 .tabelle .schmal { width: 1%; white-space: nowrap; }
 
 /* ---------- Filterleiste ---------- */
@@ -199,7 +244,7 @@ input[type="checkbox"] { width: auto; }
   color: var(--text-schwach); border-bottom: 2px solid transparent;
 }
 .tab:hover { color: var(--text); }
-.tab-aktiv { color: var(--primaer); border-bottom-color: var(--primaer); font-weight: 600; }
+.tab-aktiv { color: var(--akzent); border-bottom-color: var(--akzent); font-weight: 600; }
 
 .kommentar { padding: .45rem 0; border-bottom: 1px solid var(--rand); }
 .kommentar-kopf { font-size: .82rem; color: var(--text-schwach); }
@@ -214,7 +259,7 @@ input[type="checkbox"] { width: auto; }
 .lade-hinweis { color: var(--text-schwach); padding: 2rem; text-align: center; }
 
 /* ---------- Fortschrittsbalken ---------- */
-.fortschritt { background: #e8edf3; border-radius: 999px; height: 10px; overflow: hidden; min-width: 60px; }
+.fortschritt { background: var(--flaeche-2); border-radius: 999px; height: 10px; overflow: hidden; min-width: 60px; }
 .fortschritt > div { background: var(--gruen); height: 100%; border-radius: 999px; }
 .fortschritt-zeile { display: flex; align-items: center; gap: .6rem; }
 .fortschritt-zeile .prozent { font-size: .85rem; color: var(--text-schwach); min-width: 3ch; }
@@ -239,12 +284,12 @@ input[type="checkbox"] { width: auto; }
   display: block; padding: .45rem .6rem; border-radius: 6px; color: var(--text);
   text-align: left; font-size: .92rem; text-decoration: none;
 }
-.nutzer-menue a:hover, .nutzer-menue .btn-link:hover { background: #eef2f7; text-decoration: none; }
+.nutzer-menue a:hover, .nutzer-menue .btn-link:hover { background: var(--flaeche-2); text-decoration: none; }
 
 /* ---------- Login ---------- */
 .login-seite { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
 .login-karte { width: 100%; max-width: 380px; }
-.login-karte .logo-gross { font-size: 1.6rem; font-weight: 700; color: var(--primaer); text-align: center; margin-bottom: .3rem; }
+.login-karte .logo-gross { font-size: 1.6rem; font-weight: 700; color: var(--akzent); text-align: center; margin-bottom: .3rem; }
 .login-karte .untertitel { text-align: center; color: var(--text-schwach); margin-bottom: 1.2rem; font-size: .9rem; }
 
 /* ---------- Zeitleiste Meilensteine ---------- */

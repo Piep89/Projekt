@@ -85,7 +85,7 @@ export async function renderNotizen(el) {
 
   clear(el);
   el.append(kopfzeile('Private Notizen', h('button', { class: 'btn btn-primary', onclick: () => editor() }, '+ Notiz')));
-  el.append(h('div', { class: 'karte', style: { background: '#fff9e6', borderColor: '#e8d9a0' } },
+  el.append(h('div', { class: 'karte hinweis-karte' },
     '🔒 Private Notizen sind ausschließlich für Sie sichtbar – sie erscheinen in keiner Suche, keinem Bericht und keinem Export anderer Nutzer. Auch Administratoren haben keinen Zugriff (ROL-05). Über „Veröffentlichen" können Sie eine Notiz bewusst in die offizielle Projektdokumentation überführen.'));
   el.append(h('div', { class: 'filter-leiste' }, feld('Suche', suche), feld('Projekt', projektFilter)));
   el.append(liste);

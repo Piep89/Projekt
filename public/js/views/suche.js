@@ -48,7 +48,7 @@ export async function renderSuche(el, params, query) {
       }
       if (notizen.length) {
         treffer += notizen.length;
-        ergebnisse.append(h('div', { class: 'karte', style: { background: '#fff9e6' } },
+        ergebnisse.append(h('div', { class: 'karte hinweis-karte' },
           h('h2', {}, `🔒 Private Notizen (${notizen.length}) – nur für Sie sichtbar`),
           h('ul', { style: { paddingLeft: '1.1rem', margin: 0 } }, notizen.map((n) => h('li', {},
             h('a', { href: '#/notizen' }, kurz(`${n.titel}: ${n.text}`, 120)))))));

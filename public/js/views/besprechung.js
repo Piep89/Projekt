@@ -204,8 +204,7 @@ export async function renderBesprechung(el, params, query) {
         h('th', { class: 'schmal' }, 'Code'), h('th', { class: 'schmal' }, 'Typ'), h('th', {}, 'Punkt'),
         h('th', { class: 'schmal' }, 'Gewerk'), h('th', {}, 'Verantwortlich'), h('th', {}, 'Termin'), h('th', { class: 'schmal' }, 'Status'))),
       h('tbody', {}, punkte.map((p) => h('tr', {
-        class: 'zeile-klickbar',
-        style: query.punkt && Number(query.punkt) === p.id ? { background: '#fff3cd' } : {},
+        class: `zeile-klickbar${query.punkt && Number(query.punkt) === p.id ? ' hinweis-karte' : ''}`,
         onclick: () => punktDialog(p),
       },
         h('td', { class: 'schmal' }, h('strong', {}, p.code)),
