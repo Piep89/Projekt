@@ -71,6 +71,18 @@ export async function renderBerichte(el, params) {
       h('button', { class: 'btn', onclick: () => { window.location.href = `/api/projects/${projektId}/raumbuch.csv${psQuery()}`; } }, 'Excel/CSV'),
       h('button', { class: 'btn', onclick: () => { window.location.href = `/api/projects/${projektId}/raumbuch.doc${psQuery()}`; } }, 'Word')));
 
+  const zVon = dateInput({ value: new Date(Date.now() - 7 * 864e5).toISOString().slice(0, 10) });
+  const zBis = dateInput({ value: new Date().toISOString().slice(0, 10) });
+  karte('Wochen-/Zeitraumbericht',
+    'Was ist im Zeitraum passiert? Erledigte Punkte, Besprechungen, Mängel, eingegangene Dokumente, Journal und Ausblick – ideal für Bauherren und Lenkungskreis.',
+    h('div', { class: 'zeile' }, feld('Von', zVon), feld('Bis', zBis)),
+    h('button', {
+      class: 'btn btn-primary', onclick: () => {
+        if (!zVon.value || !zBis.value) return;
+        window.open(`/api/projects/${projektId}/reports/zeitraum.pdf?von=${zVon.value}&bis=${zBis.value}`, '_blank');
+      },
+    }, 'PDF erzeugen'));
+
   const von = dateInput(); const bis = dateInput();
   karte('Bautagebuch (NOT-05)',
     'Journaleinträge mit eingebetteten Fotos für einen Zeitraum.',

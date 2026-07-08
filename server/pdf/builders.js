@@ -409,4 +409,96 @@ function vollstaendigkeit(doc, projectId) {
   H.fusszeilen(doc, p.name);
 }
 
-module.exports = { statusbericht, gewerkAuszug, gewerkDaten, raumbuch, raumbuchDaten, protokoll, maengelliste, journal, vollstaendigkeit };
+// ============ Wochen-/Zeitraumbericht: Was ist im Zeitraum passiert? ============
+function zeitraumbericht(doc, projectId, von, bis) {
+  const p = get('SELECT * FROM projects WHERE id = ?', projectId);
+  const farben = H.gewerkFarben();
+  const vonIso = `${von}T00:00:00`;
+  const bisIso = `${bis}T23:59:59`;
+
+  H.kopf(doc, { titel: 'Zeitraumbericht', projekt: p.name, untertitel: `Berichtszeitraum: ${dat(von)} – ${dat(bis)}` });
+
+  const erledigte = all(
+    `SELECT nr, text, gewerke, erledigt_am FROM checkpoints
+     WHERE project_id = ? AND status = 'erledigt' AND erledigt_am BETWEEN ? AND ? ORDER BY erledigt_am`,
+    projectId, vonIso, bisIso);
+  H.abschnitt(doc, `Erledigte Checkpunkte (${erledigte.length})`);
+  H.tabelle(doc, [
+    { label: 'Nr.', breite: 0.1, get: (r) => r.nr },
+    { label: 'Punkt', breite: 0.6, get: (r) => r.text },
+    { label: 'Gewerke', breite: 0.18, get: (r) => r.gewerke, chips: true },
+    { label: 'Am', breite: 0.12, get: (r) => dat(r.erledigt_am) },
+  ], erledigte, { farben, leerText: 'Keine Punkte im Zeitraum erledigt.' });
+
+  const besprechungen = all(
+    `SELECT m.titel, m.datum, m.typ, m.status,
+       (SELECT COUNT(*) FROM protocol_items pi WHERE pi.meeting_id = m.id) AS punkte
+     FROM meetings m WHERE m.project_id = ? AND m.datum BETWEEN ? AND ? ORDER BY m.datum`,
+    projectId, von, bis);
+  H.abschnitt(doc, `Besprechungen (${besprechungen.length})`);
+  H.tabelle(doc, [
+    { label: 'Datum', breite: 0.15, get: (r) => dat(r.datum) },
+    { label: 'Besprechung', breite: 0.45, get: (r) => r.titel },
+    { label: 'Typ', breite: 0.2, get: (r) => lbl(r.typ) },
+    { label: 'Punkte', breite: 0.1, get: (r) => String(r.punkte) },
+    { label: 'Status', breite: 0.1, get: (r) => lbl(r.status) },
+  ], besprechungen, { leerText: 'Keine Besprechungen im Zeitraum.' });
+
+  const neueMaengel = all(
+    `SELECT nummer, beschreibung, gewerk, firma FROM defects
+     WHERE project_id = ? AND created_at BETWEEN ? AND ? ORDER BY nummer`, projectId, vonIso, bisIso);
+  const abgenommene = all(
+    `SELECT d.nummer, d.beschreibung, d.gewerk, a.timestamp FROM defects d
+     JOIN audit_trail a ON a.object_typ = 'defect' AND a.object_id = d.id
+       AND a.action = 'status' AND a.details LIKE '%"nach":"abgenommen"%'
+     WHERE d.project_id = ? AND a.timestamp BETWEEN ? AND ?
+     GROUP BY d.id ORDER BY d.nummer`, projectId, vonIso, bisIso);
+  H.abschnitt(doc, `Mängel: ${neueMaengel.length} neu erfasst, ${abgenommene.length} abgenommen`);
+  H.tabelle(doc, [
+    { label: 'Nr.', breite: 0.1, get: (r) => `M-${String(r.nummer).padStart(3, '0')}` },
+    { label: 'Beschreibung', breite: 0.6, get: (r) => r.beschreibung },
+    { label: 'Gew.', breite: 0.12, get: (r) => r.gewerk, chips: true },
+    { label: 'Firma', breite: 0.18, get: (r) => r.firma },
+  ], neueMaengel, { farben, leerText: 'Keine neuen Mängel im Zeitraum.' });
+
+  const dokumente = all(
+    `SELECT nr, titel, gewerk, erhalten_am FROM document_entries
+     WHERE project_id = ? AND erhalten_am IS NOT NULL AND erhalten_am BETWEEN ? AND ? ORDER BY erhalten_am`,
+    projectId, vonIso, bisIso);
+  H.abschnitt(doc, `Eingegangene Dokumente (${dokumente.length})`);
+  H.tabelle(doc, [
+    { label: 'Nr.', breite: 0.12, get: (r) => r.nr },
+    { label: 'Dokument', breite: 0.58, get: (r) => r.titel },
+    { label: 'Gew.', breite: 0.12, get: (r) => r.gewerk, chips: true },
+    { label: 'Am', breite: 0.18, get: (r) => dat(r.erhalten_am) },
+  ], dokumente, { farben, leerText: 'Keine Dokumente im Zeitraum eingegangen.' });
+
+  const eintraege = all(
+    `SELECT j.datum, j.kategorie, j.text, u.display_name AS verfasser
+     FROM journal_entries j LEFT JOIN users u ON u.id = j.verfasser_id
+     WHERE j.project_id = ? AND j.datum BETWEEN ? AND ? ORDER BY j.datum, j.id`, projectId, von, bis);
+  H.abschnitt(doc, `Journal (${eintraege.length} Einträge)`);
+  for (const e of eintraege) {
+    H.seitenumbruch(doc, 40);
+    doc.font('Helvetica-Bold').fontSize(9).text(`${dat(e.datum)} · ${lbl(e.kategorie)}${e.verfasser ? ' · ' + e.verfasser : ''}`, H.RAND);
+    doc.font('Helvetica').fontSize(9).text(e.text, { width: H.INHALT_BREITE });
+    doc.moveDown(0.3);
+  }
+  if (!eintraege.length) doc.font('Helvetica-Oblique').fontSize(9).text('Keine Journaleinträge im Zeitraum.', H.RAND);
+
+  // Ausblick: nächste Termine nach dem Zeitraum
+  const naechste = all(
+    `SELECT nr, text, termin, gewerke FROM checkpoints
+     WHERE project_id = ? AND relevanz != 'nicht_relevant' AND status != 'erledigt'
+       AND termin IS NOT NULL AND termin > ? ORDER BY termin LIMIT 10`, projectId, bis);
+  H.abschnitt(doc, 'Ausblick: nächste Termine');
+  H.tabelle(doc, [
+    { label: 'Termin', breite: 0.14, get: (r) => dat(r.termin) },
+    { label: 'Punkt', breite: 0.66, get: (r) => `${r.nr} ${r.text}` },
+    { label: 'Gewerke', breite: 0.2, get: (r) => r.gewerke, chips: true },
+  ], naechste, { farben, leerText: 'Keine terminierten Punkte.' });
+
+  H.fusszeilen(doc, p.name);
+}
+
+module.exports = { statusbericht, gewerkAuszug, gewerkDaten, raumbuch, raumbuchDaten, protokoll, maengelliste, journal, vollstaendigkeit, zeitraumbericht };

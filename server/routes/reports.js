@@ -147,6 +147,15 @@ router.get('/projects/:projectId/journal.pdf', requireProject('read'), (req, res
   pdfResponse(res, `Bautagebuch_${req.project.name}.pdf`, (doc) => B.journal(doc, req.project.id, von || null, bis || null));
 });
 
+// ---------------- Zeitraum-/Wochenbericht ----------------
+router.get('/projects/:projectId/reports/zeitraum.pdf', requireProject('read'), (req, res, next) => {
+  const { von, bis } = req.query;
+  const istDatum = (d) => /^\d{4}-\d{2}-\d{2}$/.test(String(d || ''));
+  if (!istDatum(von) || !istDatum(bis)) return next(new ApiError(400, 'von und bis (JJJJ-MM-TT) sind Pflicht'));
+  pdfResponse(res, `Zeitraumbericht_${req.project.name}_${von}_${bis}.pdf`,
+    (doc) => B.zeitraumbericht(doc, req.project.id, von, bis));
+});
+
 // ---------------- DOK-03: Vollständigkeitsbericht ----------------
 router.get('/projects/:projectId/reports/vollstaendigkeit.pdf', requireProject('read'), (req, res) => {
   pdfResponse(res, `Vollstaendigkeit_${req.project.name}.pdf`, (doc) => B.vollstaendigkeit(doc, req.project.id));
