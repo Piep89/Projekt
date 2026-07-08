@@ -375,3 +375,14 @@ input[type="checkbox"] { width: auto; }
   display: inline-flex; align-items: center; justify-content: center;
 }
 .hilfe-knopf:hover { border-color: var(--akzent); color: var(--akzent); }
+/* ---------- Drag-&-Drop-Zone (AP-03) ---------- */
+.dropzone {
+  border: 2px dashed var(--rand); border-radius: var(--radius);
+  padding: .8rem; text-align: center; background: var(--flaeche);
+  transition: border-color .12s ease, background .12s ease;
+}
+.dropzone .dz-text { color: var(--text-schwach); font-size: .88rem; margin-bottom: .5rem; }
+.dropzone.dz-aktiv { border-color: var(--akzent); background: var(--hover); }
+.dropzone .input { max-width: 380px; margin: 0 auto; }
+.anhang-neu { align-items: flex-end; }
+.anhang-neu .dropzone { flex: 1; }

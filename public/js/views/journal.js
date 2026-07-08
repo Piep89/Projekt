@@ -2,7 +2,7 @@
 import { get, post, patch, upload } from '../api.js';
 import {
   h, clear, kopfzeile, modal, toast, fehlerToast, feld, textInput, textArea, dateInput,
-  select, label, formatDate, formatDateTime, laden, leerHinweis,
+  select, label, formatDate, formatDateTime, laden, leerHinweis, dropzone,
 } from '../ui.js';
 import { hilfeKnopf } from './hilfe.js';
 import { istOffline, merken } from '../offline.js';
@@ -79,12 +79,13 @@ export async function renderJournal(el, params, query) {
     const wetter = textInput({ placeholder: 'z. B. 24 °C, trocken' });
     const anwesende = textInput({ placeholder: 'z. B. Fa. Schmidt (2), Bauleitung' });
     const fotos = h('input', { type: 'file', class: 'input', multiple: true, accept: 'image/*', capture: 'environment' });
-    return h('div', { class: 'karte' },
+    const zone = dropzone(fotos, { hinweis: 'Fotos hierher ziehen, einfügen (Strg+V) – oder unten auswählen' });
+    const karte = h('div', { class: 'karte' },
       h('h2', {}, 'Neuer Eintrag'),
       feld('Text *', text),
       h('div', { class: 'formular-spalten' },
         feld('Datum', datum), feld('Kategorie', kategorie), feld('Wetter', wetter), feld('Anwesende', anwesende)),
-      feld('Fotos (Kamera oder Datei, automatischer Zeitstempel)', fotos),
+      feld('Fotos (Kamera oder Datei, automatischer Zeitstempel)', zone),
       h('button', {
         class: 'btn btn-primary', onclick: async (ev) => {
           ev.target.disabled = true;
@@ -119,6 +120,9 @@ export async function renderJournal(el, params, query) {
           }
         },
       }, 'Eintrag speichern'));
+    // Bildschirmfoto o. Ä. direkt in die Karte einfügen (Strg+V / Cmd+V)
+    karte.addEventListener('paste', (e) => { if (zone.einfuegen(e.clipboardData)) e.preventDefault(); });
+    return karte;
   }
 
   function eintragKarte(e) {
@@ -176,9 +180,12 @@ export async function renderJournal(el, params, query) {
 
   function fotosNachtragen(e) {
     const fotos = h('input', { type: 'file', class: 'input', multiple: true, accept: 'image/*', capture: 'environment' });
+    const zone = dropzone(fotos);
+    const body = feld('Fotos', zone);
+    body.addEventListener('paste', (ev) => { if (zone.einfuegen(ev.clipboardData)) ev.preventDefault(); });
     const m = modal({
       title: 'Fotos zum Eintrag hochladen',
-      body: feld('Fotos', fotos),
+      body,
       actions: [h('button', {
         class: 'btn btn-primary', onclick: async () => {
           if (!fotos.files.length) return;

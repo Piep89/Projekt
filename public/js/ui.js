@@ -204,6 +204,56 @@ export function gewerkeMehrfach(csv = '') {
   };
 }
 
+/**
+ * Drag-&-Drop-Zone um einen bestehenden Datei-Input (AP-03).
+ * Der Input bleibt sichtbar und funktionsfähig (Fallback, Kamera auf Mobilgeräten);
+ * fallengelassene Dateien werden dem Input zugewiesen, sodass die bestehende
+ * Absende-Logik unverändert funktioniert.
+ */
+export function dropzone(input, { hinweis = 'Dateien hierher ziehen – oder unten auswählen' } = {}) {
+  const text = h('div', { class: 'dz-text' }, hinweis);
+  const zone = h('div', { class: 'dropzone' }, text, input);
+
+  const zeigeAnzahl = () => {
+    text.textContent = input.files && input.files.length
+      ? `${input.files.length} Datei(en) ausgewählt`
+      : hinweis;
+  };
+  input.addEventListener('change', zeigeAnzahl);
+
+  const uebernehmen = (neue) => {
+    const passend = [...neue].filter((f) => {
+      if (!input.accept) return true;
+      return input.accept.split(',').some((regel) => {
+        const r = regel.trim();
+        if (r.endsWith('/*')) return f.type.startsWith(r.slice(0, -1));
+        return f.type === r || f.name.toLowerCase().endsWith(r.toLowerCase());
+      });
+    });
+    if (!passend.length) { toast('Dateityp passt hier nicht', 'fehler'); return; }
+    const dt = new DataTransfer();
+    if (input.multiple) for (const f of input.files) dt.items.add(f);
+    for (const f of (input.multiple ? passend : passend.slice(0, 1))) dt.items.add(f);
+    input.files = dt.files;
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+  };
+
+  zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('dz-aktiv'); });
+  zone.addEventListener('dragleave', (e) => { if (!zone.contains(e.relatedTarget)) zone.classList.remove('dz-aktiv'); });
+  zone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    zone.classList.remove('dz-aktiv');
+    if (e.dataTransfer && e.dataTransfer.files.length) uebernehmen(e.dataTransfer.files);
+  });
+  // Einfügen aus der Zwischenablage (z. B. Bildschirmfoto mit Strg+V)
+  zone.einfuegen = (clipboardData) => {
+    const dateien = [...(clipboardData?.files || [])];
+    if (dateien.length) { uebernehmen(dateien); return true; }
+    return false;
+  };
+  return zone;
+}
+
 export function leerHinweis(text) { return h('div', { class: 'leer-hinweis' }, text); }
 export function laden() { return h('div', { class: 'lade-hinweis' }, 'Wird geladen …'); }
 

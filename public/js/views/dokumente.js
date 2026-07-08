@@ -6,7 +6,7 @@ import {
   h, clear, kopfzeile, table, modal, confirmModal, toast, fehlerToast,
   feld, textInput, textArea, dateInput, select, gewerkSelect, gewerkBadge,
   statusBadge, badge, label, formatDate, formatDateTime, terminZelle,
-  laden, leerHinweis,
+  laden, leerHinweis, dropzone,
 } from '../ui.js';
 import { objektZusatz } from '../objekt.js';
 
@@ -280,7 +280,7 @@ export async function renderDokumente(el, params, query) {
         ]);
         const dateiInput = h('input', { type: 'file', class: 'input' });
         const linkInput = textInput({ placeholder: 'z. B. https://dms.klinik.example/… oder \\\\server\\ablage\\…' });
-        const dateiWrap = feld('Datei', dateiInput);
+        const dateiWrap = feld('Datei', dropzone(dateiInput, { hinweis: 'Datei hierher ziehen – oder unten auswählen' }));
         const linkWrap = feld('Ablageverweis', linkInput);
         const versionInput = textInput({ placeholder: `Standard: ${d.versionen.length + 1}` });
         const datumInput = dateInput({ value: new Date().toISOString().slice(0, 10) });

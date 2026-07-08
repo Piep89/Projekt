@@ -68,7 +68,7 @@ Erstpasswort-Datei öffnen), Icon optional (ICO aus `tools/mac-app/icons` ableit
 (node.exe vorhanden, Skript referenziert korrekte Pfade). Ausführung auf Windows kann nicht getestet
 werden — Skript-Logik daher besonders sorgfältig gegenlesen.
 
-## AP-03 · Drag-&-Drop- und Einfüge-Uploads (M)
+## AP-03 · Drag-&-Drop- und Einfüge-Uploads (M) — ✅ erledigt
 
 **Ziel:** Dateien/Fotos per Ziehen auf die Fläche und per Zwischenablage (Strg+V) hochladen.
 **Kontext:** `public/js/objekt.js` (Anhänge-Reiter), `public/js/views/journal.js` (Foto-Upload),
@@ -79,7 +79,7 @@ Serverseitig ist alles vorhanden (multipart-Endpunkte).
 **Abnahme:** UI-Rundgang fehlerfrei; manueller Playwright-Test: `page.setInputFiles` bleibt als
 Fallback funktionsfähig (Datei-Input weiterhin vorhanden!).
 
-## AP-04 · Kontext-Hilfe je Modul (S)
+## AP-04 · Kontext-Hilfe je Modul (S) — ✅ erledigt
 
 **Ziel:** Kleines „?" in der Kopfzeile jedes Moduls, das den passenden Abschnitt der
 Hilfe (`public/js/views/hilfe.js`) als Modal zeigt (UX-02 vertiefen).

@@ -2,7 +2,7 @@
 import { get, post, patch, upload } from '../api.js';
 import {
   h, clear, kopfzeile, table, modal, toast, fehlerToast, feld, textInput, textArea, dateInput,
-  select, gewerkSelect, gewerkBadge, statusBadge, label, terminZelle, laden,
+  select, gewerkSelect, gewerkBadge, statusBadge, label, terminZelle, laden, dropzone,
 } from '../ui.js';
 import { hilfeKnopf } from './hilfe.js';
 import { objektZusatz } from '../objekt.js';
@@ -81,10 +81,8 @@ export async function renderMaengel(el, params, query) {
     }
 
     const fotoInput = h('input', { type: 'file', class: 'input', multiple: true, accept: 'image/*', capture: 'environment' });
-    const m = modal({
-      title: `${d.code} · ${statusBadge(d.status).textContent}`,
-      wide: true,
-      body: h('div', {},
+    const fotoZone = dropzone(fotoInput, { hinweis: 'Fotos hierher ziehen oder einfügen (Strg+V)' });
+    const detailBody = h('div', {},
         h('div', { class: 'zeile', style: { marginBottom: '.6rem' } }, statusBadge(d.status), ...statusButtons),
         feld('Beschreibung', beschreibung),
         h('div', { class: 'formular-spalten' },
@@ -105,9 +103,9 @@ export async function renderMaengel(el, params, query) {
           h('div', { class: 'foto' },
             h('img', { src: `/api/photos/${f.id}/datei`, alt: f.beschreibung || f.filename, loading: 'lazy' }),
             h('div', { class: 'foto-info' }, f.beschreibung || f.filename)))) : h('p', { class: 'muted' }, 'Keine Fotos.'),
-        readonly ? null : h('div', { class: 'zeile', style: { marginTop: '.5rem' } }, fotoInput,
+        readonly ? null : h('div', { style: { marginTop: '.5rem' } }, fotoZone,
           h('button', {
-            class: 'btn', onclick: async () => {
+            class: 'btn', style: { marginTop: '.4rem' }, onclick: async () => {
               if (!fotoInput.files.length) return;
               const fd = new FormData();
               for (const f of fotoInput.files) fd.append('fotos', f);
@@ -116,7 +114,12 @@ export async function renderMaengel(el, params, query) {
               catch (e) { fehlerToast(e); }
             },
           }, 'Fotos hochladen')),
-        objektZusatz('defect', d.id, { projectId: projektId, readonly })),
+        objektZusatz('defect', d.id, { projectId: projektId, readonly }));
+    if (!readonly) detailBody.addEventListener('paste', (ev) => { if (fotoZone.einfuegen(ev.clipboardData)) ev.preventDefault(); });
+    const m = modal({
+      title: `${d.code} · ${statusBadge(d.status).textContent}`,
+      wide: true,
+      body: detailBody,
     });
   }
 
@@ -127,14 +130,17 @@ export async function renderMaengel(el, params, query) {
     const frist = dateInput();
     const raum = select([{ value: '', label: '— kein Raum —' }, ...rooms.map((r) => ({ value: String(r.id), label: `${r.nummer} ${r.bezeichnung}` }))]);
     const fotos = h('input', { type: 'file', class: 'input', multiple: true, accept: 'image/*', capture: 'environment' });
+    const zone = dropzone(fotos, { hinweis: 'Fotos hierher ziehen, einfügen (Strg+V) – oder unten auswählen' });
+    const neuBody = h('div', {},
+      feld('Beschreibung *', beschreibung),
+      h('div', { class: 'formular-spalten' },
+        feld('Gewerk', gewerk), feld('Verursacher / Firma', firma), feld('Frist zur Behebung', frist), feld('Raum', raum)),
+      feld('Fotos', zone));
+    neuBody.addEventListener('paste', (ev) => { if (zone.einfuegen(ev.clipboardData)) ev.preventDefault(); });
     const m = modal({
       title: 'Mangel erfassen',
       wide: true,
-      body: h('div', {},
-        feld('Beschreibung *', beschreibung),
-        h('div', { class: 'formular-spalten' },
-          feld('Gewerk', gewerk), feld('Verursacher / Firma', firma), feld('Frist zur Behebung', frist), feld('Raum', raum)),
-        feld('Fotos', fotos)),
+      body: neuBody,
       actions: [h('button', {
         class: 'btn btn-primary', onclick: async (ev) => {
           ev.target.disabled = true;

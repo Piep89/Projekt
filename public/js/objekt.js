@@ -1,7 +1,7 @@
 // Querschnitts-Panel für Objektdetails: Kommentare, Anhänge, Verknüpfungen, Verlauf
 // Verwendung in Detail-Modalen aller Module (Verknüpfungsprinzip, CHK-05, ROL-06)
 import { get, post, del, upload } from './api.js';
-import { h, clear, feld, select, textArea, formatDateTime, fehlerToast, toast, confirmModal, label } from './ui.js';
+import { h, clear, feld, select, textArea, formatDateTime, fehlerToast, toast, confirmModal, label, dropzone } from './ui.js';
 
 const TYP_LABELS = {
   checkpoint: 'Checkpunkt', room: 'Raum', document: 'Dokument', meeting: 'Besprechung',
@@ -82,7 +82,7 @@ async function renderAnhaenge(el, typ, id, { readonly }) {
         : h('div', { class: 'leer-hinweis' }, 'Keine Anhänge.')));
     if (!readonly) {
       const datei = h('input', { type: 'file', class: 'input' });
-      el.append(h('div', { class: 'anhang-neu' }, datei,
+      el.append(h('div', { class: 'anhang-neu' }, dropzone(datei, { hinweis: 'Datei hierher ziehen – oder unten auswählen' }),
         h('button', {
           class: 'btn', onclick: async () => {
             if (!datei.files[0]) return;
