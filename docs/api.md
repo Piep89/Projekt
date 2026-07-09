@@ -65,6 +65,7 @@ Statuswerte: `offen · in_bearbeitung · erledigt · blockiert`; Relevanz: `unbe
 | `POST /projects/:id/rooms/import` `{csv, commit}` | CSV-Import mit Vorschau/Fehlerbericht |
 | `GET /rooms/:id` · `PATCH /rooms/:id` · `DELETE /rooms/:id` | Raumdetail (inkl. verknüpfter Punkte/Mängel/Fotos); Löschen → Papierkorb |
 | `GET /rooms/:id/abfrage` | Geführte Abfrage (AP-17): alle Punkte inkl. `schreibbar` (Gewerke-Bindung) + Fortschritt gesamt/je Gewerk |
+| `GET /rooms/:id/datenblatt.pdf` | Raumdatenblatt mit Vollständigkeit, Pflichtpunkt-Markierung und Unterschriftenblock (AP-18) |
 | `GET /projects/:id/attribut-katalog` | Attributkatalog + Raumtypen der Projektvorlage |
 | `POST /rooms/:id/attributes` | Attribute ergänzen: `{katalog_ids:[…]}` oder frei `{gewerk, name, datentyp, einheit}` |
 | `PATCH /room-attributes/:id` `{soll, ist, status, quelle, relevanz, relevanz_begruendung}` | Status: `offen · festgelegt · bestaetigt · abweichend`; `relevanz: nicht_relevant` erfordert Begründung (AP-16) |

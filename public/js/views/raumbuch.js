@@ -53,7 +53,15 @@ export async function renderRaumbuch(el, params, query) {
         { label: 'Bezeichnung', render: (r) => h('div', {}, h('strong', {}, r.bezeichnung), r.raumtyp ? h('div', { class: 'muted' }, r.raumtyp) : null) },
         { label: 'Funktion', key: 'funktion' },
         { label: 'Fläche', render: (r) => r.flaeche_m2 ? `${r.flaeche_m2} m²` : '—', class: 'schmal' },
-        { label: 'Attribute', render: (r) => String(r.attribut_anzahl), class: 'schmal' },
+        { label: 'Erfasst', render: (r) => {
+          if (!r.attribut_anzahl) return h('span', { class: 'muted' }, '—');
+          const prozent = Math.round((r.merkmale_beantwortet / r.attribut_anzahl) * 100);
+          const voll = r.merkmale_beantwortet === r.attribut_anzahl && !r.pflicht_offen;
+          return h('div', { class: 'fortschritt-zeile', title: r.pflicht_offen ? `${r.pflicht_offen} Pflichtpunkte offen` : `${prozent} % erfasst` },
+            h('div', { class: 'fortschritt', style: { width: '54px' } }, h('div', { style: { width: `${prozent}%` } })),
+            h('span', { class: 'prozent' }, `${r.merkmale_beantwortet}/${r.attribut_anzahl}`),
+            r.pflicht_offen ? h('span', { class: 'ueberfaellig', title: `${r.pflicht_offen} Pflichtpunkte offen` }, '!') : (voll ? '✓' : null));
+        } },
         { label: 'Abweichungen', render: (r) => r.abweichungen ? h('span', { class: 'ueberfaellig' }, String(r.abweichungen)) : '0', class: 'schmal' },
         { label: 'Punkte/Mängel', render: (r) => `${r.offene_punkte} / ${r.offene_maengel}`, class: 'schmal' },
         { label: 'Fotos', render: (r) => String(r.fotos), class: 'schmal' },
@@ -123,7 +131,7 @@ export async function renderRaumbuch(el, params, query) {
           readonly ? null : h('button', { class: 'btn', onclick: () => raumDialog(raum, () => { m.close(); oeffneRaum(id); }) }, 'Stammdaten bearbeiten'),
           readonly ? null : h('button', { class: 'btn', onclick: () => katalogDialog(raum, () => { m.close(); oeffneRaum(id); }) }, '+ Attribute aus Katalog'),
           readonly ? null : h('button', { class: 'btn', onclick: () => freiesAttributDialog(raum, () => { m.close(); oeffneRaum(id); }) }, '+ Freies Attribut'),
-          h('a', { class: 'btn', href: `/api/projects/${projektId}/raumbuch.pdf`, target: '_blank' }, 'Raumbuch-PDF')),
+          h('a', { class: 'btn', href: `/api/rooms/${raum.id}/datenblatt.pdf`, target: '_blank', title: 'Raumdatenblatt mit Unterschriftenblock' }, 'Datenblatt-PDF')),
         h('p', { class: 'muted' }, [
           raum.funktion && `Funktion: ${raum.funktion}`, raum.flaeche_m2 && `Fläche: ${raum.flaeche_m2} m²`,
           raum.hoehe_m && `Höhe: ${raum.hoehe_m} m`, raum.raumgruppe && `Raumgruppe: ${raum.raumgruppe}`,
@@ -149,13 +157,16 @@ export async function renderRaumbuch(el, params, query) {
   }
 
   // ============ Geführte Abfrage (AP-17): Punkt für Punkt durch den Merkmalskatalog ============
-  async function abfrageAssistent(raumId, nachher = null) {
+  async function abfrageAssistent(raumId, nachher = null, startModus = 'soll') {
     let daten;
     try { daten = await get(`/rooms/${raumId}/abfrage`); } catch (e) { return fehlerToast(e); }
     const alle = daten.punkte.filter((p) => p.schreibbar !== false);
     const gesperrt = daten.punkte.length - alle.length;
+    // Soll-Modus: relevante Punkte ohne Soll; Prüf-Modus: Soll erfasst, aber noch nicht geprüft
     const istOffen = (p) => p.relevanz !== 'nicht_relevant' && !(p.soll ?? '').toString().trim() && p.status === 'offen';
-    const fortschritt = daten.fortschritt;
+    const istZuPruefen = (p) => p.relevanz !== 'nicht_relevant' && (p.soll ?? '').toString().trim()
+      && !['bestaetigt', 'abweichend'].includes(p.status);
+    let modus = startModus;
     let gewerkFilter = '';
     let warteschlange = [];
     let aktuell = null;
@@ -165,33 +176,39 @@ export async function renderRaumbuch(el, params, query) {
     const gewerkSel = select([{ value: '', label: 'Alle Gewerke' },
       ...[...new Set(alle.map((p) => p.gewerk))].map((g) => ({ value: g, label: `${g} – ${state.gewerkeMap[g]?.name || ''}` }))]);
     gewerkSel.addEventListener('change', () => { gewerkFilter = gewerkSel.value; neuAufbauen(); });
+    const modusSel = select([
+      { value: 'soll', label: 'Soll erfassen (Planung)', selected: modus === 'soll' },
+      { value: 'pruefen', label: 'Ist prüfen (Ausführung/Abnahme)', selected: modus === 'pruefen' },
+    ]);
+    modusSel.addEventListener('change', () => { modus = modusSel.value; neuAufbauen(); });
 
     const m = modal({
       title: `Abfrage: Raum ${daten.raum.nummer} – ${daten.raum.bezeichnung}`,
       wide: true,
       body: h('div', {},
-        h('div', { class: 'zeile', style: { justifyContent: 'space-between', alignItems: 'flex-end' } },
-          feld('Gewerk', gewerkSel), kopfBereich),
+        h('div', { class: 'zeile', style: { justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap' } },
+          h('div', { class: 'zeile' }, feld('Modus', modusSel), feld('Gewerk', gewerkSel)), kopfBereich),
         gesperrt ? h('p', { class: 'muted' }, `${gesperrt} Punkt(e) anderer Gewerke sind für Sie nicht schreibbar und werden übersprungen.`) : null,
         inhaltBereich),
     });
 
+    const offenImModus = (p) => (modus === 'soll' ? istOffen(p) : istZuPruefen(p));
+
     function neuAufbauen() {
-      warteschlange = alle.filter((p) => istOffen(p) && (!gewerkFilter || p.gewerk === gewerkFilter));
+      warteschlange = alle.filter((p) => offenImModus(p) && (!gewerkFilter || p.gewerk === gewerkFilter));
       naechster();
     }
 
     function kopfAktualisieren() {
-      const prozent = fortschritt.gesamt ? Math.round((fortschritt.beantwortet / fortschritt.gesamt) * 100) : 100;
+      const gesamt = daten.punkte.length;
+      const fertig = daten.punkte.filter((p) => !offenImModus(p)).length;
+      const prozent = gesamt ? Math.round((fertig / gesamt) * 100) : 100;
       clear(kopfBereich).append(h('div', { class: 'fortschritt-zeile', style: { minWidth: '260px' } },
         h('div', { class: 'fortschritt', style: { flex: '1' } }, h('div', { style: { width: `${prozent}%` } })),
-        h('span', { class: 'prozent' }, `${fortschritt.beantwortet}/${fortschritt.gesamt}`)));
+        h('span', { class: 'prozent' }, `${fertig}/${gesamt}${modus === 'pruefen' ? ' geprüft' : ''}`)));
     }
 
     function beantwortet(p) {
-      fortschritt.beantwortet++;
-      fortschritt.offen = Math.max(0, fortschritt.offen - 1);
-      if (p.relevanz === 'nicht_relevant') fortschritt.nicht_relevant++;
       warteschlange = warteschlange.filter((x) => x.id !== p.id);
     }
 
@@ -203,29 +220,58 @@ export async function renderRaumbuch(el, params, query) {
     }
 
     function fertigAnzeigen() {
+      const nichtRelevant = daten.punkte.filter((p) => p.relevanz === 'nicht_relevant').length;
+      const pflichtOffen = daten.punkte.filter((p) => p.pflicht && istOffen(p)).length;
+      const abweichend = daten.punkte.filter((p) => p.status === 'abweichend').length;
+      const beantwortetZahl = daten.punkte.filter((p) => !offenImModus(p)).length;
       clear(inhaltBereich).append(h('div', { style: { textAlign: 'center', padding: '1.5rem 0' } },
-        h('h2', {}, gewerkFilter ? `Alle offenen ${gewerkFilter}-Punkte beantwortet` : 'Alle offenen Punkte beantwortet ✓'),
+        h('h2', {}, modus === 'pruefen'
+          ? (gewerkFilter ? `Alle ${gewerkFilter}-Punkte geprüft` : 'Alle prüfbaren Punkte geprüft ✓')
+          : (gewerkFilter ? `Alle offenen ${gewerkFilter}-Punkte beantwortet` : 'Alle offenen Punkte beantwortet ✓')),
         h('p', { class: 'muted' },
-          `${fortschritt.beantwortet} von ${fortschritt.gesamt} Merkmalen erfasst`
-          + (fortschritt.nicht_relevant ? ` (davon ${fortschritt.nicht_relevant} als nicht relevant begründet)` : '')
-          + (fortschritt.pflicht_offen ? ` – noch ${fortschritt.pflicht_offen} offene Pflichtpunkte!` : '.')),
+          `${beantwortetZahl} von ${daten.punkte.length} Merkmalen ${modus === 'pruefen' ? 'geprüft' : 'erfasst'}`
+          + (nichtRelevant ? ` · ${nichtRelevant} nicht relevant` : '')
+          + (abweichend ? ` · ${abweichend} abweichend` : '')
+          + (pflichtOffen ? ` – noch ${pflichtOffen} offene Pflichtpunkte!` : '')),
         h('button', { class: 'btn btn-primary', onclick: () => { m.close(); if (nachher) nachher(); } }, 'Schließen')));
     }
 
-    function zeigePunkt(p) {
-      const offenGesamt = warteschlange.length;
-      let eingabe;
+    function eingabeFuer(p) {
       if (p.datentyp === 'janein') {
-        eingabe = select([{ value: '', label: '— bitte wählen —' }, { value: 'ja', label: 'Ja' }, { value: 'nein', label: 'Nein' }]);
-      } else if (p.datentyp === 'auswahl' && (p.optionen || '').trim()) {
-        eingabe = select([{ value: '', label: '— bitte wählen —' },
-          ...p.optionen.split(',').map((o) => ({ value: o.trim(), label: o.trim() }))]);
-      } else {
-        eingabe = textInput({
-          inputmode: p.datentyp === 'zahl' ? 'decimal' : undefined,
-          placeholder: p.datentyp === 'zahl' ? 'Zahlenwert' : 'Wert / Beschreibung',
-        });
+        return select([{ value: '', label: '— bitte wählen —' }, { value: 'ja', label: 'Ja' }, { value: 'nein', label: 'Nein' }]);
       }
+      if (p.datentyp === 'auswahl' && (p.optionen || '').trim()) {
+        return select([{ value: '', label: '— bitte wählen —' },
+          ...p.optionen.split(',').map((o) => ({ value: o.trim(), label: o.trim() }))]);
+      }
+      return textInput({
+        inputmode: p.datentyp === 'zahl' ? 'decimal' : undefined,
+        placeholder: p.datentyp === 'zahl' ? 'Zahlenwert' : 'Wert / Beschreibung',
+      });
+    }
+
+    // Speichern mit Offline-Rückfall (NFA-03): Antwort landet notfalls im Ausgangskorb
+    async function punktSpeichern(p, body, beschreibung) {
+      if (istOffline()) {
+        await merken({ typ: 'json', methode: 'PATCH', pfad: `/room-attributes/${p.id}`, body, beschreibung });
+        return true;
+      }
+      try {
+        await patch(`/room-attributes/${p.id}`, body);
+        return true;
+      } catch (e) {
+        if (e instanceof TypeError) { // Netzausfall während des Sendens
+          await merken({ typ: 'json', methode: 'PATCH', pfad: `/room-attributes/${p.id}`, body, beschreibung });
+          return true;
+        }
+        throw e;
+      }
+    }
+
+    function zeigePunkt(p) {
+      if (modus === 'pruefen') return zeigePruefpunkt(p);
+      const offenGesamt = warteschlange.length;
+      const eingabe = eingabeFuer(p);
       const quelle = textInput({ placeholder: 'z. B. Herstellerdatenblatt, Planungsbesprechung' });
       const fehlerZeile = h('div', { style: { color: 'var(--rot)', minHeight: '1.1rem', fontSize: '.85rem' } });
 
@@ -234,22 +280,10 @@ export async function renderRaumbuch(el, params, query) {
         if (!wert) { fehlerZeile.textContent = 'Bitte einen Wert erfassen – oder „Später" bzw. „Nicht relevant" wählen.'; return; }
         const body = { soll: wert, status: 'festgelegt', quelle: quelle.value.trim() || null };
         try {
-          if (istOffline()) {
-            await merken({ typ: 'json', methode: 'PATCH', pfad: `/room-attributes/${p.id}`, body,
-              beschreibung: `Raumabfrage ${daten.raum.nummer}: ${p.gewerk} ${p.name}` });
-          } else {
-            await patch(`/room-attributes/${p.id}`, body);
-          }
+          await punktSpeichern(p, body, `Raumabfrage ${daten.raum.nummer}: ${p.gewerk} ${p.name}`);
           p.soll = wert; p.status = 'festgelegt';
           beantwortet(p); naechster();
         } catch (e) {
-          if (e instanceof TypeError) { // Netzausfall während des Sendens -> Ausgangskorb
-            await merken({ typ: 'json', methode: 'PATCH', pfad: `/room-attributes/${p.id}`, body,
-              beschreibung: `Raumabfrage ${daten.raum.nummer}: ${p.gewerk} ${p.name}` });
-            p.soll = wert; p.status = 'festgelegt';
-            beantwortet(p); naechster();
-            return;
-          }
           fehlerZeile.textContent = e.message || 'Speichern fehlgeschlagen';
         }
       };
@@ -264,12 +298,7 @@ export async function renderRaumbuch(el, params, query) {
               if (!begruendung.value.trim()) { fehlerZeile.textContent = 'Begründung ist Pflicht.'; return; }
               const body = { relevanz: 'nicht_relevant', relevanz_begruendung: begruendung.value.trim() };
               try {
-                if (istOffline()) {
-                  await merken({ typ: 'json', methode: 'PATCH', pfad: `/room-attributes/${p.id}`, body,
-                    beschreibung: `Raumabfrage ${daten.raum.nummer}: ${p.name} nicht relevant` });
-                } else {
-                  await patch(`/room-attributes/${p.id}`, body);
-                }
+                await punktSpeichern(p, body, `Raumabfrage ${daten.raum.nummer}: ${p.name} nicht relevant`);
                 p.relevanz = 'nicht_relevant';
                 beantwortet(p); naechster();
               } catch (e) { fehlerZeile.textContent = e.message || 'Speichern fehlgeschlagen'; }
@@ -300,6 +329,91 @@ export async function renderRaumbuch(el, params, query) {
           }, 'Später ▸')),
         nichtRelevantBereich));
       eingabe.focus();
+    }
+
+    // Prüf-Modus: Soll anzeigen, Ist erfassen -> bestätigt oder abweichend (AP-18)
+    function zeigePruefpunkt(p) {
+      const offenGesamt = warteschlange.length;
+      const eingabe = eingabeFuer(p);
+      const fehlerZeile = h('div', { style: { color: 'var(--rot)', minHeight: '1.1rem', fontSize: '.85rem' } });
+
+      const istSpeichern = async (wert, status) => {
+        const body = { ist: wert, status };
+        await punktSpeichern(p, body, `Raumprüfung ${daten.raum.nummer}: ${p.gewerk} ${p.name}`);
+        p.ist = wert; p.status = status;
+        beantwortet(p);
+      };
+
+      const pruefen = async () => {
+        const wert = eingabe.value.trim();
+        if (!wert) { fehlerZeile.textContent = 'Bitte den Ist-Wert erfassen – oder „Später" wählen.'; return; }
+        const weichtAb = String(wert).toLowerCase() !== String(p.soll ?? '').trim().toLowerCase();
+        try {
+          await istSpeichern(wert, weichtAb ? 'abweichend' : 'bestaetigt');
+          if (weichtAb) abweichungsPanel(p, wert);
+          else naechster();
+        } catch (e) { fehlerZeile.textContent = e.message || 'Speichern fehlgeschlagen'; }
+      };
+      eingabe.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); pruefen(); } });
+
+      clear(inhaltBereich).append(h('div', { class: 'karte', style: { marginTop: '.4rem' } },
+        h('div', { class: 'zeile', style: { justifyContent: 'space-between' } },
+          h('span', { class: 'muted' }, `Noch ${offenGesamt} zu prüfen${gewerkFilter ? ` in ${gewerkFilter}` : ''}`),
+          h('span', {}, gewerkBadge(p.gewerk), p.pflicht ? h('span', { class: 'muted', title: 'Pflichtpunkt' }, ' • Pflicht') : null)),
+        h('h2', { style: { margin: '.3rem 0' } }, p.name, p.einheit ? h('span', { class: 'muted' }, ` [${p.einheit}]`) : null),
+        p.hilfetext ? h('p', { class: 'muted' }, '💡 ', p.hilfetext) : null,
+        h('div', { class: 'karte hinweis-karte', style: { padding: '.5rem .8rem', marginBottom: '.6rem' } },
+          h('strong', {}, 'Soll: '), `${p.soll}${p.einheit ? ' ' + p.einheit : ''}`,
+          p.quelle ? h('span', { class: 'muted' }, ` (Quelle: ${p.quelle})`) : null),
+        feld('Ist-Wert *', eingabe),
+        fehlerZeile,
+        h('div', { class: 'zeile', style: { marginTop: '.4rem' } },
+          h('button', {
+            class: 'btn btn-primary', title: 'Ist entspricht dem Soll – Punkt bestätigen',
+            onclick: async () => {
+              try { await istSpeichern(String(p.soll), 'bestaetigt'); naechster(); }
+              catch (e) { fehlerZeile.textContent = e.message || 'Speichern fehlgeschlagen'; }
+            },
+          }, '✓ Stimmt überein'),
+          h('button', { class: 'btn', onclick: pruefen }, 'Ist speichern'),
+          h('button', {
+            class: 'btn', title: 'Punkt bleibt offen, ans Ende der Liste',
+            onclick: () => { warteschlange.push(warteschlange.shift()); naechster(); },
+          }, 'Später ▸'))));
+      eingabe.focus();
+    }
+
+    // Abweichung erfasst: direkt Mangel oder Aufgabe anlegen (vorbefüllt, verknüpft über den Raum)
+    function abweichungsPanel(p, istWert) {
+      const einheit = p.einheit ? ` ${p.einheit}` : '';
+      const beschreibung = `Raum ${daten.raum.nummer} · ${p.gewerk} ${p.name}: Soll ${p.soll}${einheit}, Ist ${istWert}${einheit}`;
+      const fehlerZeile = h('div', { style: { color: 'var(--rot)', minHeight: '1.1rem', fontSize: '.85rem' } });
+      kopfAktualisieren();
+      clear(inhaltBereich).append(h('div', { class: 'karte', style: { marginTop: '.4rem', borderColor: 'var(--rot)' } },
+        h('h2', { style: { margin: '.3rem 0' } }, '⚠ Abweichung erfasst'),
+        h('p', {}, beschreibung),
+        h('p', { class: 'muted' }, 'Der Punkt wurde als „abweichend" gespeichert. Soll daraus direkt ein Mangel oder eine Aufgabe entstehen?'),
+        fehlerZeile,
+        h('div', { class: 'zeile' },
+          h('button', {
+            class: 'btn btn-primary', onclick: async () => {
+              try {
+                const r = await post(`/projects/${projektId}/maengel`, {
+                  beschreibung, gewerk: p.gewerk, room_id: daten.raum.id,
+                });
+                toast(`Mangel ${r.code} angelegt`); naechster();
+              } catch (e) { fehlerZeile.textContent = e.message || 'Mangel konnte nicht angelegt werden'; }
+            },
+          }, 'Mangel anlegen'),
+          h('button', {
+            class: 'btn', onclick: async () => {
+              try {
+                await post('/tasks', { titel: `Abweichung klären: ${beschreibung}`, project_id: projektId, quelle: 'frei' });
+                toast('Aufgabe angelegt'); naechster();
+              } catch (e) { fehlerZeile.textContent = e.message || 'Aufgabe konnte nicht angelegt werden'; }
+            },
+          }, 'Aufgabe anlegen'),
+          h('button', { class: 'btn', onclick: naechster }, 'Nur speichern & weiter ▸'))));
     }
 
     neuAufbauen();

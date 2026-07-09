@@ -43,9 +43,14 @@ function fusszeilen(doc, projektName) {
   const range = doc.bufferedPageRange();
   for (let i = range.start; i < range.start + range.count; i++) {
     doc.switchToPage(i);
+    // Der Stempel liegt unterhalb des Satzspiegels – ohne abgesenkten unteren Rand
+    // würde pdfkit hier automatisch eine (leere) Folgeseite anlegen.
+    const unten = doc.page.margins.bottom;
+    doc.page.margins.bottom = 0;
     doc.font('Helvetica').fontSize(8).fillColor(GRAU)
       .text(`${projektName ? projektName + ' · ' : ''}Seite ${i - range.start + 1} von ${range.count}`,
         RAND, SEITE.hoehe - RAND + 8, { width: INHALT_BREITE, align: 'right', lineBreak: false });
+    doc.page.margins.bottom = unten;
   }
 }
 

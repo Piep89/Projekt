@@ -1,6 +1,6 @@
 // Service Worker (NFA-03): App-Shell aus dem Cache, API-Lesezugriffe network-first
 // mit Cache-Rückfall – so bleibt das Projekt ohne Netz lesbar (letzter bekannter Stand).
-const VERSION = 'ggp-v7';
+const VERSION = 'ggp-v8';
 const SHELL_CACHE = `${VERSION}-shell`;
 const API_CACHE = `${VERSION}-api`;
 

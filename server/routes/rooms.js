@@ -103,6 +103,10 @@ router.get('/projects/:projectId/rooms', requireProject('read'), (req, res) => {
   res.json(all(
     `SELECT r.*,
        (SELECT COUNT(*) FROM room_attributes a WHERE a.room_id = r.id) AS attribut_anzahl,
+       (SELECT COUNT(*) FROM room_attributes a WHERE a.room_id = r.id
+          AND (a.relevanz = 'nicht_relevant' OR COALESCE(a.soll,'') != '' OR a.status != 'offen')) AS merkmale_beantwortet,
+       (SELECT COUNT(*) FROM room_attributes a WHERE a.room_id = r.id
+          AND a.pflicht = 1 AND a.relevanz != 'nicht_relevant' AND COALESCE(a.soll,'') = '' AND a.status = 'offen') AS pflicht_offen,
        (SELECT COUNT(*) FROM room_attributes a WHERE a.room_id = r.id AND a.relevanz != 'nicht_relevant'
           AND (a.status = 'abweichend'
                OR (COALESCE(a.soll,'') != '' AND COALESCE(a.ist,'') != '' AND a.ist != a.soll))) AS abweichungen,

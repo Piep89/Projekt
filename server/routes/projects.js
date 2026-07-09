@@ -123,6 +123,12 @@ router.get('/projects/:projectId', requireProject('read'), (req, res) => {
     letzte_journaleintraege: all('SELECT id, datum, kategorie, substr(text,1,160) AS text FROM journal_entries WHERE project_id = ? ORDER BY datum DESC, id DESC LIMIT 5', p.id),
     offene_maengel: get("SELECT COUNT(*) AS n FROM defects WHERE project_id = ? AND status != 'abgenommen'", p.id).n,
     offene_aufgaben: get("SELECT COUNT(*) AS n FROM tasks WHERE project_id = ? AND status = 'offen'", p.id).n,
+    // Raumbuch-Vollständigkeit (AP-18): beantwortet = Soll erfasst, Status gesetzt oder begründet nicht relevant
+    raumbuch: get(
+      `SELECT COUNT(*) AS gesamt,
+         COALESCE(SUM(CASE WHEN a.relevanz = 'nicht_relevant' OR COALESCE(a.soll,'') != '' OR a.status != 'offen' THEN 1 ELSE 0 END), 0) AS beantwortet,
+         COALESCE(SUM(CASE WHEN a.pflicht = 1 AND a.relevanz != 'nicht_relevant' AND COALESCE(a.soll,'') = '' AND a.status = 'offen' THEN 1 ELSE 0 END), 0) AS pflicht_offen
+       FROM room_attributes a JOIN rooms r ON r.id = a.room_id WHERE r.project_id = ?`, p.id),
   });
 });
 

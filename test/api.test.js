@@ -251,6 +251,44 @@ test('Raumbuch 2.0: Abfrage-Endpunkt liefert Fortschritt, Antworten reduzieren o
   assert.equal(jeGewerk.beantwortet, 1, 'Gewerk-Fortschritt muss mitzählen');
 });
 
+test('Raumbuch 2.0: Prüfmodus erzeugt Abweichung samt Mangel; Datenblatt-PDF; Vollständigkeit in Liste/Projekt (AP-18)', async () => {
+  const raum = await api('POST', `/projects/${projektId}/rooms`, {
+    nummer: 'EG.016', bezeichnung: 'Prüf-Testraum', raumtyp: 'Technikraum',
+  });
+  const abfrage = (await api('GET', `/rooms/${raum.daten.id}/abfrage`)).daten;
+  const punkt = abfrage.punkte.find((p) => p.datentyp === 'zahl');
+  assert.ok(punkt, 'Zahlenpunkt erwartet');
+
+  // Soll festlegen, dann abweichenden Ist-Wert erfassen (wie der Prüfmodus des Assistenten)
+  assert.equal((await api('PATCH', `/room-attributes/${punkt.id}`, { soll: '10', status: 'festgelegt' })).status, 200);
+  assert.equal((await api('PATCH', `/room-attributes/${punkt.id}`, { ist: '7', status: 'abweichend' })).status, 200);
+  const abw = (await api('GET', `/projects/${projektId}/abweichungen`)).daten;
+  assert.ok(abw.some((a) => a.id === punkt.id), 'Abweichung muss in der Auswertung erscheinen');
+
+  // Mangel aus der Abweichung (vorbefüllt, mit Raumbezug)
+  const mangel = await api('POST', `/projects/${projektId}/maengel`, {
+    beschreibung: `Raum EG.016 · ${punkt.gewerk} ${punkt.name}: Soll 10, Ist 7`,
+    gewerk: punkt.gewerk, room_id: raum.daten.id,
+  });
+  assert.equal(mangel.status, 201);
+  assert.ok(mangel.daten.code, 'Mangel braucht einen Code');
+  const mangelDetail = (await api('GET', `/maengel/${mangel.daten.id}`)).daten;
+  assert.equal(mangelDetail.room_id, raum.daten.id, 'Mangel muss mit dem Raum verknüpft sein');
+
+  // Raumdatenblatt-PDF
+  const pdf = await api('GET', `/rooms/${raum.daten.id}/datenblatt.pdf`);
+  assert.equal(pdf.status, 200);
+  assert.ok(pdf.contentType.includes('application/pdf'));
+
+  // Vollständigkeit: Raumliste und Projekt-Aggregat zählen den beantworteten Punkt
+  const zeile = (await api('GET', `/projects/${projektId}/rooms`)).daten.find((r) => r.id === raum.daten.id);
+  assert.ok(zeile.merkmale_beantwortet >= 1, 'Raumliste muss beantwortete Merkmale zählen');
+  assert.ok(zeile.attribut_anzahl > zeile.merkmale_beantwortet, 'Restliche Punkte müssen offen bleiben');
+  const projekt = (await api('GET', `/projects/${projektId}`)).daten;
+  assert.ok(projekt.raumbuch.gesamt > 0 && projekt.raumbuch.beantwortet > 0, 'Projekt-Aggregat fehlt');
+  assert.ok(projekt.raumbuch.pflicht_offen > 0, 'Offene Pflichtpunkte müssen ausgewiesen sein');
+});
+
 test('Besprechungsserie: Carry-over offener Punkte, Aufgaben-Sync in beide Richtungen (PRO-04/06)', async () => {
   kontaktId = (await api('POST', `/projects/${projektId}/contacts`, { name: 'Jens Maurer', firma: 'Bau GmbH', gewerk: 'AR' })).daten.id;
   const sitzung1 = await api('POST', `/projects/${projektId}/meetings`, {
@@ -391,7 +429,7 @@ test('Mangel: Statuskette bis Abnahme, rückwärts verboten, Mängelliste-PDF ge
     beschreibung: 'Kratzer in Strahlenschutztür', gewerk: 'StrS', firma: 'Bau GmbH', frist: '2026-08-01',
   });
   assert.equal(mangel.status, 201);
-  assert.equal(mangel.daten.code, 'M-001');
+  assert.match(mangel.daten.code, /^M-\d{3}$/, 'Mangel-Codes laufen fortlaufend als M-NNN');
   for (const status of ['in_behebung', 'behoben', 'abgenommen']) {
     assert.equal((await api('PATCH', `/maengel/${mangel.daten.id}`, { status })).status, 200);
   }

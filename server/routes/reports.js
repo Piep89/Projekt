@@ -15,6 +15,7 @@ const router = express.Router();
 router.use(requireAuth);
 
 const meetingProjekt = (req) => get('SELECT project_id FROM meetings WHERE id = ?', Number(req.params.meetingId))?.project_id ?? 0;
+const raumProjekt = (req) => get('SELECT project_id FROM rooms WHERE id = ?', Number(req.params.roomId))?.project_id ?? 0;
 
 function csvResponse(res, dateiname, inhalt) {
   res.setHeader('Content-Type', 'text/csv; charset=utf-8');
@@ -133,6 +134,15 @@ router.get('/projects/:projectId/raumbuch.doc', requireProject('read'), (req, re
 // ---------------- PRO-05: Protokoll-PDF ----------------
 router.get('/meetings/:meetingId/protokoll.pdf', requireProject('read', meetingProjekt), (req, res) => {
   pdfResponse(res, `Protokoll_${req.params.meetingId}.pdf`, (doc) => B.protokoll(doc, Number(req.params.meetingId)));
+});
+
+// ---------------- AP-18: Raumdatenblatt je Raum ----------------
+router.get('/rooms/:roomId/datenblatt.pdf', requireProject('read', raumProjekt), (req, res, next) => {
+  try {
+    const raum = get('SELECT nummer FROM rooms WHERE id = ?', Number(req.params.roomId));
+    if (!raum) throw new ApiError(404, 'Raum nicht gefunden');
+    pdfResponse(res, `Raumdatenblatt_${raum.nummer}.pdf`, (doc) => B.raumdatenblatt(doc, Number(req.params.roomId)));
+  } catch (e) { next(e); }
 });
 
 // ---------------- MGL-02: Mängelliste ----------------

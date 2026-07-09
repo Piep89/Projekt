@@ -45,7 +45,12 @@ export async function renderDashboard(el, params) {
       kennzahl(String(p.punkte.unbewertet || 0), 'Punkte unbewertet', p.punkte.unbewertet ? '' : 'gruen', `${basis}/setup`),
       kennzahl(String(sumUeberfaellig(p.je_gewerk)), 'Punkte überfällig', sumUeberfaellig(p.je_gewerk) ? 'rot' : 'gruen', `${basis}/checkliste?termin=ueberfaellig`),
       kennzahl(`${p.dokumente.erhalten || 0} / ${p.dokumente.benoetigt || 0}`, 'Dokumente erhalten / benötigt', '', `${basis}/dokumente`),
-      kennzahl(String(p.offene_maengel), 'Offene Mängel', p.offene_maengel ? 'rot' : 'gruen', `${basis}/maengel`)));
+      kennzahl(String(p.offene_maengel), 'Offene Mängel', p.offene_maengel ? 'rot' : 'gruen', `${basis}/maengel`),
+      p.raumbuch?.gesamt ? kennzahl(
+        `${Math.round((p.raumbuch.beantwortet / p.raumbuch.gesamt) * 100)} %`,
+        p.raumbuch.pflicht_offen ? `Raumbuch erfasst (${p.raumbuch.pflicht_offen} Pflichtpunkte offen)` : 'Raumbuch erfasst',
+        p.raumbuch.pflicht_offen ? 'rot' : (p.raumbuch.beantwortet === p.raumbuch.gesamt ? 'gruen' : ''),
+        `${basis}/raumbuch`) : null));
 
     // Meilenstein-Zeitleiste
     if (p.meilensteine.length) {

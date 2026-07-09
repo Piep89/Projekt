@@ -114,6 +114,24 @@ function statusbericht(doc, projectId) {
   doc.moveDown(0.5);
   H.absatz(doc, 'Offene Mängel', String(maengel));
 
+  // Raumbuch-Vollständigkeit (AP-18): Erfassungsstand je Raum
+  const raumStand = all(
+    `SELECT r.nummer, r.bezeichnung,
+       COUNT(a.id) AS gesamt,
+       SUM(CASE WHEN a.relevanz = 'nicht_relevant' OR COALESCE(a.soll,'') != '' OR a.status != 'offen' THEN 1 ELSE 0 END) AS beantwortet,
+       SUM(CASE WHEN a.pflicht = 1 AND a.relevanz != 'nicht_relevant' AND COALESCE(a.soll,'') = '' AND a.status = 'offen' THEN 1 ELSE 0 END) AS pflicht_offen
+     FROM rooms r LEFT JOIN room_attributes a ON a.room_id = r.id
+     WHERE r.project_id = ? GROUP BY r.id ORDER BY r.nummer`, projectId);
+  if (raumStand.length) {
+    H.abschnitt(doc, 'Raumbuch: Erfassungsstand je Raum');
+    H.tabelle(doc, [
+      { label: 'Raum', breite: 0.45, get: (r) => `${r.nummer} ${r.bezeichnung}` },
+      { label: 'Erfasst', breite: 0.2, get: (r) => `${r.beantwortet || 0} / ${r.gesamt || 0}` },
+      { label: 'Vollständig', breite: 0.15, get: (r) => (r.gesamt && r.beantwortet === r.gesamt) ? 'ja' : 'nein', rot: (r) => !(r.gesamt && r.beantwortet === r.gesamt) },
+      { label: 'Pflicht offen', breite: 0.2, get: (r) => String(r.pflicht_offen || 0), rot: (r) => (r.pflicht_offen || 0) > 0 },
+    ], raumStand);
+  }
+
   // Anhang (Abnahmekriterium): Begründungen für nicht relevante Punkte
   doc.addPage();
   H.abschnitt(doc, 'Anhang: Nicht relevante Punkte mit Begründung');
@@ -486,6 +504,16 @@ function zeitraumbericht(doc, projectId, von, bis) {
   }
   if (!eintraege.length) doc.font('Helvetica-Oblique').fontSize(9).text('Keine Journaleinträge im Zeitraum.', H.RAND);
 
+  // Raumbuch-Erfassungsstand als Einzeiler (AP-18)
+  const rb = get(
+    `SELECT COUNT(*) AS gesamt,
+       COALESCE(SUM(CASE WHEN a.relevanz = 'nicht_relevant' OR COALESCE(a.soll,'') != '' OR a.status != 'offen' THEN 1 ELSE 0 END), 0) AS beantwortet
+     FROM room_attributes a JOIN rooms r ON r.id = a.room_id WHERE r.project_id = ?`, projectId);
+  if (rb.gesamt) {
+    doc.moveDown(0.4);
+    H.absatz(doc, 'Raumbuch', `${rb.beantwortet} von ${rb.gesamt} Merkmalen erfasst (${Math.round((rb.beantwortet / rb.gesamt) * 100)} %)`);
+  }
+
   // Ausblick: nächste Termine nach dem Zeitraum
   const naechste = all(
     `SELECT nr, text, termin, gewerke FROM checkpoints
@@ -501,4 +529,67 @@ function zeitraumbericht(doc, projectId, von, bis) {
   H.fusszeilen(doc, p.name);
 }
 
-module.exports = { statusbericht, gewerkAuszug, gewerkDaten, raumbuch, raumbuchDaten, protokoll, maengelliste, journal, vollstaendigkeit, zeitraumbericht };
+// ============ AP-18: Raumdatenblatt je Raum (mit Unterschriftenblock) ============
+function raumdatenblatt(doc, roomId) {
+  const raum = get('SELECT * FROM rooms WHERE id = ?', roomId);
+  const p = get('SELECT * FROM projects WHERE id = ?', raum.project_id);
+  const attribute = all('SELECT * FROM room_attributes WHERE room_id = ? ORDER BY gewerk, sort_order, name', roomId);
+  const beantwortet = attribute.filter((a) => a.relevanz === 'nicht_relevant' || (a.soll ?? '') !== '' || a.status !== 'offen').length;
+  const pflichtOffen = attribute.filter((a) => a.pflicht && a.relevanz !== 'nicht_relevant' && (a.soll ?? '') === '' && a.status === 'offen').length;
+
+  H.kopf(doc, {
+    titel: `Raumdatenblatt ${raum.nummer}`,
+    projekt: `${p.name} · ${raum.bezeichnung}`,
+    untertitel: `${raum.raumtyp || 'ohne Raumtyp'} · ${beantwortet} von ${attribute.length} Merkmalen erfasst`
+      + (pflichtOffen ? ` · ${pflichtOffen} Pflichtpunkte offen` : ''),
+  });
+
+  H.abschnitt(doc, 'Stammdaten');
+  for (const [label, wert] of [
+    ['Funktion', raum.funktion], ['Fläche', raum.flaeche_m2 ? `${raum.flaeche_m2} m²` : null],
+    ['Lichte Höhe', raum.hoehe_m ? `${raum.hoehe_m} m` : null], ['Raumgruppe (VDE 0100-710)', raum.raumgruppe],
+    ['Strahlenschutz', raum.strahlenschutz], ['HF-Anforderung', raum.hf_anforderung],
+    ['Bemerkung', raum.bemerkung],
+  ].filter(([, v]) => v)) H.absatz(doc, label, wert);
+
+  const jeGewerk = {};
+  for (const a of attribute) (jeGewerk[a.gewerk] = jeGewerk[a.gewerk] || []).push(a);
+  for (const [gewerk, attrs] of Object.entries(jeGewerk)) {
+    H.seitenumbruch(doc, 50);
+    doc.moveDown(0.4);
+    doc.font('Helvetica-Bold').fontSize(10).text(gewerk, H.RAND);
+    doc.moveDown(0.1);
+    H.tabelle(doc, [
+      { label: 'Merkmal', breite: 0.3, get: (a) => (a.pflicht ? '* ' : '') + a.name + (a.einheit ? ` [${a.einheit}]` : '') },
+      { label: 'Soll', breite: 0.2, get: (a) => a.relevanz === 'nicht_relevant' ? 'nicht relevant' : a.soll },
+      { label: 'Ist', breite: 0.17, get: (a) => a.relevanz === 'nicht_relevant' ? '—' : a.ist },
+      { label: 'Status', breite: 0.13, get: (a) => a.relevanz === 'nicht_relevant' ? '—' : lbl(a.status), rot: (a) => a.status === 'abweichend' && a.relevanz !== 'nicht_relevant' },
+      { label: 'Quelle/Begründung', breite: 0.2, get: (a) => a.relevanz === 'nicht_relevant' ? a.relevanz_begruendung : a.quelle },
+    ], attrs);
+  }
+  doc.moveDown(0.3);
+  doc.font('Helvetica').fontSize(8).fillColor('#666666').text('* = Pflichtpunkt für die Vollständigkeit', H.RAND).fillColor('#222222');
+
+  // Unterschriftenblock für Planungsfreigabe/Abnahme
+  H.seitenumbruch(doc, 120);
+  H.abschnitt(doc, 'Freigabe / Abnahme');
+  const rollen = ['Bauherr / Betreiber', 'Nutzer (Klinik/Institut)', 'Fachplanung', 'Medizintechnik'];
+  const spaltenBreite = H.INHALT_BREITE / 2 - 20;
+  for (let i = 0; i < rollen.length; i += 2) {
+    H.seitenumbruch(doc, 70);
+    const y = doc.y + 34;
+    [rollen[i], rollen[i + 1]].filter(Boolean).forEach((rolle, j) => {
+      const x = H.RAND + j * (spaltenBreite + 40);
+      doc.moveTo(x, y).lineTo(x + spaltenBreite, y).strokeColor('#999999').stroke();
+      doc.font('Helvetica').fontSize(8).fillColor('#666666')
+        .text(`${rolle} – Ort, Datum, Unterschrift`, x, y + 3, { width: spaltenBreite, lineBreak: false });
+    });
+    doc.y = y + 24;
+  }
+  doc.fillColor('#222222');
+  doc.x = H.RAND;
+
+  H.fusszeilen(doc, p.name);
+}
+
+module.exports = { statusbericht, gewerkAuszug, gewerkDaten, raumbuch, raumbuchDaten, raumdatenblatt, protokoll, maengelliste, journal, vollstaendigkeit, zeitraumbericht };

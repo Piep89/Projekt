@@ -30,6 +30,7 @@ const ABSCHNITTE = [
       ['Zwei Sichten', '„Räume" zeigt alle Gewerke eines Raums; die „Gewerke-Sicht" ein Gewerk über alle Räume als Tabelle — ideal für die Massenpflege mit dem Fachplaner.'],
       ['Raumtyp nutzen', 'Beim Anlegen einen Raumtyp (z. B. „MRT-Untersuchungsraum") wählen — der vollständige Merkmalskatalog aller Gewerke wird automatisch vorbelegt, passend zum Gerätetyp des Projekts.'],
       ['Geführte Abfrage', '„▶ Abfrage" führt Punkt für Punkt durch alle offenen Merkmale eines Raums — mit Hilfetext, Soll-Vorschlag und Fortschrittsanzeige. Jeder Punkt wird beantwortet, auf „Später" gelegt oder mit Begründung als nicht relevant markiert. Funktioniert auch offline bei Begehungen.'],
+      ['Prüfmodus', 'Im Assistenten auf „Ist prüfen" umschalten: das Soll wird angezeigt, der Ist-Wert erfasst. Bei Übereinstimmung wird der Punkt bestätigt, bei Abweichung direkt ein Mangel oder eine Aufgabe angelegt. Das Raumdatenblatt-PDF fasst alles mit Unterschriftenblock für die Abnahme zusammen.'],
       ['Planstände einfrieren', 'Zu jedem Meilenstein (Entwurf, Ausführung, As built) den Stand einfrieren. Die Delta-Ansicht zeigt später jede Änderung zwischen zwei Ständen.'],
     ],
   },

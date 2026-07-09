@@ -39,9 +39,10 @@ Server mit Demodaten starten (`GGP_DATA_DIR=<tmp> GGP_ADMIN_PASSWORD=test-passwo
 
 ## Statusstand (zur Einordnung)
 
-Umgesetzt und getestet (23 E2E-Tests): alle MUSS- und SOLL-Anforderungen des
+Umgesetzt und getestet (25 E2E-Tests): alle MUSS- und SOLL-Anforderungen des
 Anforderungsprofils außer SSO/MFA (Stufe 3) und Virenscan-Hook; zusätzlich PWA/Offline,
-E-Mail-Versand, Papierkorb, dunkles Design, REST-API-Doku, macOS-App-Paketierung.
+E-Mail-Versand, Papierkorb, dunkles Design, REST-API-Doku, macOS-App-Paketierung
+und Raumbuch 2.0 (Merkmalskataloge, Erfassungsassistent, Prüfmodus, Raumdatenblatt).
 Offen sind die folgenden Pakete.
 
 ---
@@ -202,7 +203,7 @@ serverseitig erzwungen wie CHK-02)/Später, Filter „nur offene"/„nur Gewerk 
 **Abnahme:** Kompletter Durchlauf eines Raums im UI-Rundgang; Begründungspflicht getestet;
 Fortschritt korrekt; Rundgang fehlerfrei.
 
-## AP-18 · Raumbuch 2.0: Prüfmodus, Abweichungen, Raumdatenblatt (M — baut auf AP-17 auf)
+## AP-18 · Raumbuch 2.0: Prüfmodus, Abweichungen, Raumdatenblatt (M — baut auf AP-17 auf) — ✅ erledigt
 
 **Ziel:** Ist-Prüfung gegen Soll mit Direktaktion und Auswertung, Konzept Kap. 5 + 6.
 **Umfang:** Prüf-Modus im Assistenten (Soll anzeigen, Ist erfassen → bestätigt/abweichend),
